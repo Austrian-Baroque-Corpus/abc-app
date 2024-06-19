@@ -1,0 +1,47 @@
+---
+import FormatUrl from "./FormatUrl.astro";
+import { createBaseurl } from "../lib/baseurl";
+
+interface Author {
+	firstName: string;
+	lastName: string;
+	middleName?: string;
+}
+interface Props {
+	title: string;
+	date: Date | null;
+	authors: Array<Author>;
+	url: string | null;
+	image: string | null;
+	baseurl: string | null;
+}
+const { title, date, authors, url, image } = Astro.props;
+---
+
+<div class="my-8 flex flex-col">
+	<div class="container mx-auto max-w-[1200px] py-6">
+		<div class="mx-auto flex max-w-[800px] sm:px-2 md:px-2 lg:px-2">
+			{image && <img class="rounded-lg" src={createBaseurl(image.slice(1))} alt={title} />}
+		</div>
+		<div class="my-6 border-b-2 text-gray-400 sm:px-2 md:px-2 lg:px-2">
+			<h1 class="mb-8 text-center text-4xl">{title}</h1>
+			<p>
+				{date ? "Datum: " + date.toLocaleDateString("de-DE") : ""}
+				{url ? " | Url: " : ""}<FormatUrl url={url} />
+			</p>
+			<p>Autor: {authors.map((author) => author.lastName + ", " + author.firstName + " ")}</p>
+		</div>
+		<div class="py-6 sm:px-2 md:px-2 lg:px-2">
+			<slot />
+		</div>
+	</div>
+</div>
+<style is:global>
+	p {
+		margin: 0.5rem 0 !important;
+	}
+
+	p a {
+		color: #3182ce !important;
+	}
+</style>

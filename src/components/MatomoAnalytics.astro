@@ -1,0 +1,33 @@
+---
+interface Props {
+	matomoUrl: string;
+	siteId: number;
+}
+
+const { matomoUrl, siteId } = Astro.props;
+---
+
+<script is:inline type="text/javascript" define:vars={{ matomoUrl, siteId }}>
+	var url = window.location.href;
+	var locale = document.documentElement.lang ? document.documentElement.lang : "de";
+	var _paq = (window._paq = window._paq || []);
+	_paq.push(["trackPageView"]);
+	_paq.push(["enableLinkTracking"]);
+	_paq.push(["disableCookies"]);
+	_paq?.push(["setCustomVariable", 1, "Locale", locale, "page"]);
+	_paq?.push(["setCustomUrl", url]);
+	_paq?.push(["trackPageView"]);
+	_paq?.push(["enableLinkTracking"]);
+	(function (matomoUrl, siteId) {
+		var u = matomoUrl;
+		_paq.push(["setTrackerUrl", u + "matomo.php"]);
+		_paq.push(["setSiteId", siteId]);
+		var d = document,
+			g = d.createElement("script"),
+			s = d.getElementsByTagName("script")[0];
+		g.type = "text/javascript";
+		g.async = true;
+		g.src = u + "matomo.js";
+		s.parentNode.insertBefore(g, s);
+	})(matomoUrl, siteId);
+</script>

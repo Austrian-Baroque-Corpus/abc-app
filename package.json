@@ -1,0 +1,154 @@
+{
+	"name": "abc-app",
+	"license": "MIT",
+	"type": "module",
+	"engines": {
+		"node": "20.x",
+		"pnpm": "9.x"
+	},
+	"packageManager": "pnpm@9.0.6",
+	"scripts": {
+		"build": "astro check && astro build",
+		"dev": "astro dev --host 127.0.0.1",
+		"format:check": "prettier . \"!./src/content/**\" --cache --check --ignore-path ./.gitignore --plugin=prettier-plugin-astro",
+		"format:fix": "pnpm run format:check --write",
+		"lint:check": "run-p --continue-on-error \"lint:*:check\"",
+		"lint:fix": "run-p --continue-on-error \"lint:*:fix\"",
+		"lint:code:check": "eslint . --cache --ext .astro,.js,.ts,.tsx --ignore-path ./.gitignore",
+		"lint:code:fix": "pnpm run lint:code:check --fix",
+		"lint:styles:check": "stylelint \"./**/*.@(astro|css)\" --cache --ignore-path ./.gitignore",
+		"lint:styles:fix": "pnpm run lint:styles:check --fix",
+		"preinstall": "npx only-allow pnpm",
+		"prepare": "run-s setup sync",
+		"setup": "is-ci || simple-git-hooks",
+		"start": "astro preview",
+		"sync": "astro sync",
+		"types:check": "astro check",
+		"validate": "run-p format:check lint:check types:check"
+	},
+	"dependencies": {
+		"@astrojs/check": "^0.7.0",
+		"@astrojs/markdoc": "^0.9.0",
+		"@astrojs/mdx": "^2.2.0",
+		"@astrojs/react": "^3.0.10",
+		"@astrojs/tailwind": "^5.1.0",
+		"@astrojs/vercel": "^7.3.2",
+		"@babel/runtime": "^7.24.0",
+		"@fontsource-variable/inter": "^5.0.16",
+		"@fortawesome/fontawesome-svg-core": "^6.5.1",
+		"@fortawesome/free-brands-svg-icons": "^6.5.1",
+		"@fortawesome/free-regular-svg-icons": "^6.5.1",
+		"@fortawesome/free-solid-svg-icons": "^6.5.1",
+		"@fortawesome/react-fontawesome": "github:fortawesome/react-fontawesome",
+		"@iconify-json/lucide": "^1.1.166",
+		"@keystatic/astro": "^5.0.0",
+		"@keystatic/core": "^0.5.7",
+		"@types/openseadragon": "^3.0.10",
+		"@types/react": "^18.2.57",
+		"@types/react-dom": "^18.2.19",
+		"acdh-noske-search": "^0.0.8",
+		"algoliasearch": "^4.22.1",
+		"astro": "^4.4.0",
+		"astro-icon": "^1.1.0",
+		"cva": "^1.0.0-beta.1",
+		"de-micro-editor": "^0.4.2",
+		"instantsearch.js": "^4.66.0",
+		"node-fetch": "^3.3.2",
+		"openseadragon": "^4.1.0",
+		"react": "^18.2.0",
+		"react-dom": "^18.2.0",
+		"sharp": "^0.33.2",
+		"tabulator-tables": "^6.2.1",
+		"typed.js": "^2.1.0",
+		"typescript": "^5.4.5",
+		"typesense-instantsearch-adapter": "^2.8.0"
+	},
+	"devDependencies": {
+		"@acdh-oeaw/eslint-config": "^1.0.6",
+		"@acdh-oeaw/eslint-config-astro": "^1.0.7",
+		"@acdh-oeaw/prettier-config": "^2.0.0",
+		"@acdh-oeaw/stylelint-config": "^2.0.1",
+		"@acdh-oeaw/tsconfig": "^1.0.2",
+		"@astrojs/check": "^0.5.4",
+		"@astrojs/ts-plugin": "^1.5.2",
+		"@types/piwik-tracker": "^0.1.32",
+		"@types/tabulator-tables": "^6.2.0",
+		"eslint": "^8.56.0",
+		"eslint-plugin-tailwindcss": "^3.14.2",
+		"is-ci": "^3.0.1",
+		"lint-staged": "^15.2.2",
+		"npm-run-all2": "^6.1.2",
+		"postcss": "^8.4.35",
+		"prettier": "^3.2.5",
+		"prettier-plugin-astro": "^0.13.0",
+		"simple-git-hooks": "^2.9.0",
+		"stylelint": "^16.2.1",
+		"tailwindcss": "^3.4.1",
+		"typescript": "^5.3.3"
+	},
+	"browserslist": {
+		"development": [
+			"last 1 chrome version",
+			"last 1 firefox version",
+			"last 1 safari version"
+		],
+		"production": [
+			">=0.75%",
+			"not dead",
+			"not op_mini all"
+		]
+	},
+	"eslintConfig": {
+		"extends": [
+			"@acdh-oeaw/eslint-config",
+			"@acdh-oeaw/eslint-config/strict",
+			"@acdh-oeaw/eslint-config-astro",
+			"plugin:eslint-plugin-tailwindcss/recommended"
+		],
+		"settings": {
+			"tailwindcss": {
+				"callees": [
+					"cn",
+					"variants"
+				]
+			}
+		},
+		"ignorePatterns": [
+			"/edition/**/*.astro",
+			"/public/*",
+			"/src/client/**"
+		],
+		"rules": {
+			"@typescript-eslint/no-unsafe-assignment": "off",
+			"@typescript-eslint/no-unsafe-call": "off",
+			"@typescript-eslint/no-unsafe-member-access": "off"
+		}
+	},
+	"lint-staged": {
+		"*.astro": [
+			"eslint --cache --fix",
+			"stylelint --cache --fix",
+			"prettier --cache --plugin=prettier-plugin-astro --write"
+		],
+		"*.css": [
+			"stylelint --cache --fix",
+			"prettier --cache --write"
+		],
+		"*.@(js|ts|tsx)": [
+			"eslint --cache --fix",
+			"prettier --cache --write"
+		],
+		"*.!(astro|css|js|ts|tsx),!./src/content/**": "prettier --cache --ignore-unknown --write"
+	},
+	"postcss": {
+		"plugins": {
+			"tailwindcss": {}
+		}
+	},
+	"simple-git-hooks": {
+		"pre-commit": "pnpm exec lint-staged"
+	},
+	"stylelint": {
+		"extends": "@acdh-oeaw/stylelint-config"
+	}
+}

@@ -1,0 +1,6 @@
+/public/*
+/node_modules/*
+/edition/*.astro
+/tailwind.config.ts
+/src/client
+

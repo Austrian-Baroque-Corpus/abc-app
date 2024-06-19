@@ -1,0 +1,117 @@
+/* stylelint-disable */
+
+* {
+	box-sizing: border-box;
+}
+
+ul li {
+	list-style: none;
+}
+
+ul {
+	padding-left: 0;
+}
+
+.linebreak {
+	display: none;
+}
+
+.linebreak-on {
+	display: inline !important;
+}
+
+img {
+	max-height: 250px;
+}
+
+h5 {
+	font-size: 1em;
+}
+
+.margin-end {
+	margin-bottom: 25%;
+}
+
+.font-20 {
+	font-size: 20px;
+}
+
+.corr3 {
+	border: 2px solid #327e82 !important;
+	border-radius: 0.5rem;
+}
+
+.corr2 {
+	border: 2px solid #59c9d4 !important;
+	border-radius: 0.5rem;
+}
+
+.corr1 {
+	border: 2px solid #d2f6f9 !important;
+	border-radius: 0.5rem;
+}
+
+.corr0 {
+	border: 2px solid #000 !important;
+	border-radius: 0.5rem;
+}
+
+.btn {
+	border-radius: 0.5rem;
+}
+
+/* .bg-diarium-menu {
+    border: 2px solid #bad2d4;
+    border-radius: .35rem .35rem .35rem 0;
+} */
+
+.bg-diarium-search {
+	border: 2px solid #bad2d4;
+	border-radius: 0.5rem;
+}
+
+.hover-shadow:hover {
+	background-color: rgb(196 196 196 / 10%);
+}
+
+.table > :not(caption) > * > * {
+	background-color: transparent !important;
+}
+
+.img-thumbnail {
+	border-color: #bad2d4;
+}
+
+.fade.show {
+	display: block !important;
+}
+
+.fade-lang {
+	display: none;
+}
+
+@media (width <= 768px) {
+	.ais-Hits-item {
+		width: 100% !important;
+	}
+
+	.hidemobile {
+		display: none !important;
+	}
+}
+
+@media (width <= 992px) {
+	.ais-Hits-item {
+		width: 47% !important;
+	}
+
+	#searchbox {
+		width: 100% !important;
+	}
+}
+
+@media (width <= 1920px) {
+	.ais-Hits-item {
+		width: 32% !important;
+	}
+}

@@ -1,0 +1,60 @@
+---
+import type { CollectionEntry } from "astro:content";
+
+type Props = CollectionEntry<"presentations">["data"];
+
+const { presentationUnstructured, title, authors, type, place, date, url } = Astro.props;
+
+const stringifyAuthors = (authors: Props["authors"]) => {
+	return authors
+		.map((author) => {
+			return `${author.lastName}, ${author.firstName}${author.middleName ? " " + author.middleName : ""}`;
+		})
+		.join("; ");
+};
+
+const urlToHtml = (url: Props["url"]) => {
+	if (!url) {
+		return "";
+	}
+	return `<a href="${url}" target="_blank">${url}</a>`;
+};
+
+const dateToHTml = (date: Props["date"]) => {
+	if (!date) {
+		return "";
+	}
+	return date.toLocaleDateString("de-DE", {
+		year: "numeric",
+		month: "2-digit",
+		day: "2-digit",
+	});
+};
+
+const createTemplate = (
+	presentationUnstructured: Props["presentationUnstructured"],
+	title: Props["title"],
+	authors: Props["authors"],
+	type: Props["type"],
+	place: Props["place"],
+	date: Props["date"],
+	url: Props["url"],
+) => {
+	if (presentationUnstructured !== undefined) {
+		return presentationUnstructured;
+	}
+	return type
+		? type + ": "
+		: String(stringifyAuthors(authors)) + ":" + title + "." + place
+			? place + "."
+			: String(date)
+				? dateToHTml(date)
+				: String(url)
+					? urlToHtml(url)
+					: "";
+};
+---
+
+<li class="p-2">
+	{createTemplate(presentationUnstructured, title, authors, type, place, date, url)}
+</li>

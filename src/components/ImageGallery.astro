@@ -1,0 +1,30 @@
+---
+import { createBaseurl } from "../lib/baseurl.ts";
+
+interface Image {
+	image: string;
+	alt: string;
+	caption: string;
+}
+interface Props {
+	images: Array<Image>;
+}
+const { images } = Astro.props;
+---
+
+<div class="my-4 grid grid-cols-3 gap-4">
+	{
+		images.map((data) => (
+			<div class="content-center">
+				<figure class="object-contain">
+					<img
+						class="rounded-lg hover:saturate-50"
+						src={createBaseurl(data.image.slice(1))}
+						alt={data.alt}
+					/>
+					<figcaption class="pr-1 text-center text-sm text-gray-500">{data.caption}</figcaption>
+				</figure>
+			</div>
+		))
+	}
+</div>

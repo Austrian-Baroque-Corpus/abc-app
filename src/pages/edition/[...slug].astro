@@ -1,0 +1,50 @@
+---
+import { readdir, readFile } from "node:fs/promises";
+
+import Edition from "../../layouts/Edition.astro";
+import { baseurl } from "../../lib/baseurl.js";
+
+export async function getStaticPaths() {
+	const entries = await readdir("edition", { withFileTypes: true });
+	const about = await readFile("edition/about.json", "utf-8");
+	const editions = JSON.parse(about);
+	return entries
+		.filter((entry) => entry.isFile() && entry.name.endsWith(".html"))
+		.map((entry) => ({
+			params: { slug: entry.name.replace(/\.html$/, "") },
+			props: {
+				html: readFile(`edition/${entry.name}`, "utf-8"),
+				date: new Date(entry.name.replace(/\.html$/, "").replace("wr_", "")),
+				issue:
+					editions[
+						(() => {
+							const name = entry.name.replace(/\.html$/, "");
+							return name;
+						})()
+					].title,
+				corpus:
+					editions[
+						(() => {
+							const name = entry.name.replace(/\.html$/, "");
+							return name;
+						})()
+					].corpus,
+				name: entry.name,
+			},
+		}));
+}
+
+const { html, date, issue, corpus, name } = Astro.props;
+---
+
+<style is:global>
+	.text.basis-full {
+		max-width: 1200px !important;
+		margin: 0 auto !important;
+	}
+</style>
+<Edition title={issue} baseurl={baseurl} date={date} issue={issue} corpus={corpus} name={name}>
+	<div class="flex flex-col">
+		<div set:html={html} />
+	</div>
+</Edition>

@@ -1,0 +1,86 @@
+---
+import Page from "../layouts/Page.astro";
+import { baseurl, createBaseurl } from "../lib/baseurl.ts";
+---
+
+<Page title="Austrian Baroque Corpus" baseurl={baseurl}>
+	<div class="flex flex-col">
+		<div class="mx-auto my-[5%] text-center">
+			<div class="m-6 sm:m-2">
+				<img
+					class="max-w-[600px] sm:max-w-[300px] md:max-w-[400px] rounded-md"
+					src={createBaseurl("intro_image.jpg")}
+					alt="Austrian Baroque Corpus"
+				/>
+			</div>
+		</div>
+		<div class="mb-[3%] flex flex-col">
+			<div class="basis-full">
+				<div class="flex flex-col p-4 sm:mx-auto sm:flex-col sm:items-center sm:p-2">
+					<figure class="sm:mb-4 sm:flex sm:flex-col py-4">
+						<img
+							class="mr-4 max-w-[300px] rounded-lg border shadow-md sm:mr-0 sm:max-w-[200px]"
+							alt="Aber was ist das."
+							src={createBaseurl("GeneigterLeser.jpg")}
+						/>
+					</figure>
+					<h1 class="font-medium text-2xl">
+						Herzlich willkommen auf den Seiten des Austrian Baroque Corpus!
+					</h1>
+				</div>
+				<div class="flex flex-col p-4 sm:mx-auto sm:flex-col sm:items-center sm:p-2">
+					<figure class="sm:mb-4 sm:flex sm:flex-col py-4">
+						<img
+							class="mr-4 max-w-[300px] rounded-lg border shadow-md sm:mr-0 sm:max-w-[200px]"
+							alt="Aber was ist das."
+							src={createBaseurl("Aber_was_ist_das.jpg")}
+						/>
+					</figure>
+					<p>
+						<strong>ABaC:us – Austrian Baroque Corpus</strong> ist die Bezeichnung für eine digitale
+						Sammlung von literarischen Texten aus der Barockzeit. Die Texte, die Sie hier einsehen und
+						durchsuchen können, sind Teil einer reichhaltigen und weit verbreiteten Literatur, die sich
+						mit der Vorbereitung auf den Tod beschäftigt und heute beinahe in Vergessenheit geraten ist.
+						Den thematischen Kern der Sammlung bilden Schriften theologisch-erbaulichen Inhalts, insbesondere
+						Ars moriendi-, Totentanz- und Memento mori-Literatur, die einen wesentlichen Teil damaliger
+						Textproduktion darstellt.
+					</p>
+				</div>
+				<div class="mt-10 flex flex-col p-4 sm:mx-auto sm:flex-col sm:items-center sm:p-2">
+					<figure class="sm:mb-4 sm:mr-0 sm:flex sm:max-w-[200px] sm:flex-col py-4">
+						<img
+							class="float-left mr-4 max-w-[300px] rounded-lg border shadow-md"
+							alt="was man Gutes gethan."
+							src={createBaseurl("was_man_Gutes_gethan.jpg")}
+						/>
+					</figure>
+					<p>
+						Mit ABaC:us wird der Versuch unternommen, zeitentfernte Printprodukte der Barockzeit für
+						ein interessiertes, öffentliches (Fach-)Publikum mit innovativen texttechnologischen
+						Methoden zu erschließen. Durch die Anwendung international anerkannter Standards stellt
+						das Projektteam sicher, dass die aufbereiteten, annotierten historischen Textdaten
+						verschiedenen Erkenntnisinteressen dienlich sind. In der texttechnologischen
+						Erschließung dieser wertvollen Quellen wird sprachlich-kulturelles Erbe aus der
+						Barockzeit bewahrt und eine empirische Grundlage zu dessen nachhaltiger,
+						interdisziplinärer Erforschung und Interpretation geschaffen.
+					</p>
+				</div>
+				<div class="mt-10 flex flex-col p-4 sm:mx-auto sm:flex-col sm:items-center sm:p-2">
+					<figure class="sm:mb-4 sm:mr-0 sm:flex sm:max-w-[200px] sm:flex-col py-4">
+						<img
+							class="float-left mr-4 max-w-[300px] rounded-lg border shadow-md"
+							alt="zur Welt hinaus"
+							src={createBaseurl("zurWelt_hinaus.jpg")}
+						/>
+					</figure>
+					<p>
+						Das <strong>Austrian Centre for Digital Humanities and Cultural Heritage</strong> der <strong
+							>Österreichischen Akademie der Wissenschaften</strong
+						> stellt einen Teil der Sammlung testweise, kostenfrei und in hochwertiger Qualität für den
+						wissenschaftlichen Gebrauch zur Verfügung.
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</Page>

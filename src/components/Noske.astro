@@ -1,0 +1,71 @@
+---
+
+---
+
+<div class="my-8">
+	<div class="py-4 text-center sm:px-2 md:px-2">
+		<div class="px-4">
+			<h4 class="pt-2 text-lg">Einfache Suche in den Wiener Diarium Transkripten</h4>
+			<div class="text-sm text-gray-600">
+				<a target="_blank" href="https://diarium-noske.acdh-dev.oeaw.ac.at/crystal"
+					>Erweiterte Suche in Crystal</a
+				>
+			</div>
+			<div id="noske-search" class="text-center"></div>
+			<div id="hitsbox"></div>
+			<div class="mx-auto grid grid-cols-2">
+				<div id="noske-pagination" class="text-right"></div>
+				<div id="statsbox" class="text-left"></div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+	import { NoskeSearch } from "acdh-noske-search";
+
+	const search = new NoskeSearch({
+		container: "noske-search",
+	});
+
+	search.minQueryLength = 1;
+
+	search.search({
+		client: {
+			base: "https://diarium-noske.acdh-dev.oeaw.ac.at",
+			corpname: "diarium",
+			attrs: "word,id",
+			structs: "doc,p,head,list,docTitle,imprimatur,g",
+			refs: "doc.id,doc.corpus,p.id,head.id,list.id,docTitle.id,imprimatur.id",
+		},
+		hits: {
+			id: "hitsbox",
+			css: {
+				table: "table-auto",
+				kwic: "text-cyan-600 text-lg",
+				trHead: "bg-gray-200",
+			},
+		},
+		searchInput: {
+			id: "noske-input",
+			placeholder: "Suche nach Wörter, Phrase (inkl. Regular Expressions) oder mit CQL",
+		},
+		pagination: {
+			id: "noske-pagination",
+			css: {
+				select: "rounded-lg text-xl p-2",
+			},
+		},
+		stats: {
+			id: "statsbox",
+			label: "Ergebnisse:",
+			css: {
+				label: "text-lg text-gray-600 pt-2",
+			},
+		},
+		config: {
+			customUrl: "https://digitarium.acdh-dev.oeaw.ac.at/edition",
+			urlparam: "&img=on",
+		},
+	});
+</script>

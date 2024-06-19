@@ -1,0 +1,84 @@
+---
+
+---
+
+<div class="flex flex-col">
+	<ul>
+		<li class="my-2 px-2 text-white sm:hidden md:hidden">Suche im Text (regex erlaubt):</li>
+		<li class="my-2 px-2 sm:hidden md:hidden">
+			<!-- <input type="checkbox" name="opt[]" value="separateWordSearch" checked="checked" />Wörter
+		einzeln suchen -->
+			<input
+				type="text"
+				name="keyword"
+				class="h-12 w-full rounded border border-white p-2"
+				placeholder="Schlagwort eingeben..."
+			/>
+		</li>
+		<li class="my-2 px-2 sm:hidden md:hidden">
+			<div id="mark-scroll" class="fade-lang rounded border border-gray-100 bg-white text-center">
+				<button class="text-xl" data-search="next" disabled="disabled">&#x2193;</button>
+				<button class="text-xl" data-search="prev" disabled="disabled">&#x2191;</button>
+				<button class="text-xl" data-search="clear" disabled="disabled">✖</button>
+				<div id="results-div"></div>
+			</div>
+		</li>
+		<li class="my-2 px-2 sm:hidden md:hidden">
+			<image-switch opt="es" class="text-white"></image-switch>
+		</li>
+		<li class="my-2 px-2 sm:hidden">
+			<font-size opt="fs" class="text-white"></font-size>
+		</li>
+		<li class="my-2 px-2 sm:hidden">
+			<font-family opt="ff" class="text-white"></font-family>
+		</li>
+		<li class="my-2 px-2">
+			<annotation-slider opt="lb" class="text-white"></annotation-slider>
+		</li>
+	</ul>
+</div>
+<style is:global>
+	image-switch a {
+		cursor: pointer;
+	}
+
+	image-switch a svg {
+		margin-left: 5%;
+	}
+
+	small {
+		font-size: 100%;
+	}
+
+	font-family select {
+		width: 100%;
+		height: 3rem;
+		margin-top: 0.5rem;
+		border: 1px solid #fff;
+		border-radius: 0.35rem;
+		color: #000;
+		font-size: 1rem;
+	}
+
+	font-size select {
+		width: 100%;
+		height: 3rem;
+		margin-top: 0.5rem;
+		border: 1px solid #fff;
+		border-radius: 0.35rem;
+		color: #000;
+		font-size: 1rem;
+	}
+
+	annotation-slider label {
+		display: block;
+		margin-top: 0.75rem;
+	}
+
+	.slider-number::after {
+		position: relative;
+		margin-top: -0.3rem;
+		margin-left: 3.5rem;
+		color: #fff;
+	}
+</style>

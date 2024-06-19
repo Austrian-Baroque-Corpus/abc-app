@@ -1,0 +1,166 @@
+/* stylelint-disable */
+
+/* ############################
+ * ############################
+ * EDITIONS view properties
+ * ########################### */
+
+.fade {
+	display: none;
+}
+
+/* The switch - the box around the slider */
+.switch {
+	position: relative;
+	display: inline-block;
+	width: 45px;
+	height: 20px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+	/* opacity: 0; */
+	width: 0;
+	height: 0;
+}
+
+/* The slider */
+.i-slider {
+	position: absolute;
+	inset: 0;
+	background-color: #ccc;
+	cursor: pointer;
+	transition: 0.4s;
+}
+
+.i-slider::before {
+	content: "";
+	position: absolute;
+	bottom: 3px;
+	left: 4px;
+	width: 15px;
+	height: 15px;
+	background-color: #fff;
+	transition: 0.4s;
+}
+
+input:focus + .i-slider {
+	box-shadow: 0 0 1px #f1f1f1;
+}
+
+input:checked + .i-slider::before {
+	transform: translateX(20px);
+}
+
+/* Rounded sliders */
+.i-slider.round {
+	border-radius: 20px;
+}
+
+.i-slider.round::before {
+	border-radius: 50%;
+}
+
+/* accumulated element number next to slider */
+.slider-number::after {
+	content: "(" attr(data) ")";
+	display: block;
+	width: 50px;
+	margin-left: 4em;
+	color: #fff;
+}
+
+.bi-pencil-square {
+	color: #fff;
+}
+
+.strikethrough {
+	text-decoration: line-through;
+}
+
+.underline {
+	text-decoration: underline;
+}
+
+.italic {
+	font-style: italic;
+}
+
+.red {
+	background-color: #ffe6e6;
+}
+
+.blue {
+	background-color: #e1d4ff;
+}
+
+.white {
+	background-color: #fff;
+}
+
+.grey {
+	background-color: #f1f1f1;
+}
+
+.green {
+	background-color: #c9ffcf;
+}
+
+.yellow {
+	background-color: #fbff9f;
+}
+
+.lila {
+	background-color: #ef9fff;
+}
+
+.badge-item {
+	border-radius: 0.25rem;
+}
+
+.badge-link {
+	margin: 0 0.1em;
+	padding: 0.2em;
+	border-radius: 0.25rem;
+}
+
+/* font styles and sizes */
+
+.times-new-roman {
+	font-family: "Times New Roman", serif !important;
+}
+
+.courier-new {
+	font-family: "Courier New", monospace !important;
+}
+
+.arial-serif {
+	font-family: Arial, serif !important;
+}
+
+.font-size-26 {
+	font-size: 26px !important;
+}
+
+.font-size-22 {
+	font-size: 22px !important;
+}
+
+.font-size-18 {
+	font-size: 18px !important;
+}
+
+.font-size-14 {
+	font-size: 14px !important;
+}
+
+.font-select {
+	vertical-align: middle;
+	border-radius: 0.35rem;
+	font-size: 14px;
+}
+
+.text:not(.active) {
+	max-width: 50% !important;
+	margin: 0 auto;
+}

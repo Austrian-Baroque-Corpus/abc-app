@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project basedir="../.." name="tei2html">
+	<property name="target" value="${basedir}/edition"/>
+	<mkdir dir="${target}"/>
+	<delete>
+			<fileset dir="${target}" includes="*.html"/>
+	</delete>
+	<delete>
+			<fileset dir="${target}" includes="*.xml"/>
+	</delete>
+	<delete>
+			<fileset dir="${target}" includes="*.json"/>
+	</delete>
+	<xslt in="${basedir}/data/editions/about.xml" out="${target}/about.json" style="${basedir}/scripts/xslt/xml-to-json.xsl">
+			<factory name="net.sf.saxon.TransformerFactoryImpl"/>
+			<classpath location="${basedir}/saxon/saxon9he.jar"/>
+	</xslt>
+	<delete file="${basedir}/data/editons/about.xml"/>
+	<xslt style="${basedir}/scripts/xslt/editions.xsl"  basedir="${basedir}/data/editions" destdir="${target}" includes="*.xml">
+			<factory name="net.sf.saxon.TransformerFactoryImpl"/>
+			<classpath location="${basedir}/saxon/saxon9he.jar"/>
+	</xslt>
+	<replace dir="${target}" value="">
+			<include name="*.html"/>
+			<replacetoken> xmlns=""</replacetoken>
+	</replace>
+	<replace dir="${target}" value="">
+			<include name="*.html"/>
+			<replacetoken>xmlns:tei="http://www.tei-c.org/ns/1.0"</replacetoken>
+	</replace>
+	<replace dir="${target}" value="">
+			<include name="*.html"/>
+			<replacetoken> xmlns="http://www.w3.org/1999/xhtml"</replacetoken>
+	</replace>
+
+</project>

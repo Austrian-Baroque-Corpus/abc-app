@@ -1,0 +1,63 @@
+---
+import "@fontsource-variable/inter/standard.css";
+import "tailwindcss/tailwind.css";
+
+import BaseHead from "../components/BaseHead.astro";
+import EditionAside from "../components/EditionAside.astro";
+import Footer from "../components/Footer.astro";
+import MatomoAnalytics from "../components/MatomoAnalytics.astro";
+import { baseurl, createBaseurl } from "../lib/baseurl.js";
+
+const { title, issue, corpus, date, name } = Astro.props;
+const backgroundcolor = "bg-stone-500";
+const githuburl = "https://github.com/wiener-diarium/";
+const textcolor = "text-stone-700";
+const matomoUrl = "https://matomo.acdh.oeaw.ac.at/";
+const siteId = 99999;
+---
+
+<html lang="de">
+	<head>
+		<BaseHead title={title} />
+		<link rel="stylesheet" href={createBaseurl("style.css")} />
+		<link
+			rel="stylesheet"
+			href="https://unpkg.com/de-micro-editor@0.4.2/src/css/micro-editor.css"
+		/>
+	</head>
+	<body class="flex flex-col">
+		<main class="container mb-auto flex flex-row">
+			<EditionAside
+				textcolor={textcolor}
+				backgroundcolor={backgroundcolor}
+				baseurl={baseurl}
+				width="basis-2/12"
+				issue={issue}
+				corpus={corpus}
+				date={date}
+				name={name}
+			/>
+			<div class="basis-10/12" id="edition-content">
+				<slot />
+			</div>
+		</main>
+		<Footer
+			backgroundcolor="bg-white"
+			github_url={githuburl}
+			textcolor={textcolor}
+			baseurl={baseurl}
+		/>
+		<script
+			is:inline
+			src="https://cdnjs.cloudflare.com/ajax/libs/openseadragon/4.1.0/openseadragon.min.js"
+		></script>
+		<script is:inline src={createBaseurl("osd_scroll.js")}></script>
+		<script is:inline src="https://unpkg.com/de-micro-editor@0.4.0/dist/de-editor.min.js"></script>
+		<script is:inline src={createBaseurl("run.js")}></script>
+		<script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js"
+		></script>
+		<script type="text/javascript" is:inline src={createBaseurl("mark.js")}></script>
+		<script type="text/javascript" is:inline src={createBaseurl("listStopProp.js")}></script>
+		<MatomoAnalytics matomoUrl={matomoUrl} siteId={siteId} />
+	</body>
+</html>

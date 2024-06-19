@@ -1,0 +1,31 @@
+---
+import Page from "../layouts/Page.astro";
+import { baseurl } from "../lib/baseurl.ts";
+
+async function impressum() {
+	const response = await fetch("https://imprint.acdh.oeaw.ac.at/22895/?locale=de&format=html");
+	const impressum = response.body;
+	return impressum;
+}
+const imprint = impressum();
+---
+
+<Page title="Imprint" baseurl={baseurl}>
+	<div class="m-4 p-4" set:html={imprint} />
+</Page>
+<style is:global>
+	h2 {
+		padding: 0.5rem 0;
+		font-size: 1.5rem !important;
+	}
+
+	h3 {
+		padding: 0.5rem 0;
+		font-size: 1.2rem;
+	}
+
+	p {
+		padding: 0.5rem 0;
+		font-size: 1rem;
+	}
+</style>
