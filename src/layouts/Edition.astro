@@ -5,15 +5,16 @@ import "tailwindcss/tailwind.css";
 import BaseHead from "../components/BaseHead.astro";
 import EditionAside from "../components/EditionAside.astro";
 import Footer from "../components/Footer.astro";
-import MatomoAnalytics from "../components/MatomoAnalytics.astro";
+import Header from "../components/Header.astro";
+// import MatomoAnalytics from "../components/MatomoAnalytics.astro";
 import { baseurl, createBaseurl } from "../lib/baseurl.js";
 
 const { title, issue, source, name } = Astro.props;
 const backgroundcolor = "bg-stone-500";
 const githuburl = "https://github.com/wiener-diarium/";
 const textcolor = "text-stone-700";
-const matomoUrl = "https://matomo.acdh.oeaw.ac.at/";
-const siteId = 99999;
+// const matomoUrl = "https://matomo.acdh.oeaw.ac.at/";
+// const siteId = 99999;
 ---
 
 <html lang="de">
@@ -26,6 +27,9 @@ const siteId = 99999;
 		/>
 	</head>
 	<body class="flex flex-col">
+		<header id="header">
+			<Header backgroundcolor={backgroundcolor} baseurl={baseurl} />
+		</header>
 		<main class="container mb-auto flex flex-row">
 			<EditionAside
 				textcolor={textcolor}
@@ -57,6 +61,6 @@ const siteId = 99999;
 		></script>
 		<script type="text/javascript" is:inline src={createBaseurl("mark.js")}></script>
 		<script type="text/javascript" is:inline src={createBaseurl("listStopProp.js")}></script>
-		<MatomoAnalytics matomoUrl={matomoUrl} siteId={siteId} />
+		<!-- <MatomoAnalytics matomoUrl={matomoUrl} siteId={siteId} /> -->
 	</body>
 </html>
