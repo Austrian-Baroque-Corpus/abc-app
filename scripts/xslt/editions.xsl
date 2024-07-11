@@ -32,41 +32,9 @@
 <div class="flex flex-row transcript active p-2 sm:flex-col">
 	<div class="basis-7/12 text px-4 yes-index sm:px-2 sm:basis-full md:basis-full">
 		<div class="flex flex-col section">
-			<xsl:for-each-group select=".//tei:front/tei:titlePage/*|.//tei:body/tei:div[@type='article']/*" group-starting-with="self::tei:pb">
-				<xsl:for-each select="current-group()/self::tei:pb">
-					<!-- <xsl:value-of select="*/name()"/> -->
-					<xsl:apply-templates select="self::tei:pb"/>
-					<xsl:for-each select="current-group()">
-						<xsl:apply-templates select="self::tei:docTitle|self::tei:milestone|self::tei:imprimatur|self::tei:ab[@type='imprint']|self::tei:ab[@type='count-date']"/>
-					</xsl:for-each>
-					<div class="grid grid-cols-2 sm:grid-cols-1 md:grid-cols-1">
-						<xsl:choose>
-							<xsl:when test="current-group()/self::*[@rendition='#lc'] or current-group()/self::*[@rendition='#rc']">
-								<div class="flex flex-col items-center">
-									<xsl:for-each select="current-group()">
-										<xsl:apply-templates select="self::*[@rendition='#lc']"/>
-									</xsl:for-each>
-								</div>
-								<div class="flex flex-col items-center">
-									<xsl:for-each select="current-group()">
-										<xsl:apply-templates select="self::*[@rendition='#rc']"/>
-									</xsl:for-each>
-								</div>
-							</xsl:when>
-							<xsl:when test="current-group()/self::*[rendition='#f'] or current-group()/self::*[rendition='#fc']">
-								<div class="flex flex-col items-center">
-									<xsl:for-each select="current-group()">
-										<xsl:apply-templates select="self::*[rendition='#f']|self::*[rendition='#fc']"/>
-									</xsl:for-each>
-								</div>
-							</xsl:when>
-						</xsl:choose>
-					</div>
-					<xsl:for-each select="current-group()">
-						<xsl:apply-templates select="self::tei:fw"/>
-					</xsl:for-each>
-				</xsl:for-each>
-			</xsl:for-each-group>
+			<xsl:for-each select=".//tei:front|.//tei:body">
+				<xsl:apply-templates/>
+			</xsl:for-each>
 		</div>
 	</div>
 	<div class="basis-5/12 facsimiles sm:hidden md:hidden">
@@ -121,7 +89,11 @@
 	<br class="linebreak"/>
 </xsl:template>
 
-<!-- <xsl:template match="tei:lb[@break]"/>
+<xsl:template match="tei:lb[@break]">
+	<span class="linebreak"><xsl:text>=</xsl:text><br /></span>
+</xsl:template>
+
+<!--
 
 <xsl:template match="tei:lb[parent::tei:list]"/> -->
 
@@ -147,53 +119,46 @@
 
 <xsl:template match="tei:w[parent::tei:item]">
 	<xsl:apply-templates/>
-	<xsl:if test="following-sibling::tei:*[1]/@break='no'">
-			<xsl:value-of select="."/><span class="linebreak"><xsl:text>=</xsl:text></span>
-		</xsl:if>
-	<xsl:if test="self::tei:w[not(following-sibling::tei:w) or not(following-sibling::tei:pc)]/parent::tei:item/following-sibling::*[1][@break]">
-		<span class="linebreak"><xsl:text>=</xsl:text></span>
-	</xsl:if>
 	<xsl:if test="following-sibling::*[1]/name() = 'pc'">
 		<xsl:value-of select="following-sibling::*[1]"/>
 	</xsl:if>
 </xsl:template>
 
 <xsl:template match="tei:w[not(parent::tei:item)]">
-	<xsl:choose>
-		<xsl:when test="following-sibling::tei:*[1]/@break='no'">
-			<xsl:value-of select="."/><span class="linebreak"><xsl:text>=</xsl:text></span>
-			<br class="linebreak"/>
-			<xsl:value-of select="following-sibling::tei:w[1]"/>
-		</xsl:when>
-		<xsl:when test="preceding-sibling::tei:*[1]/@break='no'">
-			<!-- do not serialize -->
-		</xsl:when>
-		<!-- <xsl:when test="matches(., '=$', 'm')">
-			<xsl:value-of select="replace(., '\s+$', '')"/>
-		</xsl:when>
-		<xsl:when test="matches(., '-$', 'm')">
-				<xsl:value-of select="replace(., '\s+$', '')"/>
-		</xsl:when> -->
-		<xsl:otherwise>
-			<xsl:value-of select="."/>
-		</xsl:otherwise>
-	</xsl:choose>
-	<xsl:if test="self::tei:w[not(following-sibling::tei:w) or not(following-sibling::tei:pc)]/parent::tei:item/following-sibling::*[1][@break]">
-		<span class="linebreak"><xsl:text>=</xsl:text></span>
-	</xsl:if>
+	<xsl:apply-templates/>
 	<xsl:if test="following-sibling::*[1]/name() = 'pc'">
 		<xsl:value-of select="following-sibling::*[1]"/>
 	</xsl:if>
 </xsl:template>
 
+<xsl:template match="tei:seg">
+	<xsl:apply-templates/>
+</xsl:template>
+
 <xsl:template match="tei:pc"/>
 
+<!-- <xsl:template match="tei:fw[@type='footer']">
+	<span class="block">
+		<xsl:apply-templates/>
+	</span>
+</xsl:template>
+
+<xsl:template match="tei:fw[@type='header']">
+	<span class="block">
+		<xsl:apply-templates/>
+	</span>
+</xsl:template> -->
+
+<xsl:template match="tei:fw[@type='pageNum']">
+	<span id="{@xml:id}" class="block yes-index text-center px-2">
+		<xsl:apply-templates/>
+	</span>
+</xsl:template>
+
 <xsl:template match="tei:fw[@type='catch']">
-	<div id="{@xml:id}" class="basis-full float-right text-right px-4">
-		<span class="yes-index">
-			<xsl:apply-templates/>
-		</span>
-	</div>
+	<span id="{@xml:id}" class="block yes-index text-right px-2">
+		<xsl:apply-templates/>
+	</span>
 </xsl:template>
 
 <xsl:template match="tei:ab">

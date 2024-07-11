@@ -8,7 +8,7 @@ import Footer from "../components/Footer.astro";
 import MatomoAnalytics from "../components/MatomoAnalytics.astro";
 import { baseurl, createBaseurl } from "../lib/baseurl.js";
 
-const { title, issue, corpus, date, name } = Astro.props;
+const { title, issue, source, name } = Astro.props;
 const backgroundcolor = "bg-stone-500";
 const githuburl = "https://github.com/wiener-diarium/";
 const textcolor = "text-stone-700";
@@ -33,8 +33,7 @@ const siteId = 99999;
 				baseurl={baseurl}
 				width="basis-2/12"
 				issue={issue}
-				corpus={corpus}
-				date={date}
+				source={source}
 				name={name}
 			/>
 			<div class="basis-10/12" id="edition-content">

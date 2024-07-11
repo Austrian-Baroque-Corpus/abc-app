@@ -14,27 +14,26 @@ export async function getStaticPaths() {
 			params: { slug: entry.name.replace(/\.html$/, "") },
 			props: {
 				html: readFile(`edition/${entry.name}`, "utf-8"),
-				date: new Date(entry.name.replace(/\.html$/, "").replace("wr_", "")),
 				issue:
 					editions[
 						(() => {
-							const name = entry.name.replace(/\.html$/, "");
+							const name = entry.name.replace(/\.html$/, ".xml");
 							return name;
 						})()
 					].title,
-				corpus:
+				source:
 					editions[
 						(() => {
-							const name = entry.name.replace(/\.html$/, "");
+							const name = entry.name.replace(/\.html$/, ".xml");
 							return name;
 						})()
-					].corpus,
+					].source,
 				name: entry.name,
 			},
 		}));
 }
 
-const { html, date, issue, corpus, name } = Astro.props;
+const { html, issue, name, source } = Astro.props;
 ---
 
 <style is:global>
@@ -43,7 +42,7 @@ const { html, date, issue, corpus, name } = Astro.props;
 		margin: 0 auto !important;
 	}
 </style>
-<Edition title={issue} baseurl={baseurl} date={date} issue={issue} corpus={corpus} name={name}>
+<Edition title={issue} baseurl={baseurl} issue={issue} name={name} source={source}>
 	<div class="flex flex-col">
 		<div set:html={html} />
 	</div>

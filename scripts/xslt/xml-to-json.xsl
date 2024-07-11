@@ -8,21 +8,16 @@
 	<xsl:output encoding="UTF-8" method="text" indent="yes" omit-xml-declaration="yes"/>
 
 	<xsl:template match="/">
-		<xsl:variable name="files" select="collection('../../data/editions/legacy')"/>
-		<xsl:variable name="files2" select="collection('../../data/editions/present')"/>
+		<xsl:variable name="files" select="collection('../../data/editions')"/>
 		<xsl:variable name="xml">
 			<map>
 				<xsl:for-each select="$files//tei:TEI">
 					<map key="{@xml:id}">
 						<string key="title">
-							<xsl:value-of select="//tei:titleStmt/tei:title[@level='a' or @type='num']"/>
+							<xsl:value-of select="//tei:titleStmt/tei:title[1]"/>
 						</string>
-					</map>
-				</xsl:for-each>
-				<xsl:for-each select="$files2//tei:TEI">
-					<map key="{substring-before(@xml:id, '.xml')}">
-						<string key="title">
-								<xsl:value-of select="//tei:titleStmt/tei:title[@level='a' or @type='num']"/>
+						<string key="source">
+							<xsl:value-of select="//tei:sourceDesc/tei:bibl[@type='short']"/>
 						</string>
 					</map>
 				</xsl:for-each>

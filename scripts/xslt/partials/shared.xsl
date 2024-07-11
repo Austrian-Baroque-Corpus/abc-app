@@ -25,10 +25,10 @@
 								<xsl:when test="starts-with($date, '1703')">
 										<xsl:variable name="img-url" select="'digit__'"/>
 										<xsl:variable name="graphic-url" select="concat($img-url, $img-1)"/>
-										<div class="my-2 basis-full" id="wr_page_{@n}">
+										<span class="my-2 basis-full" id="wr_page_{@n}">
 												<span class="anchor-pb"></span>
 												<span class="pb text-gray-400" id="{$graphic-url}">-----[<xsl:value-of select="./@n"/>]-----</span>
-										</div>
+										</span>
 								</xsl:when>
 								<xsl:otherwise>
 										<xsl:variable name="img-url" select="'wrz|'"/>
@@ -40,10 +40,10 @@
 										<xsl:variable name="img-dir-yearx" select="concat(substring($img-dir-year, 1, 3), 'x')"/>
 										<xsl:variable name="graphic-url" select="concat($img-url, $img-dir-yearx, '/', $img-dir-year, '/', $img-dir-month, '/', $img-dir1, '/', $img-1, '/full/full/0/default.jpg')"/> -->
 										<xsl:variable name="graphic-url" select="concat($img-url, $filedate, '|', @n, '|99.9|0' )"/>
-										<div class="my-2 basis-full" id="wr_page_{@n}">
+										<span class="my-2 basis-full" id="wr_page_{@n}">
 												<span class="anchor-pb"></span>
 												<span class="pb text-gray-400" id="{$graphic-url}">-----[<xsl:value-of select="./@n"/>]-----</span>
-										</div>
+										</span>
 								</xsl:otherwise>
 							</xsl:choose>
             </xsl:when>
@@ -52,10 +52,10 @@
                 <xsl:variable name="anno-url" select="'wrz|'"/>
                 <xsl:variable name="date" select="replace(substring-after(ancestor::tei:TEI/@xml:id, 'wr_'), '.xml', '')"/>
                 <xsl:variable name="graphic-url" select="concat($anno-url, replace($date, '-', ''), '|', @n, '|99.9|0')"/>
-                <div class="my-2 basis-full" id="wr_page_{@n}">
+                <span class="my-2 basis-full" id="wr_page_{@n}">
                     <span class="anchor-pb"></span>
                     <span class="pb text-gray-400" id="{$graphic-url}">-----[<xsl:value-of select="./@n"/>]-----</span>
-                </div>
+                </span>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
@@ -186,7 +186,7 @@
             <xsl:apply-templates/>
         </xsl:element>
     </xsl:template>
-    <xsl:template match="tei:rs">
+    <!-- <xsl:template match="tei:rs">
         <xsl:variable name="id" select="@xml:id"/>
         <xsl:variable name="tokens" select="tokenize(@ref, ' ')"/>
         <xsl:variable name="rendition" select="substring-after(@rendition, '#')"/>
@@ -656,7 +656,7 @@
                 </div>
             </div>
         </div>
-    </xsl:template>
+    </xsl:template> -->
 
     <!-- <xsl:template match="tei:rs[@ref or @key]">
         <strong>

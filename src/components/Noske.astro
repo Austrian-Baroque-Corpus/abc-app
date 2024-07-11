@@ -7,9 +7,7 @@
 		<div class="px-4">
 			<h4 class="pt-2 text-lg">Einfache Suche in den Wiener Diarium Transkripten</h4>
 			<div class="text-sm text-gray-600">
-				<a target="_blank" href="https://diarium-noske.acdh-dev.oeaw.ac.at/crystal"
-					>Erweiterte Suche in Crystal</a
-				>
+				<a target="_blank" href="http://localhost:8080/crystal">Erweiterte Suche in Crystal</a>
 			</div>
 			<div id="noske-search" class="text-center"></div>
 			<div id="hitsbox"></div>
@@ -26,17 +24,20 @@
 
 	const search = new NoskeSearch({
 		container: "noske-search",
+		autocomplete: true,
+		wordlistattr: ["word", "lemma", "type", "placeName", "persName"],
 	});
 
 	search.minQueryLength = 1;
 
 	search.search({
 		client: {
-			base: "https://diarium-noske.acdh-dev.oeaw.ac.at",
-			corpname: "diarium",
-			attrs: "word,id",
-			structs: "doc,p,head,list,docTitle,imprimatur,g",
-			refs: "doc.id,doc.corpus,p.id,head.id,list.id,docTitle.id,imprimatur.id",
+			//base: "http://localhost:8080",
+			base: "https://abacus-noske.acdh-dev.oeaw.ac.at",
+			corpname: "abacus",
+			attrs: "word,lemma,type,id,placeName,persName",
+			structs: "doc,g",
+			refs: "doc.id,doc.title",
 		},
 		hits: {
 			id: "hitsbox",
@@ -63,8 +64,16 @@
 				label: "text-lg text-gray-600 pt-2",
 			},
 		},
+		autocompleteOptions: {
+			id: "noske-autocomplete",
+			css: {
+				div: "bg-white border border-gray-300 absolute ml-40 mt-10 text-left overflow-hidden",
+				ul: "p-0",
+				li: "p-2 hover:bg-gray-100 text-sm text-gray-500 hover:cursor-pointer",
+			},
+		},
 		config: {
-			customUrl: "https://digitarium.acdh-dev.oeaw.ac.at/edition",
+			customUrl: "edition",
 			urlparam: "&img=on",
 		},
 	});

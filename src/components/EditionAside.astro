@@ -2,20 +2,13 @@
 import { createBaseurl } from "../lib/baseurl";
 import EditionEditor from "./EditionEditor.astro";
 
-const { textcolor, backgroundcolor, width, issue, corpus, date, name } = Astro.props;
+const { textcolor, backgroundcolor, width, issue, source, name } = Astro.props;
 
 function verifyArche() {
 	const format = "?format=raw";
-	if (corpus === "1") {
-		const url = "https://id.acdh.oeaw.ac.at/digitarium/";
-		const doc = "ed__" + name.replace(".html", ".xml");
-		return url + doc + format;
-	} else {
-		// const url = "https://id.acdh.oeaw.ac.at/digitarium2/";
-		// const doc = name.replace(".html", ".xml");
-		// return url + doc + format;
-		return "/";
-	}
+	const url = "https://id.acdh.oeaw.ac.at/abacus/";
+	const doc = "ed__" + name.replace(".html", ".xml");
+	return url + doc + format;
 }
 ---
 
@@ -69,28 +62,10 @@ function verifyArche() {
 
 		<div class="flex items-center justify-center text-center text-white">
 			<div class="p-4">
-				<p>
-					{
-						(() => {
-							if (corpus === "1") {
-								return "Ausgewählte Ausgaben 18. Jahrhundert";
-							} else {
-								return "Alle Ausgaben Siebenjähriger Krieg";
-							}
-						})()
-					}
-				</p>
 				<h1 class="text-xl font-bold sm:text-lg md:text-lg">{issue}</h1>
 				<p>Wienerisches Diarium</p>
 				<p class="text-sm">
-					{
-						date.toLocaleDateString("de-De", {
-							weekday: "long",
-							year: "numeric",
-							month: "long",
-							day: "numeric",
-						})
-					}
+					{source}
 				</p>
 				<p class="mt-4 flex justify-center">
 					<a href={verifyArche()} aria-label="Download" target="_blank">
