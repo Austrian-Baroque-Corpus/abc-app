@@ -56,7 +56,9 @@ for (const [id, { title, source }] of Object.entries(meta)) {
 		responsiveLayout: "collapse",
 		tooltips: true,
 	});
+	// @ts-ignore
 	table.on("rowClick", function (e, row) {
+		console.log(e);
 		var data = row.getData();
 		if (data.link != null) {
 			var url = data.link;
