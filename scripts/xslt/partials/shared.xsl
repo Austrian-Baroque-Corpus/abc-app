@@ -15,49 +15,14 @@
     </xsl:function>
 
     <xsl:template match="tei:pb" name="tei-pb">
-        <xsl:variable name="graphic-id" select="data(substring-after(@facs, '#'))"/>
-        <xsl:choose>
-            <xsl:when test="starts-with(ancestor::tei:TEI/@xml:id, 'edoc_wd_')">
-							<xsl:variable name="date" select="substring-after(ancestor::tei:TEI/@xml:id, 'edoc_wd_')"/>
-							<xsl:variable name="img-fn" select="substring-after(ancestor::tei:TEI//tei:surface[@xml:id=$graphic-id]/tei:graphic[1]/@url, 'anno:')"/>
-							<xsl:variable name="img-1" select="replace(replace(tokenize($img-fn, '_')[last()], '.jpg', ''), '.png', '')"/>
-							<xsl:choose>
-								<xsl:when test="starts-with($date, '1703')">
-										<xsl:variable name="img-url" select="'digit__'"/>
-										<xsl:variable name="graphic-url" select="concat($img-url, $img-1)"/>
-										<span class="my-2 basis-full" id="wr_page_{@n}">
-												<span class="anchor-pb"></span>
-												<span class="pb text-gray-400" id="{$graphic-url}">-----[<xsl:value-of select="./@n"/>]-----</span>
-										</span>
-								</xsl:when>
-								<xsl:otherwise>
-										<xsl:variable name="img-url" select="'wrz|'"/>
-										<xsl:variable name="filedate" select="substring-before($img-1, '-')"/>
-										<!-- <xsl:variable name="img-dir1" select="tokenize($img-1, '-')[1]"/>
-										<xsl:variable name="img-dir-year" select="tokenize($date, '-')[1]"/>
-										<xsl:variable name="img-dir-month" select="tokenize($date, '-')[2]"/>
-										<xsl:variable name="img-dir-day" select="tokenize($date, '-')[3]"/>
-										<xsl:variable name="img-dir-yearx" select="concat(substring($img-dir-year, 1, 3), 'x')"/>
-										<xsl:variable name="graphic-url" select="concat($img-url, $img-dir-yearx, '/', $img-dir-year, '/', $img-dir-month, '/', $img-dir1, '/', $img-1, '/full/full/0/default.jpg')"/> -->
-										<xsl:variable name="graphic-url" select="concat($img-url, $filedate, '|', @n, '|99.9|0' )"/>
-										<span class="my-2 basis-full" id="wr_page_{@n}">
-												<span class="anchor-pb"></span>
-												<span class="pb text-gray-400" id="{$graphic-url}">-----[<xsl:value-of select="./@n"/>]-----</span>
-										</span>
-								</xsl:otherwise>
-							</xsl:choose>
-            </xsl:when>
-            <xsl:otherwise>
-                <!--<xsl:variable name="graphic-url" select="ancestor::tei:TEI//tei:surface[@xml:id=$graphic-id]/tei:graphic[starts-with(@url, 'http')]/@url"/>-->
-                <xsl:variable name="anno-url" select="'wrz|'"/>
-                <xsl:variable name="date" select="replace(substring-after(ancestor::tei:TEI/@xml:id, 'wr_'), '.xml', '')"/>
-                <xsl:variable name="graphic-url" select="concat($anno-url, replace($date, '-', ''), '|', @n, '|99.9|0')"/>
-                <span class="my-2 basis-full" id="wr_page_{@n}">
-                    <span class="anchor-pb"></span>
-                    <span class="pb text-gray-400" id="{$graphic-url}">-----[<xsl:value-of select="./@n"/>]-----</span>
-                </span>
-            </xsl:otherwise>
-        </xsl:choose>
+				<xsl:variable name="doc" select="//tei:publicationStmt/tei:idno[@type='cr-xq-mets'][1]/text()"/>
+        <xsl:variable name="graphic-id" select="@facs"/>
+				<xsl:variable name="url" select="concat('/abacus/', $doc ,'/default/')"/>
+				<xsl:variable name="graphic-url" select="concat($url, $graphic-id)"/>
+				<span class="my-2 basis-full" id="abc_page_{@n}">
+						<span class="anchor-pb"></span>
+						<span class="pb text-gray-400" id="{$graphic-url}">-----[<xsl:value-of select="./@n"/>]-----</span>
+				</span>
     </xsl:template>
     <xsl:template match="tei:unclear">
         <abbr title="unclear"><xsl:apply-templates/></abbr>

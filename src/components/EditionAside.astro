@@ -1,5 +1,5 @@
 ---
-import { createBaseurl } from "../lib/baseurl";
+// import { createBaseurl } from "../lib/baseurl";
 import EditionEditor from "./EditionEditor.astro";
 
 const { textcolor, backgroundcolor, width, issue, source, name } = Astro.props;
@@ -50,20 +50,9 @@ function verifyArche() {
 		</ul>
 	</div>
 	<div class="active sticky top-16" id="edition-aside">
-		<div class="my-4 flex shrink-0 justify-center text-center text-white">
-			<a href={createBaseurl("digitarium")} aria-label="Zurück zur Hauptseite">
-				<img
-					class="w-60 p-4"
-					src={createBaseurl("Digitarium-Logo-Vector-final.png")}
-					alt="Wiener Diarium Logo"
-				/>
-			</a>
-		</div>
-
 		<div class="flex items-center justify-center text-center text-white">
 			<div class="p-4">
 				<h1 class="text-xl font-bold sm:text-lg md:text-lg">{issue}</h1>
-				<p>Wienerisches Diarium</p>
 				<p class="text-sm">
 					{source}
 				</p>

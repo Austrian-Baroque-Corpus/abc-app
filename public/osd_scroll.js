@@ -11,8 +11,7 @@ var height = screen.height;
 var width = document.querySelector(".text").clientWidth;
 var container = document.getElementById("container_facs_1");
 var wrapper = document.getElementsByClassName("facsimiles")[0];
-var anno_url = "https://anno.onb.ac.at/cgi-content/annoshow?call=";
-var digit_url = "https://iiif.acdh.oeaw.ac.at/iiif/images/digitarium/";
+var url = "http://clarin.oeaw.ac.at/cr-images";
 
 /*
 ##################################################################
@@ -51,11 +50,7 @@ creates an array for osd viewer with static images
 var element = document.getElementsByClassName("pb");
 var tileSources = [];
 var img = element[0].getAttribute("id");
-if (String(img).includes("digit__")) {
-	var img = img.replace("digit__", digit_url) + ".jp2/full/full/0/default.jpg";
-} else {
-	var img = anno_url + img;
-}
+var img = url + img;
 var imageURL = {
 	type: "image",
 	url: img,
@@ -152,11 +147,7 @@ function loadNewImage(new_item) {
 	if (new_item) {
 		// source attribute hold image item id without url
 		var new_image = new_item.getAttribute("id");
-		if (String(new_image).includes("digit__")) {
-			var new_image = new_image.replace("digit__", digit_url) + ".jp2/full/full/0/default.jpg";
-		} else {
-			var new_image = anno_url + new_image;
-		}
+		var new_image = url + new_image;
 		var old_image = viewer.world.getItemAt(0);
 		if (old_image) {
 			// get url from current/old image and replace the image id with

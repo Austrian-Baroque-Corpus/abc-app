@@ -63,6 +63,14 @@ const { textcolor } = Astro.props;
 					>
 						ABaC:us
 					</a>
+					<a
+						href={createBaseurl("toc")}
+						class={`block px-2 text-lg ${textcolor}`}
+						role="menuitem"
+						tabindex="-1"
+					>
+						Inhaltsverzeichnis
+					</a>
 				</div>
 			</div>
 		</div>
@@ -77,6 +85,14 @@ const { textcolor } = Astro.props;
 			tabindex="-1"
 		>
 			ABaC:us
+		</a>
+		<a
+			href={createBaseurl("toc")}
+			class={`block px-2 text-lg ${textcolor}`}
+			role="menuitem"
+			tabindex="-1"
+		>
+			Inhaltsverzeichnis
 		</a>
 	</div>
 </div>

@@ -6,90 +6,51 @@ import { createBaseurl } from "../lib/baseurl";
 interface Meta {
 	id: string;
 	title: string;
-	corpus: string | undefined;
-	link: string;
-	date: string;
+	source: string;
+	url: string;
 }
 const about = await readFile("edition/about.json", "utf-8");
 const meta: Record<
 	string,
 	{
 		title: string;
-		corpus: string;
+		source: string;
 	}
 > = JSON.parse(about);
 const data = [] as Array<Meta>;
-for (const [id, { title, corpus }] of Object.entries(meta)) {
-	let data_normalized = new Date(id.replace("edoc_wd_", "").replace(/_/g, "-"));
-	let date = data_normalized.toISOString();
+for (const [id, { title, source }] of Object.entries(meta)) {
 	data.push({
 		id: id,
 		title: title,
-		corpus: (() => {
-			switch (corpus) {
-				case "1":
-					return "Alle Ausgaben 18. Jahrhundert";
-				case "2":
-					return "Ausgewählte Ausgaben Siebenjähriger Krieg";
-			}
-		})(),
-		link: createBaseurl(`edition/${id.replace("edoc_wd_", "")}?img=on`),
-		date: date.replace(/T.+/g, ""),
+		source: source,
+		url: createBaseurl(`edition/${id.replace(".xml", ".html?aside=closed")}`),
 	});
 }
 ---
 
-<div id="toc" class="m-2"></div>
+<div id="toc" class="ml-12 mt-4"></div>
 <style>
 	@import url("https://unpkg.com/tabulator-tables@6.2.1/dist/css/tabulator.min.css");
-	@import url("https://unpkg.com/tabulator-tables@6.2.1/dist/css/tabulator_semanticui.min.css"); /* @tailwind base;
-	@tailwind components;
-	@tailwind utilities;
-
-	.tabulator {
-		.tabulator-headers,
-		.tabulator-row {
-			@apply flex border-b border-dotted border-neutral-400 p-4;
-		}
-
-		.tabulator-cell[tabulator-field="field1"],
-		.tabulator-col[tabulator-field="field1"] {
-			@apply border-r border-neutral-300 mr-4;
-		}
-
-		.tabulator-cell[tabulator-field="field2"],
-		.tabulator-cell[tabulator-field="field3"] {
-			@apply bg-neutral-100;
-		}
-	} */
+	@import url("https://unpkg.com/tabulator-tables@6.2.1/dist/css/tabulator_semanticui.min.css");
 </style>
 <script is:inline src="https://unpkg.com/tabulator-tables@6.2.1/dist/js/tabulator.min.js"></script>
 <script is:inline src="https://cdn.jsdelivr.net/npm/luxon@3.4.4/build/global/luxon.min.js"></script>
 <script is:inline define:vars={{ data }}>
 	const table = new Tabulator("#toc", {
-		height: 1000,
+		height: 400,
 		layout: "fitColumns",
 		pagination: true,
 		headerFilterLiveFilterDelay: 600,
 		initialSort: [
-			{ column: "date", dir: "asc" }, //sort by this first
-			{ column: "corpus", dir: "asc" }, //then sort by this second
+			{ column: "title", dir: "asc" }, //sort by this first
 		],
 		columns: [
-			{
-				title: "Datum",
-				field: "date",
-				headerFilter: "input",
-				resizeable: false,
-				sorter: "date",
-				sorterParams: { format: "iso", alignEmptyValues: "top" },
-			},
-			{
-				title: "Edition",
-				field: "corpus",
-				headerFilter: "input",
-			},
 			{ title: "Titel", field: "title", headerFilter: "input" },
+			{
+				title: "Quelle",
+				field: "source",
+				headerFilter: "input",
+			},
 		],
 		data: data,
 		responsiveLayout: "collapse",
@@ -100,7 +61,7 @@ for (const [id, { title, corpus }] of Object.entries(meta)) {
 		if (data.link != null) {
 			var url = data.link;
 		} else if (data.id != null) {
-			var url = data.id + ".html";
+			var url = `edition/${data.id.replace(".xml", ".html?aside=closed")}`;
 		}
 		window.location.href = url;
 	});

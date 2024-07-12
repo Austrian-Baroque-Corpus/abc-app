@@ -3,7 +3,7 @@ import Page from "../layouts/Page.astro";
 import { baseurl } from "../lib/baseurl.ts";
 
 async function impressum() {
-	const response = await fetch("https://imprint.acdh.oeaw.ac.at/22895/?locale=de&format=html");
+	const response = await fetch("https://imprint.acdh.oeaw.ac.at/23016/?locale=de&format=html");
 	const impressum = response.body;
 	return impressum;
 }

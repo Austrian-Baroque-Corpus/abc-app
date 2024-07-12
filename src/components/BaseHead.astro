@@ -1,4 +1,6 @@
 ---
+import { createBaseurl } from "@/lib/baseurl";
+
 const { title } = Astro.props;
 ---
 
@@ -33,6 +35,6 @@ const { title } = Astro.props;
 			<link rel="None" type="image/png" href="images/favicons/mstile-310x150.png" />
 			<link rel="shortcut icon" type="image/png" href="images/favicons/favicon-196x196.png" /> -->
 <!-- favicon end -->
-<link rel="icon" type="image/svg+xml" href="/Digitarium-Logo-Vector-final.png" sizes="any" />
+<link rel="icon" type="image/svg+xml" href={createBaseurl("Logo_A_v3_resize65.png")} sizes="any" />
 <link rel="profile" href="http://gmpg.org/xfn/11" />
 <title>{title}</title>
