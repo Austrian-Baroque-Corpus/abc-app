@@ -10,6 +10,7 @@ new LoadEditor({
 				html_class: "linebreak",
 				css_class: "linebreak-on",
 				chg_citation: "citation-url",
+				default: true,
 				hide: {
 					hidden: true,
 					class: "linebreak",
