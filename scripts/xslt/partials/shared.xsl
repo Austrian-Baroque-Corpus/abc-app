@@ -23,6 +23,10 @@
 						<span class="anchor-pb"></span>
 						<span class="pb text-gray-400" id="{$graphic-url}">-----[<xsl:value-of select="./@n"/>]-----</span>
 				</span>
+				<xsl:if test="following-sibling::*[1][self::tei:pb] and not(parent::tei:p)">
+						<div class="min-h-[250px]">
+						</div>
+				</xsl:if>
     </xsl:template>
     <xsl:template match="tei:unclear">
         <abbr title="unclear"><xsl:apply-templates/></abbr>
