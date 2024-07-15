@@ -9,11 +9,44 @@ new LoadEditor({
 				color: "undefined",
 				html_class: "linebreak",
 				css_class: "linebreak-on",
-				chg_citation: "citation-url",
 				default: true,
 				hide: {
 					hidden: true,
 					class: "linebreak",
+				},
+				features: {
+					all: false,
+					class: "features-1",
+				},
+			},
+			{
+				opt: "prs",
+				opt_slider: "prs-features-slider",
+				title: "Personen",
+				color: "yellow",
+				html_class: "person",
+				css_class: "person-active",
+				default: true,
+				hide: {
+					hidden: false,
+					class: "person-active",
+				},
+				features: {
+					all: false,
+					class: "features-1",
+				},
+			},
+			{
+				opt: "plc",
+				opt_slider: "plc-features-slider",
+				title: "Orte",
+				color: "orange",
+				html_class: "place",
+				css_class: "place-active",
+				default: true,
+				hide: {
+					hidden: false,
+					class: "place-active",
 				},
 				features: {
 					all: false,
@@ -37,7 +70,6 @@ new LoadEditor({
 				opt: "ff",
 				title: "Schriftart",
 				urlparam: "ff",
-				chg_citation: "citation-url",
 				fonts: {
 					default: "default",
 					font1: "Times-New-Roman",
@@ -76,7 +108,6 @@ new LoadEditor({
 				opt: "fs",
 				title: "Schriftgröße",
 				urlparam: "fs",
-				chg_citation: "citation-url",
 				sizes: {
 					default: "default",
 					font_size_14: "14",

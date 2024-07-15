@@ -24,8 +24,15 @@
 						<span class="pb text-gray-400" id="{$graphic-url}">-----[<xsl:value-of select="./@n"/>]-----</span>
 				</span>
 				<xsl:if test="following-sibling::*[1][self::tei:pb] and not(parent::tei:p)">
-						<div class="min-h-[250px]">
-						</div>
+					<div class="min-h-[250px]">
+					</div>
+				</xsl:if>
+				<xsl:if test="not(following-sibling::tei:*) and not(parent::tei:w) and not(parent::tei:p)">
+					<div class="min-h-[250px]">
+					</div>
+				</xsl:if>
+				<xsl:if test="parent::tei:p or parent::tei:w">
+					<br class="linebreak"/>
 				</xsl:if>
     </xsl:template>
     <xsl:template match="tei:unclear">
@@ -43,26 +50,28 @@
     <xsl:template match="tei:date">
         <span class="date"><xsl:apply-templates/></span>
     </xsl:template>
-    <!-- <xsl:template match="tei:lb">
-        <br/>
-    </xsl:template> -->
+    <xsl:template match="tei:choice">
+        <xsl:apply-templates/>
+    </xsl:template>
+		<xsl:template match="tei:orig">
+			<!-- do not render -->
+    </xsl:template>
+		<xsl:template match="tei:reg">
+        <xsl:apply-templates/>
+    </xsl:template>
 
     <xsl:template match="tei:note">
         <xsl:element name="a">
             <xsl:attribute name="id">
-                <xsl:text>fna_</xsl:text>
-                <xsl:number level="any" format="1" count="tei:note"/>
+                <xsl:value-of select="@xml:id"/>
             </xsl:attribute>
             <xsl:attribute name="href">
-                <xsl:text>#fn</xsl:text>
-                <xsl:number level="any" format="1" count="tei:note"/>
+                <xsl:value-of select="replace(@xml:id, 'LW_', '#')"/>
             </xsl:attribute>
-            <xsl:attribute name="aria-label">
-                <xsl:value-of select="normalize-space(.)"/>
+						<xsl:attribute name="class">
+                <xsl:text>mb-4</xsl:text>
             </xsl:attribute>
-            <sup>
-                <xsl:number level="any" format="1" count="tei:note"/>
-            </sup>
+            <xsl:apply-templates/>
         </xsl:element>
     </xsl:template>
 
@@ -121,13 +130,18 @@
     </xsl:template>
 
     <xsl:template match="tei:ref">
-        <a class="ref {@type}" href="{@target}"><xsl:apply-templates/></a>
+			<a class="ref {@type}" href="#LW_{substring-after(@target, '#')}" id="{substring-after(@target, '#')}">
+				<xsl:apply-templates/>
+			</a>
     </xsl:template>
-    <xsl:template match="tei:lg">
-        <p><xsl:apply-templates/></p>
+    <xsl:template match="tei:lg[parent::tei:lg]">
+      <li><ul><xsl:apply-templates/></ul></li>
+    </xsl:template>
+		<xsl:template match="tei:lg[not(parent::tei:lg)]">
+      <ul><xsl:apply-templates/></ul>
     </xsl:template>
     <xsl:template match="tei:l">
-        <xsl:apply-templates/><br/>
+      <li><xsl:apply-templates/></li>
     </xsl:template>
     <xsl:template match="tei:p">
        <p><xsl:apply-templates/></p>

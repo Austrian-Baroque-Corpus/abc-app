@@ -32,7 +32,7 @@
 <div class="flex flex-row transcript active p-2 sm:flex-col">
 	<div class="basis-7/12 text px-4 yes-index sm:px-2 sm:basis-full md:basis-full">
 		<div class="flex flex-col section">
-			<xsl:for-each select=".//tei:front|.//tei:body">
+			<xsl:for-each select=".//tei:front|.//tei:body|.//tei:back">
 				<xsl:apply-templates/>
 			</xsl:for-each>
 		</div>
@@ -44,53 +44,69 @@
 		</div>
 	</div>
 </div>
-<xsl:for-each select="//tei:back">
-<div class="tei-back">
-    <xsl:apply-templates/>
-</div>
-</xsl:for-each>
+</xsl:template>
 
+<xsl:template match="tei:titlePage">
+	<div class="title-page" id="#top_page">
+		<xsl:apply-templates/>
+	</div>
 </xsl:template>
 
 <xsl:template match="tei:docTitle">
-	<div class="title-page py-4" id="#top_page">
+	<div>
 		<xsl:apply-templates/>
 	</div>
 </xsl:template>
 
 <xsl:template match="tei:titlePart">
-	<xsl:choose>
-		<xsl:when test="@type='count-date-normalized' or @type='num'">
-			<h5 id="{@xml:id}" class="yes-index text-center py-4 text-lg"><xsl:apply-templates/></h5>
-		</xsl:when>
-		<xsl:when test="@type='main-title' or @type='main'">
-			<h4	id="{@xml:id}" class="yes-index text-center py-4 text-2xl"><xsl:apply-templates/></h4>
-		</xsl:when>
-	</xsl:choose>
+	<h4 class="yes-index text-center py-2 text-xl">
+		<xsl:apply-templates/>
+	</h4>
 </xsl:template>
 
-<xsl:template match="tei:milestone">
-	<hr class="mx-10 p-4 border-gray-500"/>
+<xsl:template match="tei:byline">
+	<div>
+		<p class="yes-index text-center py-2 text-lg">
+			<xsl:apply-templates/>
+		</p>
+	</div>
 </xsl:template>
 
-<xsl:template match="tei:imprimatur">
-	<div id="{@xml:id}">
-		<p id="{@xml:id}" class="yes-index italic text-center py-4"><xsl:apply-templates/></p>
+<xsl:template match="tei:docImprint">
+	<div>
+		<p class="yes-index text-center py-2 text-lg">
+			<xsl:apply-templates/>
+		</p>
 	</div>
 </xsl:template>
 
 <xsl:template match="tei:head">
-	<h5 id="{@xml:id}" class="yes-index text-center font-semibold">
+	<h5 class="yes-index text-center font-semibold">
 		<xsl:apply-templates/>
 	</h5>
 </xsl:template>
 
 <xsl:template match="tei:lb[not(@break)]">
 	<br class="linebreak"/>
+	<xsl:if test="@rend and not(ancestor::tei:p)">
+		<hr class="py-2 border-gray-500"/>
+	</xsl:if>
+</xsl:template>
+
+<xsl:template match="tei:figure">
+	<div>
+		<xsl:apply-templates/>
+	</div>
 </xsl:template>
 
 <xsl:template match="tei:lb[@break]">
 	<span class="linebreak"><xsl:text>=</xsl:text><br /></span>
+</xsl:template>
+
+<xsl:template match="tei:div">
+	<div>
+		<xsl:apply-templates/>
+	</div>
 </xsl:template>
 
 <!--
@@ -131,8 +147,20 @@
 	</xsl:if>
 </xsl:template>
 
-<xsl:template match="tei:seg">
+<xsl:template match="tei:seg[not(@type='whitespace')]">
+	<span class="antiqua">
+		<xsl:apply-templates/>
+	</span>
+	<xsl:if test="following-sibling::*[1]/name() = 'pc'">
+		<xsl:value-of select="following-sibling::*[1]"/>
+	</xsl:if>
+</xsl:template>
+
+<xsl:template match="tei:seg[@type='whitespace']">
 	<xsl:apply-templates/>
+	<xsl:if test="following-sibling::*[1]/name() = 'pc'">
+		<xsl:value-of select="following-sibling::*[1]"/>
+	</xsl:if>
 </xsl:template>
 
 <xsl:template match="tei:pc"/>
@@ -150,13 +178,33 @@
 </xsl:template> -->
 
 <xsl:template match="tei:fw[@type='pageNum']">
-	<span id="{@xml:id}" class="block yes-index text-center px-2">
+	<span class="block yes-index text-center px-2">
+		<xsl:choose>
+			<xsl:when test="parent::tei:fw[@type='header']/following-sibling::tei:lb[@rend='line']">
+				<xsl:attribute name="class">block yes-index text-center px-2 border-b border-gray-900</xsl:attribute>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:attribute name="class">block yes-index text-center px-2</xsl:attribute>
+			</xsl:otherwise>
+		</xsl:choose>
 		<xsl:apply-templates/>
 	</span>
 </xsl:template>
 
 <xsl:template match="tei:fw[@type='catch']">
-	<span id="{@xml:id}" class="block yes-index text-right px-2">
+	<span class="block yes-index text-right px-2">
+		<xsl:apply-templates/>
+	</span>
+</xsl:template>
+
+<xsl:template match="tei:persName[ancestor::tei:body or ancestor::tei:front]">
+	<span class="person">
+		<xsl:apply-templates/>
+	</span>
+</xsl:template>
+
+<xsl:template match="tei:placeName[ancestor::tei:body or ancestor::tei:front]">
+	<span class="place">
 		<xsl:apply-templates/>
 	</span>
 </xsl:template>
@@ -164,28 +212,28 @@
 <xsl:template match="tei:ab">
 	<xsl:choose>
 		<xsl:when test="@type='catch-word'">
-			<div id="{@xml:id}" class="grid-item w-[100%] text-end">
+			<div class="grid-item w-[100%] text-end">
 				<h5 class="yes-index catch-word">
 						<xsl:apply-templates/>
 				</h5>
 			</div>
 		</xsl:when>
 		<xsl:when test="@type='imprint' and not(contains(@facs, 'facs_1_'))">
-			<div id="{@xml:id}">
+			<div>
 				<h5 class="italic yes-index text-center">
 						<xsl:apply-templates/>
 				</h5>
 			</div>
 		</xsl:when>
 		<xsl:when test="@type='count-date' and not(contains(@facs, 'facs_1_'))">
-			<div id="{@xml:id}">
+			<div>
 				<h4 class="yes-index text-center">
 						<xsl:apply-templates/>
 				</h4>
 			</div>
 		</xsl:when>
 		<xsl:otherwise>
-			<div id="{@xml:id}">
+			<div>
 			<h5 class="yes-index">
 					<xsl:apply-templates/>
 			</h5>
@@ -195,7 +243,7 @@
 </xsl:template>
 
 <xsl:template match="tei:p">
-	<p id="{@xml:id}" class="yes-index text-justify py-2 px-4">
+	<p class="yes-index text-justify py-2">
 		<xsl:apply-templates/>
 		<!--<xsl:if test="following-sibling::tei:p[@prev]">
 				<xsl:if test="following-sibling::*[1]/name() = 'pb'">
@@ -212,7 +260,7 @@
 </xsl:template>
 
 <xsl:template match="tei:list">
-	<ul class="p-4" id="{@xml:id}">
+	<ul class="p-4">
 		<xsl:apply-templates/>
 	</ul>
 </xsl:template>

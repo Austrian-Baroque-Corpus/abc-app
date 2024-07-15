@@ -38,7 +38,7 @@ export default defineConfig({
 	output: "static",
 	// output: "static",
 	server: {
-		port: 3000,
+		port: 3030,
 	},
 	site: "https://austrian-baroque-corpus.github.io/abc-app",
 	base: "/abc-app/",
