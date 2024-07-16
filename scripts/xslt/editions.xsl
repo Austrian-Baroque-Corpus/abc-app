@@ -88,6 +88,9 @@
 
 <xsl:template match="tei:lb[not(@break)]">
 	<br class="linebreak"/>
+	<xsl:if test="parent::tei:titlePage and @rend">
+		<hr class="border-black" />
+	</xsl:if>
 </xsl:template>
 
 <xsl:template match="tei:figure">
@@ -131,14 +134,14 @@
 </xsl:template> -->
 
 <xsl:template match="tei:w[parent::tei:item]">
-	<xsl:apply-templates/>
+	<xsl:apply-templates/><span class="pos text-cyan-400">[ l=<xsl:value-of select="@lemma"/> | t=<xsl:value-of select="@type"/> ]</span>
 	<xsl:if test="following-sibling::*[1]/name() = 'pc'">
 		<xsl:value-of select="following-sibling::*[1]"/>
 	</xsl:if>
 </xsl:template>
 
 <xsl:template match="tei:w[not(parent::tei:item)]">
-	<xsl:apply-templates/>
+	<xsl:apply-templates/><span class="pos text-cyan-500">[ l=<xsl:value-of select="@lemma"/> | t=<xsl:value-of select="@type"/> ]</span>
 	<xsl:if test="following-sibling::*[1]/name() = 'pc'">
 		<xsl:value-of select="following-sibling::*[1]"/>
 	</xsl:if>

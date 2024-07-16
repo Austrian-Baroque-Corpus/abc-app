@@ -73,7 +73,7 @@ function performMarkUrl() {
 	if (jumpto === false) {
 		let hash = url.hash;
 		if (hash) {
-			let element = document.getElementById(hash.substring(1));
+			let element = document.querySelector(hash);
 			element.scrollIntoView({
 				block: "start",
 				inline: "nearest",

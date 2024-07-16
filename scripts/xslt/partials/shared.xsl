@@ -19,10 +19,22 @@
         <xsl:variable name="graphic-id" select="@facs"/>
         <xsl:variable name="url" select="concat('/abacus/', $doc ,'/default/')"/>
         <xsl:variable name="graphic-url" select="concat($url, $graphic-id)"/>
-        <span class="my-2 block mt-[200px]" id="abc_page_{@n}">
-					<span class="anchor-pb"></span>
-					<span class="pb text-gray-400" id="{$graphic-url}">-----[<xsl:value-of select="./@n"/>]-----</span>
-        </span>
+        <xsl:choose>
+					<xsl:when test="parent::tei:div">
+						<span class="my-2 block mt-[200px]" id="abc_page_{@xml:id}">
+							<span class="anchor-pb"></span>
+							<span class="pb text-gray-400" id="{$graphic-url}">-----[<xsl:value-of select="./@n"/>]-----</span>
+						</span>
+					</xsl:when>
+					<xsl:otherwise>
+						<div>
+							<span class="my-2 block mt-[200px]" id="abc_page_{@xml:id}">
+								<span class="anchor-pb"></span>
+								<span class="pb text-gray-400" id="{$graphic-url}">-----[<xsl:value-of select="./@n"/>]-----</span>
+							</span>
+						</div>
+					</xsl:otherwise>
+				</xsl:choose>
         <xsl:if test="following-sibling::*[1][self::tei:pb] and not(parent::tei:p)">
             <div class="min-h-[250px]">
             </div>
@@ -31,9 +43,9 @@
             <div class="min-h-[250px]">
             </div>
         </xsl:if>
-        <xsl:if test="parent::tei:p or parent::tei:w">
+        <!-- <xsl:if test="parent::tei:p or parent::tei:w">
             <br class="linebreak"/>
-        </xsl:if>
+        </xsl:if> -->
     </xsl:template>
     <xsl:template match="tei:unclear">
         <abbr title="unclear"><xsl:apply-templates/></abbr>

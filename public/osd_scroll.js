@@ -22,7 +22,7 @@ height is always the screen height minus some offset
 ##################################################################
 */
 if (!wrapper.classList.contains("fade")) {
-	container.style.height = `${String(height / 1.2)}px`;
+	container.style.height = `${String(height / 1.3)}px`;
 	// set osd wrapper container width
 	var container = document.querySelector(".section");
 	if (container !== null) {
@@ -30,8 +30,9 @@ if (!wrapper.classList.contains("fade")) {
 	}
 	var container = document.getElementById("viewer-1");
 	container.style.width = `${String(width / 1.16)}px`;
+	container.style.height = `${String(width / 1.16)}px`;
 } else {
-	container.style.height = `${String(height / 1.2)}px`;
+	container.style.height = `${String(height / 1.3)}px`;
 	// set osd wrapper container width
 	var container = document.querySelector(".section");
 	if (container !== null) {
@@ -65,10 +66,38 @@ initialize osd
 var viewer = OpenSeadragon({
 	id: "container_facs_1",
 	prefixUrl: "https://cdnjs.cloudflare.com/ajax/libs/openseadragon/4.0.0/images/",
-	sequenceMode: true,
-	showNavigator: true,
 	tileSources: tileSources,
+	visibilityRatio: 1,
+	sequenceMode: true,
+	showNavigationControl: true,
+	showNavigator: false,
+	showSequenceControl: true,
+	showZoomControl: true,
+	zoomInButton: "osd_zoom_in_button",
+	zoomOutButton: "osd_zoom_out_button",
+	homeButton: "osd_zoom_reset_button",
+	constrainDuringPan: true,
 });
+
+viewer.viewport.goHome = function () {
+	fitVertically_align_left_bottom();
+};
+
+function fitVertically_align_left_bottom() {
+	let initial_bounds = viewer.viewport.getBounds();
+	let ratio = initial_bounds.width / initial_bounds.height;
+	let tiledImage = viewer.world.getItemAt(viewer.world.getItemCount() - 1);
+	if (ratio > tiledImage.contentAspectX) {
+		var new_width = tiledImage.normHeight * ratio;
+		var new_bounds = new OpenSeadragon.Rect(0, 0, new_width, tiledImage.normHeight);
+	} else {
+		var new_height = 1 / ratio;
+		let bounds_y = -(new_height - tiledImage.normHeight);
+		var new_bounds = new OpenSeadragon.Rect(0, bounds_y, 1, new_height);
+	}
+	viewer.viewport.fitBounds(new_bounds, true);
+}
+
 /*
 ##################################################################
 remove container holding the images url
