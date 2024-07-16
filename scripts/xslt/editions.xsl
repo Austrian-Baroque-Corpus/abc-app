@@ -31,7 +31,7 @@
 <xsl:template match="/">
 <div class="flex flex-row transcript active p-2 sm:flex-col">
 	<div class="basis-7/12 text px-4 yes-index sm:px-2 sm:basis-full md:basis-full">
-		<div class="flex flex-col section">
+		<div class="flex flex-col section font-cambria text-xl">
 			<xsl:for-each select=".//tei:front|.//tei:body|.//tei:back">
 				<xsl:apply-templates/>
 			</xsl:for-each>
@@ -59,14 +59,14 @@
 </xsl:template>
 
 <xsl:template match="tei:titlePart">
-	<h4 class="yes-index text-center py-2 text-xl">
+	<h4 class="yes-index text-center py-2">
 		<xsl:apply-templates/>
 	</h4>
 </xsl:template>
 
 <xsl:template match="tei:byline">
 	<div>
-		<p class="yes-index text-center py-2 text-lg">
+		<p class="yes-index text-center py-2">
 			<xsl:apply-templates/>
 		</p>
 	</div>
@@ -74,7 +74,7 @@
 
 <xsl:template match="tei:docImprint">
 	<div>
-		<p class="yes-index text-center py-2 text-lg">
+		<p class="yes-index text-center py-2">
 			<xsl:apply-templates/>
 		</p>
 	</div>
@@ -88,9 +88,6 @@
 
 <xsl:template match="tei:lb[not(@break)]">
 	<br class="linebreak"/>
-	<xsl:if test="@rend and not(ancestor::tei:p)">
-		<hr class="py-2 border-gray-500"/>
-	</xsl:if>
 </xsl:template>
 
 <xsl:template match="tei:figure">
@@ -148,9 +145,25 @@
 </xsl:template>
 
 <xsl:template match="tei:seg[not(@type='whitespace')]">
-	<span class="antiqua">
-		<xsl:apply-templates/>
-	</span>
+	<xsl:variable name="rend" select="if(@rend = 'bold') then('font-bold')
+																		else if(@rend = 'antiqua') then('font-antiqua')
+																		else if(@rend = 'spaced') then('tracking-[.3em]')
+																		else if(@rend = 'italicised') then('italic')
+																		else if(@rend = 'smallCaps') then('font-variant')
+																		else('')"/>
+	<xsl:choose>
+		<xsl:when test="@rend = 'initialCapital'">
+			<span class="text-3xl">
+				<xsl:value-of select="substring(./tei:w/., 1, 1)"/>
+			</span>
+			<xsl:value-of select="substring(./tei:w/., 2)"/>
+		</xsl:when>
+		<xsl:otherwise>
+			<span class="{$rend}">
+				<xsl:apply-templates/>
+			</span>
+		</xsl:otherwise>
+	</xsl:choose>
 	<xsl:if test="following-sibling::*[1]/name() = 'pc'">
 		<xsl:value-of select="following-sibling::*[1]"/>
 	</xsl:if>
@@ -166,25 +179,25 @@
 <xsl:template match="tei:pc"/>
 
 <!-- <xsl:template match="tei:fw[@type='footer']">
-	<span class="block">
+	<span class="block mt-[200px]">
 		<xsl:apply-templates/>
 	</span>
-</xsl:template>
+</xsl:template> -->
 
-<xsl:template match="tei:fw[@type='header']">
-	<span class="block">
+<!-- <xsl:template match="tei:fw[@type='header']">
+	<span class="block mt-[200px]">
 		<xsl:apply-templates/>
 	</span>
 </xsl:template> -->
 
 <xsl:template match="tei:fw[@type='pageNum']">
-	<span class="block yes-index text-center px-2">
+	<span>
 		<xsl:choose>
 			<xsl:when test="parent::tei:fw[@type='header']/following-sibling::tei:lb[@rend='line']">
-				<xsl:attribute name="class">block yes-index text-center px-2 border-b border-gray-900</xsl:attribute>
+				<xsl:attribute name="class">font-antiqua block yes-index text-center px-2 border-b border-black</xsl:attribute>
 			</xsl:when>
 			<xsl:otherwise>
-				<xsl:attribute name="class">block yes-index text-center px-2</xsl:attribute>
+				<xsl:attribute name="class">font-antiqua block yes-index text-center px-2</xsl:attribute>
 			</xsl:otherwise>
 		</xsl:choose>
 		<xsl:apply-templates/>
@@ -243,7 +256,8 @@
 </xsl:template>
 
 <xsl:template match="tei:p">
-	<p class="yes-index text-justify py-2">
+	<xsl:variable name="indent" select="if(@rend = 'indent') then('indent-8') else('')"/>
+	<p class="yes-index text-justify py-1 {$indent}">
 		<xsl:apply-templates/>
 		<!--<xsl:if test="following-sibling::tei:p[@prev]">
 				<xsl:if test="following-sibling::*[1]/name() = 'pb'">

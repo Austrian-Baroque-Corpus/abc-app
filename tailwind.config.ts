@@ -20,7 +20,13 @@ module.exports = {
 					"5xl": "2550px",
 				},
 			},
+			fontFamily: {
+				antiqua: "Helvetica, Verdana, sans-serif;",
+				variant: "font-variant: small-caps;",
+				cambria: "Cambria, serif;",
+			},
 		},
+
 		screens: {
 			sm: { min: "320px", max: "767px" },
 			// => @media (min-width: 640px and max-width: 767px) { ... }

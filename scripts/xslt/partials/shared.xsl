@@ -15,25 +15,25 @@
     </xsl:function>
 
     <xsl:template match="tei:pb" name="tei-pb">
-				<xsl:variable name="doc" select="//tei:publicationStmt/tei:idno[@type='cr-xq-mets'][1]/text()"/>
+        <xsl:variable name="doc" select="//tei:publicationStmt/tei:idno[@type='cr-xq-mets'][1]/text()"/>
         <xsl:variable name="graphic-id" select="@facs"/>
-				<xsl:variable name="url" select="concat('/abacus/', $doc ,'/default/')"/>
-				<xsl:variable name="graphic-url" select="concat($url, $graphic-id)"/>
-				<span class="my-2 basis-full" id="abc_page_{@n}">
-						<span class="anchor-pb"></span>
-						<span class="pb text-gray-400" id="{$graphic-url}">-----[<xsl:value-of select="./@n"/>]-----</span>
-				</span>
-				<xsl:if test="following-sibling::*[1][self::tei:pb] and not(parent::tei:p)">
-					<div class="min-h-[250px]">
-					</div>
-				</xsl:if>
-				<xsl:if test="not(following-sibling::tei:*) and not(parent::tei:w) and not(parent::tei:p)">
-					<div class="min-h-[250px]">
-					</div>
-				</xsl:if>
-				<xsl:if test="parent::tei:p or parent::tei:w">
-					<br class="linebreak"/>
-				</xsl:if>
+        <xsl:variable name="url" select="concat('/abacus/', $doc ,'/default/')"/>
+        <xsl:variable name="graphic-url" select="concat($url, $graphic-id)"/>
+        <span class="my-2 block mt-[200px]" id="abc_page_{@n}">
+					<span class="anchor-pb"></span>
+					<span class="pb text-gray-400" id="{$graphic-url}">-----[<xsl:value-of select="./@n"/>]-----</span>
+        </span>
+        <xsl:if test="following-sibling::*[1][self::tei:pb] and not(parent::tei:p)">
+            <div class="min-h-[250px]">
+            </div>
+        </xsl:if>
+        <xsl:if test="not(following-sibling::tei:*) and not(parent::tei:w) and not(parent::tei:p)">
+            <div class="min-h-[250px]">
+            </div>
+        </xsl:if>
+        <xsl:if test="parent::tei:p or parent::tei:w">
+            <br class="linebreak"/>
+        </xsl:if>
     </xsl:template>
     <xsl:template match="tei:unclear">
         <abbr title="unclear"><xsl:apply-templates/></abbr>
