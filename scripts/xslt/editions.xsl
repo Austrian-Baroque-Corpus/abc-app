@@ -156,10 +156,21 @@
 																		else('')"/>
 	<xsl:choose>
 		<xsl:when test="@rend = 'initialCapital'">
-			<span class="text-3xl">
-				<xsl:value-of select="substring(./tei:w/., 1, 1)"/>
-			</span>
-			<xsl:value-of select="substring(./tei:w/., 2)"/>
+
+				<xsl:choose>
+					<xsl:when test="child::tei:w">
+						<span class="text-3xl">
+							<xsl:value-of select="substring(./tei:w/., 1, 1)"/>
+						</span>
+						<xsl:value-of select="substring(./tei:w/., 2)"/>
+					</xsl:when>
+					<xsl:otherwise>
+						<span class="text-3xl">
+							<xsl:value-of select="substring(., 1, 1)"/>
+						</span>
+						<xsl:value-of select="substring(., 2)"/>
+					</xsl:otherwise>
+				</xsl:choose>
 		</xsl:when>
 		<xsl:otherwise>
 			<span class="{$rend}">

@@ -23,7 +23,7 @@ for (const [id, { title, source }] of Object.entries(meta)) {
 		id: id,
 		title: title,
 		source: source,
-		url: createBaseurl(`edition/${id.replace(".xml", ".html?aside=closed")}`),
+		url: createBaseurl(`edition/${id.replace(".xml", ".html?aside=closed#abc_page_title")}`),
 	});
 }
 ---
@@ -63,7 +63,7 @@ for (const [id, { title, source }] of Object.entries(meta)) {
 		if (data.link != null) {
 			var url = data.link;
 		} else if (data.id != null) {
-			var url = `edition/${data.id.replace(".xml", ".html?aside=closed")}`;
+			var url = `edition/${data.id.replace(".xml", ".html?aside=closed#abc_page_title")}`;
 		}
 		window.location.href = url;
 	});
