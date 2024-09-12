@@ -7,22 +7,27 @@ interface Props {
 	image: string;
 	text: string;
 	image_alt: string;
+	link: string;
 }
 
-const { image, text, image_alt } = Astro.props;
+const { image, text, image_alt, link } = Astro.props;
 ---
 
 <div class="my-4 flex flex-row">
-	<section class="basis-2/12 rounded-lg border border-gray-200 p-4">
+	<section class="basis-2/12 items-center border-gray-200 py-2 align-middle">
 		{
-			typeof image === "string" ? (
-				<img src={createBaseurl(image.slice(1))} alt={image_alt} />
-			) : (
-				<Image src={image} alt={image_alt} format="avif" quality="mid" />
+			(
+				<a href={link}>
+					{typeof image === "string" ? (
+						<img src={createBaseurl(image.slice(1))} alt={image_alt} />
+					) : (
+						<Image src={image} alt={image_alt} format="avif" quality="mid" />
+					)}
+				</a>
 			)
 		}
 	</section>
-	<article class="basis-10/12 px-6 pt-2 text-lg">
+	<article class="basis-10/12 pl-4 text-justify text-lg">
 		{text}
 		<slot />
 	</article>

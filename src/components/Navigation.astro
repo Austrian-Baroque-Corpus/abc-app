@@ -57,6 +57,14 @@ const { textcolor } = Astro.props;
 			<div class="absolute right-2 ml-6 block sm:hidden">
 				<div class="flex space-x-4">
 					<a
+						href={createBaseurl("corpus")}
+						class={`block px-2 text-lg ${textcolor}`}
+						role="menuitem"
+						tabindex="-1"
+					>
+						Corpus
+					</a>
+					<a
 						href={createBaseurl("search")}
 						class={`block px-2 text-lg ${textcolor}`}
 						role="menuitem"
@@ -79,6 +87,14 @@ const { textcolor } = Astro.props;
 </div>
 <div class="hidden" id="mobile-menu">
 	<div class="space-y-1 px-2 pb-3 pt-2 text-center">
+		<a
+			href={createBaseurl("corpus")}
+			class={`block px-2 text-lg ${textcolor}`}
+			role="menuitem"
+			tabindex="-1"
+		>
+			Corpus
+		</a>
 		<a
 			href={createBaseurl("abacus")}
 			class={`block px-2 text-lg ${textcolor}`}

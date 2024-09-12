@@ -1,0 +1,175 @@
+---
+import TextImage from "../components/TextImage.astro";
+import Page from "../layouts/Page.astro";
+import { createBaseurl } from "../lib/baseurl.ts";
+
+const backgroundcolor = "bg-stone-400";
+// const textcolor = "text-stone-700";
+---
+
+<Page title="Corpus">
+	<div class="grid grid-cols-2">
+		<div class="p-4">
+			<h1 class=`my-6 p-0 ${backgroundcolor}`>
+				<img src={createBaseurl("Corpus-Button.jpg")} alt="Corpus Button" />
+			</h1>
+			<img class="pt-2" src={createBaseurl("Eckstein.jpg")} alt="Eckstein" title="Eckstein" />
+			<p class="py-2 text-justify">
+				<strong>ABaC:us – Austrian Baroque Corpus</strong> ist eine strukturierte Sammlung von digitalen
+				Volltexten aus der Barockzeit, die seit 2010 an der Österreichischen Akademie der Wissenschaften
+				in Wien aufgebaut und beforscht wird. Die in ABaC:us vereinten historischen Texte stammen aus
+				dem
+				<strong>Zeitraum von 1650 bis 1750</strong> und lassen sich der Periode des „Älteren Neuhochdeutsch“
+				zuordnen. Sie sind Zeugnisse eines reichhaltigen und weitverbreiteten Literaturzweiges, der sich
+				mit der Vorbereitung auf den Tod beschäftigt.
+			</p>
+			<p class="py-2 text-justify">
+				Mit ABaC:us wird der Versuch unternommen, zeitentfernte Printprodukte aus der Barockzeit mit
+				zeitgemäßen texttechnologischen Methoden und international anerkannten Standards zu
+				verbinden. Das Projektteam hat sich bei der Konzeption des Korpus für eine streng
+				quellenkundliche Vorgehensweise entschieden und jeweils Erstausgaben zur Digitalisierung
+				ausgewählt, sofern diese zu identifizieren waren (Erstdruckprinzip).
+			</p>
+			<p class="py-2 text-justify">
+				ABaC:us umfasst derzeit etwa 200.000 Token – etwa <strong>1000 Textseiten</strong> stellt das
+				Projektteam nun testweise, kostenfrei und in hochwertiger Qualität für den wissenschaftlichen
+				Bedarf zur Verfügung.
+			</p>
+			<img
+				class="pt-2"
+				src={createBaseurl("kleinePortion.jpg")}
+				alt="ausgewählte Werke"
+				title="ausgewählte Werke"
+			/>
+			<p class="py-2 text-justify">
+				Alle Schriften, die in ABaC:us derzeit online verfügbar sind, gehen auf den bekannten
+				Augustiner Barfüßer Prediger und Schriftsteller <strong>Abraham a Sancta Clara</strong> (1644-1709,
+				eigentlich Johann Ulrich Megerle) zurück beziehungsweise werden sie ihm bis heute zugeschrieben:
+			</p>
+			<h4 class="border-b pt-4 font-bold">Mercks Wienn</h4>
+			<TextImage
+				link={createBaseurl(
+					"edition/Abraham-Mercks_Wien.html?aside=closed&lb=on&prs=on&plc=on#abc_page_title",
+				)}
+				image="/Abraham-Mercks_Wienn.jpg"
+				image_alt="Abraham-Mercks_Wienn.jpg"
+				text=""
+			>
+				<p>
+					Abraham â Sancta Clara: Mercks Wienn / Das ist Deß wütenden Todts ein vmbständige
+					Beschreibung Jn Der berühmten Haubt vnd Kayserl. Residentz Statt in Oesterreich [...].
+					Gedruckt zu Wienn / bey Peter Paul Vivian / der löbl: Universitet Buchdrucker 1680.
+				</p>
+				<p class="py-2 text-left">Stiftsbibliothek Melk (Signatur 48.022)</p>
+				<p class="py-2 text-left">
+					Zitation: Abraham â Sancta Clara: Mercks Wienn. Wien, 1680. (Digitale Ausgabe). In:
+					ABaC:us – Austrian Baroque Corpus. Hrsg. von Claudia Resch und Ulrike Czeitschner.
+					https://acdh.oeaw.ac.at/abacus/get/abacus.1 abgerufen am 12. 9. 2024.
+				</p>
+			</TextImage>
+			<h4 class="border-b pt-4 font-bold">Lösch Wienn</h4>
+			<TextImage
+				link={createBaseurl(
+					"edition/Abraham-Loesch_Wienn.html?aside=closed&lb=on&prs=on&plc=on#abc_page_title",
+				)}
+				image="/Abraham-Loesch_Wienn.jpg"
+				image_alt="Abraham-Loesch_Wienn.jpg"
+				text=""
+			>
+				<p>
+					Abraham â Sancta Clara: Lösch Wienn / Das ist Ein Bewögliche Anmahnung zu der Kays.
+					Residentz=Statt Wienn in Oesterreich [...] Gedruckt zu Wien / bey Peter Paul Vivian /
+					1680.
+				</p>
+				<p class="py-2 text-left">
+					Universitätsbibliothek Graz, Rara Sammlung (Signatur I 25.896 Rara II)
+				</p>
+				<p class="py-2 text-left">
+					Zitation: Abraham â Sancta Clara: Lösch Wienn. Wien, 1680. (Digitale Ausgabe). In: ABaC:us
+					– Austrian Baroque Corpus. Hrsg. von Claudia Resch und Ulrike Czeitschner.
+					https://acdh.oeaw.ac.at/abacus/get/abacus.5 abgerufen am 12. 9. 2024
+				</p>
+			</TextImage>
+			<h4 class="border-b pt-4 font-bold">Todten Bruderschaft</h4>
+			<TextImage
+				link={createBaseurl(
+					"edition/Abraham-Todten_Bruderschaft.html?aside=closed&lb=on&prs=on&plc=on#abc_page_title",
+				)}
+				image="/Abraham-Todten_Bruderschaft.jpg"
+				image_alt="Abraham-Todten_Bruderschaft.jpg"
+				text=""
+			>
+				<p>
+					[Abraham â Sancta Clara]: Grosse Todten Bruderschaft / Das ist Ein kurtzer Entwurff Deß
+					Sterblichen Lebens [...] Gedruckt im Jahr 1681.
+				</p>
+				<p class="py-2 text-left">
+					Österreichische Nationalbibliothek, Sammlung von Handschriften und alten Drucken (Signatur
+					298.002-A) Zitation: Abraham â Sancta Clara: Grosse Todten Bruderschaft. Wien, 1681.
+					(Digitale Ausgabe).
+				</p>
+				<p class="py-2 text-left">
+					In: ABaC:us – Austrian Baroque Corpus. Hrsg. von Claudia Resch und Ulrike Czeitschner.
+					https://acdh.oeaw.ac.at/abacus/get/abacus.7 abgerufen am 12. 9. 2024
+				</p>
+			</TextImage>
+			<h4 class="border-b pt-4 font-bold">Augustini Feuriges Hertz</h4>
+			<TextImage
+				link={createBaseurl(
+					"edition/Abraham-Augustini_feuriges_Hertz.html?aside=closed&lb=on&prs=on&plc=on#abc_page_title",
+				)}
+				image="/Abraham-Augustini_feuriges_Hertz.jpg"
+				image_alt="Abraham-Augustini_feuriges_Hertz.jpg"
+				text=""
+			>
+				<p>
+					Abraham â Sancta Clara: AUGUSTINI Feuriges Hertz Tragt Ein Hertzliches Mitleyden mit den
+					armen im Feeg=Feuer Leydenden Seelen [...] Gedruckt zu Saltzburg bey Melchior Haan [...]
+					Anno 1693.
+				</p>
+				<p class="py-2 text-left">
+					Österreichische Nationalbibliothek, Sammlung von Handschriften und alten Drucken (Signatur
+					484.862-A Alt) Zitation: Abraham â Sancta Clara: Augustini Feuriges Hertz. Salzburg, 1693.
+					(Digitale Ausgabe).
+				</p>
+				<p class="py-2 text-left">
+					In: ABaC:us – Austrian Baroque Corpus. Hrsg. von Claudia Resch und Ulrike Czeitschner.
+					(https://acdh.oeaw.ac.at/abacus/get/abacus.9 abgerufen am 12. 9. 2024)
+				</p>
+			</TextImage>
+			<h4 class="border-b pt-4 font-bold">Todten-Capelle</h4>
+			<TextImage
+				link={createBaseurl(
+					"edition/Abraham-Todten_Capelle.html?aside=closed&lb=on&prs=on&plc=on#abc_page_title",
+				)}
+				image="/Abraham-Todten_Capelle.jpg"
+				image_alt="Abraham-Todten_Capelle.jpg"
+				text=""
+			>
+				<p class="text-justify">
+					[Abraham â Sancta Clara]: Besonders meublirt- und gezierte Todten=Capelle / Oder
+					Allgemeiner Todten=Spiegel / [...] Nürnberg / Bey Christoph Weigel [...] Würtzburg /
+					Druckts Marrtin Frantz Hertz. An. 1710.
+				</p>
+				<p class="py-2 text-left">
+					University Library Illinois, Emblem Collection of the University of Illinois,
+					Urbana-Champaign (Signatur 832Ab8)
+				</p>
+				<p class="py-2 text-left">
+					Zitation: Abraham â Sancta Clara: Todten-Capelle. Würzburg, 1710. (Digitale Ausgabe) . In:
+					ABaC:us – Austrian Baroque Corpus. Hrsg. von Claudia Resch und Ulrike Czeitschner.
+					(https://acdh.oeaw.ac.at/abacus/get/abacus.3 abgerufen am 12. 9. 2024)
+				</p>
+			</TextImage>
+		</div>
+		<div class="p-4">
+			<div class="py-6">
+				<img
+					class="max-w-[600px] rounded-md sm:max-w-[300px] md:max-w-[400px]"
+					src={createBaseurl("intro_image.jpg")}
+					alt="Austrian Baroque Corpus"
+				/>
+			</div>
+		</div>
+	</div>
+</Page>
