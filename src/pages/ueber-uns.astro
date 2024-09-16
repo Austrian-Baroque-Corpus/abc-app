@@ -1,6 +1,6 @@
 ---
 import SingleImage from "../components/SingleImage.astro";
-import { components, Content } from "../content/ueber_uns.mdx";
+import { Content } from "../content/ueber_uns.mdx";
 import Page from "../layouts/Page.astro";
 import { createBaseurl } from "../lib/baseurl.ts";
 ---
@@ -9,7 +9,7 @@ import { createBaseurl } from "../lib/baseurl.ts";
 	<h1 class="my-6 bg-stone-400 p-0">
 		<img src={createBaseurl("6Ueberuns.jpg")} alt="Annotation Button" />
 	</h1>
-	<Content components={{ ...components, SingleImage: SingleImage }} />
+	<Content components={{ SingleImage: SingleImage }} />
 </Page>
 <style is:global>
 	p {
