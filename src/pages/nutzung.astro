@@ -1,0 +1,28 @@
+---
+import SingleImage from "../components/SingleImage.astro";
+import { components, Content } from "../content/nutzung.mdx";
+import Page from "../layouts/Page.astro";
+import { createBaseurl } from "../lib/baseurl.ts";
+---
+
+<Page title="Nutzbarkeit">
+	<h1 class="my-6 bg-stone-400 p-0">
+		<img src={createBaseurl("4Nutzung.jpg")} alt="Annotation Button" />
+	</h1>
+	<Content components={{ ...components, SingleImage: SingleImage }} />
+</Page>
+<style is:global>
+	p {
+		padding: 0.5rem 0;
+		text-align: justify;
+	}
+
+	a {
+		color: #c00000;
+	}
+
+	td {
+		vertical-align: top;
+		padding: 0.5rem 0;
+	}
+</style>

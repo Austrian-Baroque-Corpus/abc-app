@@ -1,5 +1,4 @@
 import {
-	collection,
 	config,
 	fields,
 	// type GitHubConfig,
@@ -20,9 +19,9 @@ const localMode: LocalConfig["storage"] = {
 export default config({
 	storage: localMode,
 	singletons: {
-		about: singleton({
-			label: "Über uns",
-			path: "src/content/about",
+		corpus: singleton({
+			label: "Corpus",
+			path: "src/content/corpus",
 			format: { contentField: "content" },
 			schema: {
 				title: fields.text({
@@ -32,8 +31,8 @@ export default config({
 					label: "Inhalt",
 					options: {
 						image: {
-							directory: "public/images/about",
-							publicPath: "/images/about",
+							directory: "public/images/corpus",
+							publicPath: "/images/corpus",
 						},
 					},
 					components: {
@@ -52,12 +51,16 @@ export default config({
 								}),
 								image: fields.image({
 									label: "Bild",
-									directory: "public/images/about",
-									publicPath: "/images/about",
+									directory: "public/images/corpus",
+									publicPath: "/images/corpus",
 								}),
 								image_alt: fields.text({
 									label: "Bild Alt",
 									description: "Der Alt-Text für das Bild",
+								}),
+								link: fields.text({
+									label: "Link",
+									description: "Der Link, der unter dem Text angezeigt wird.",
 								}),
 							},
 						}),
@@ -70,8 +73,8 @@ export default config({
 										{
 											image: fields.image({
 												label: "Bild",
-												directory: "public/images/about",
-												publicPath: "/images/about",
+												directory: "public/images/corpus",
+												publicPath: "/images/corpus",
 											}),
 											alt: fields.text({
 												label: "Alt",
@@ -115,9 +118,9 @@ export default config({
 				}),
 			},
 		}),
-		help: singleton({
-			label: "Hilfe",
-			path: "src/content/help",
+		annotation: singleton({
+			label: "Annotation",
+			path: "src/content/annotation",
 			format: { contentField: "content" },
 			schema: {
 				title: fields.text({
@@ -127,8 +130,98 @@ export default config({
 					label: "Inhalt",
 					options: {
 						image: {
-							directory: "public/images/help",
-							publicPath: "/images/help",
+							directory: "public/images/annotation",
+							publicPath: "/images/annotation",
+						},
+					},
+					components: {
+						TextImage: wrapper({
+							label: "Text und Bild",
+							description: "Ein Container mit Text und einem Bild",
+							schema: {
+								text: fields.text({
+									label: "Text",
+									description: "Der Text, der neben dem Bild angezeigt wird.",
+								}),
+								image: fields.image({
+									label: "Bild",
+									directory: "public/images/annotation",
+									publicPath: "/images/annotation",
+								}),
+								image_alt: fields.text({
+									label: "Bild Alt",
+									description: "Der Alt-Text für das Bild",
+								}),
+							},
+						}),
+						ImageGallery: wrapper({
+							label: "Gallerie",
+							description: "Eine Gallerie mit Bildern",
+							schema: {
+								images: fields.array(
+									fields.object(
+										{
+											image: fields.image({
+												label: "Bild",
+												directory: "public/images/annotation",
+												publicPath: "/images/annotation",
+											}),
+											alt: fields.text({
+												label: "Alt",
+											}),
+											caption: fields.text({
+												label: "Caption",
+											}),
+										},
+										{
+											label: "Bilder",
+										},
+									),
+								),
+							},
+						}),
+						SingleImage: wrapper({
+							label: "Einzelbild",
+							description: "Ein einzelnes Bild",
+							schema: {
+								image: fields.object(
+									{
+										image: fields.image({
+											label: "Bild",
+											directory: "public/images/annotation",
+											publicPath: "/images/annotation",
+										}),
+										alt: fields.text({
+											label: "Alt",
+										}),
+										caption: fields.text({
+											label: "Caption",
+										}),
+									},
+									{
+										label: "Einzelbild",
+									},
+								),
+							},
+						}),
+					},
+				}),
+			},
+		}),
+		nutzung: singleton({
+			label: "Nutzung",
+			path: "src/content/nutzung",
+			format: { contentField: "content" },
+			schema: {
+				title: fields.text({
+					label: "Titel",
+				}),
+				content: fields.mdx({
+					label: "Inhalt",
+					options: {
+						image: {
+							directory: "public/images/nutzung",
+							publicPath: "/images/nutzung",
 						},
 					},
 					components: {
@@ -147,8 +240,8 @@ export default config({
 								}),
 								image: fields.image({
 									label: "Bild",
-									directory: "public/images/help",
-									publicPath: "/images/help",
+									directory: "public/images/nutzung",
+									publicPath: "/images/nutzung",
 								}),
 								image_alt: fields.text({
 									label: "Bild Alt",
@@ -165,8 +258,8 @@ export default config({
 										{
 											image: fields.image({
 												label: "Bild",
-												directory: "public/images/help",
-												publicPath: "/images/help",
+												directory: "public/images/nutzung",
+												publicPath: "/images/nutzung",
 											}),
 											alt: fields.text({
 												label: "Alt",
@@ -190,8 +283,8 @@ export default config({
 									{
 										image: fields.image({
 											label: "Bild",
-											directory: "public/images/help",
-											publicPath: "/images/help",
+											directory: "public/images/nutzung",
+											publicPath: "/images/nutzung",
 										}),
 										alt: fields.text({
 											label: "Alt",
@@ -210,9 +303,9 @@ export default config({
 				}),
 			},
 		}),
-		project: singleton({
-			label: "Projekt",
-			path: "src/content/project",
+		cite: singleton({
+			label: "Zitierung, Kontakt",
+			path: "src/content/cite",
 			format: { contentField: "content" },
 			schema: {
 				title: fields.text({
@@ -222,8 +315,8 @@ export default config({
 					label: "Inhalt",
 					options: {
 						image: {
-							directory: "public/images/project",
-							publicPath: "/images/project",
+							directory: "public/images/cite",
+							publicPath: "/images/cite",
 						},
 					},
 					components: {
@@ -242,8 +335,8 @@ export default config({
 								}),
 								image: fields.image({
 									label: "Bild",
-									directory: "public/images/project",
-									publicPath: "/images/project",
+									directory: "public/images/cite",
+									publicPath: "/images/cite",
 								}),
 								image_alt: fields.text({
 									label: "Bild Alt",
@@ -260,8 +353,8 @@ export default config({
 										{
 											image: fields.image({
 												label: "Bild",
-												directory: "public/images/project",
-												publicPath: "/images/project",
+												directory: "public/images/cite",
+												publicPath: "/images/cite",
 											}),
 											alt: fields.text({
 												label: "Alt",
@@ -285,8 +378,8 @@ export default config({
 									{
 										image: fields.image({
 											label: "Bild",
-											directory: "public/images/project",
-											publicPath: "/images/project",
+											directory: "public/images/cite",
+											publicPath: "/images/cite",
 										}),
 										alt: fields.text({
 											label: "Alt",
@@ -305,181 +398,30 @@ export default config({
 				}),
 			},
 		}),
-	},
-	collections: {
-		publications: collection({
-			label: "Publikationen",
-			slugField: "title",
-			parseSlugForSort: (slug) => {
-				return slug + "-" + String(new Date().getTime());
-			},
-			path: "src/content/publications/*",
-			format: { data: "json" },
+		ueber_uns: singleton({
+			label: "Über uns",
+			path: "src/content/ueber_uns",
+			format: { contentField: "content" },
 			schema: {
-				title: fields.slug({
-					name: { label: "Titel", description: "Publikationstitel" },
-					slug: {
-						label: "URL und Dateiname",
-						description: "Der Name der Datei und der URL",
-					},
-				}),
-				publicationUnstructured: fields.text({
-					label: "Publikation unstrukturiert",
-					multiline: true,
-				}),
-				authors: fields.array(
-					fields.object({
-						firstName: fields.text({ label: "Vorname" }),
-						lastName: fields.text({ label: "Nachname" }),
-						middleName: fields.text({ label: "Zweiter Vorname" }),
-					}),
-					{
-						label: "Autor(en)",
-					},
-				),
-				year: fields.text({
-					label: "Jahr",
-				}),
-				publishedIn: fields.text({
-					label: "Publiziert in",
-				}),
-				publishers: fields.text({
-					label: "Verlag",
-				}),
-				pubPlace: fields.text({
-					label: "Erscheinungsort",
-				}),
-				volume: fields.text({
-					label: "Band",
-				}),
-				pages: fields.text({
-					label: "Seiten",
-				}),
-				url: fields.text({
-					label: "URL",
-				}),
-				urldate: fields.date({
-					label: "Zugriffsdatum",
-				}),
-			},
-		}),
-		presentations: collection({
-			label: "Präsentationen",
-			slugField: "title",
-			parseSlugForSort: (slug) => {
-				return slug + "-" + String(new Date().getTime());
-			},
-			path: "src/content/presentations/*",
-			format: { data: "json" },
-			schema: {
-				title: fields.slug({
-					name: { label: "Titel" },
-				}),
-				presentationUnstructured: fields.text({
-					label: "Präsentationen unstrukturiert",
-					multiline: true,
-				}),
-				type: fields.select({
-					label: "Typ",
-					options: [
-						{ label: "Workshop", value: "Workshop" },
-						{ label: "Vortrag", value: "Vortrag" },
-						{ label: "Poster", value: "Poster" },
-					],
-					defaultValue: "Vortrag",
-				}),
-				authors: fields.array(
-					fields.object({
-						firstName: fields.text({ label: "Vorname" }),
-						lastName: fields.text({ label: "Nachname" }),
-						middleName: fields.text({ label: "Zweiter Vorname" }),
-					}),
-					{
-						label: "Autor(en)",
-					},
-				),
-				date: fields.date({
-					label: "Datum",
-				}),
-				place: fields.text({
-					label: "Ort",
-				}),
-				url: fields.text({
-					label: "URL",
-				}),
-			},
-		}),
-		events: collection({
-			label: "Events",
-			slugField: "title",
-			parseSlugForSort: (slug) => {
-				return slug + "-" + String(new Date().getTime());
-			},
-			path: "src/content/events/*",
-			entryLayout: "content",
-			format: {
-				contentField: "content",
-			},
-			schema: {
-				type: fields.select({
-					label: "Typ",
-					options: [
-						{ label: "Workshop", value: "Workshop" },
-						{ label: "Vortrag", value: "Vortrag" },
-						{ label: "Konferenz", value: "Konferenz" },
-						{ label: "Buchpräsentation", value: "Buchpräsentation" },
-					],
-					defaultValue: "Vortrag",
-				}),
-				authors: fields.array(
-					fields.object({
-						firstName: fields.text({ label: "Vorname" }),
-						lastName: fields.text({ label: "Nachname" }),
-						middleName: fields.text({ label: "Zweiter Vorname" }),
-					}),
-					{
-						label: "Autor(en)",
-					},
-				),
-				title: fields.slug({
-					name: { label: "Titel" },
-				}),
-				date: fields.date({
-					label: "Datum",
-				}),
-				place: fields.text({
-					label: "Ort",
-				}),
-				url: fields.text({
-					label: "URL",
-				}),
-				image: fields.image({
-					label: "Titelbild",
-					directory: "public/images/events/title",
-					publicPath: "/images/events/title",
+				title: fields.text({
+					label: "Titel",
 				}),
 				content: fields.mdx({
-					label: "Content",
+					label: "Inhalt",
 					options: {
 						image: {
-							directory: "public/images/news/content",
-							publicPath: "/images/news/content",
+							directory: "public/images/ueber_uns",
+							publicPath: "/images/ueber_uns",
 						},
 					},
 					components: {
 						TextImage: wrapper({
-							label: "Text and Image",
-							description: "A container with text and an image",
-							// ContentView: (props) => {
-							// 	return `<div>
-							// 			${props.value.text}
-							// 			<img src="${props.value.image?.filename}" alt="${props.value.image_alt}" />
-							// 		</div>`;
-							// },
+							label: "Text und Bild",
+							description: "Ein Container mit Text und einem Bild",
 							schema: {
 								text: fields.text({
 									label: "Text",
-									description: "The text to display next to the image.",
+									description: "Der Text, der neben dem Bild angezeigt wird.",
 									validation: {
 										length: {
 											min: 20,
@@ -487,34 +429,27 @@ export default config({
 									},
 								}),
 								image: fields.image({
-									label: "Image",
-									directory: "public/images/events/component",
-									publicPath: "/images/events/component",
+									label: "Bild",
+									directory: "public/images/ueber_uns",
+									publicPath: "/images/ueber_uns",
 								}),
 								image_alt: fields.text({
-									label: "Image Alt",
-									description: "The alt text for the image",
+									label: "Bild Alt",
+									description: "Der Alt-Text für das Bild",
 								}),
 							},
 						}),
 						ImageGallery: wrapper({
 							label: "Gallerie",
 							description: "Eine Gallerie mit Bildern",
-							// ContentView: (props) => {
-							// 	const images = props.value.images;
-							// 	if (!images.image) return null;
-							// 	return `<div>
-							// 			<img src="${images.image.filename}" alt="${images.alt}" />
-							// 		</div>`;
-							// },
 							schema: {
 								images: fields.array(
 									fields.object(
 										{
 											image: fields.image({
 												label: "Bild",
-												directory: "public/images/events/component",
-												publicPath: "/images/events/component",
+												directory: "public/images/ueber_uns",
+												publicPath: "/images/ueber_uns",
 											}),
 											alt: fields.text({
 												label: "Alt",
@@ -538,8 +473,8 @@ export default config({
 									{
 										image: fields.image({
 											label: "Bild",
-											directory: "public/images/news/component",
-											publicPath: "/images/news/component",
+											directory: "public/images/ueber_uns",
+											publicPath: "/images/ueber_uns",
 										}),
 										alt: fields.text({
 											label: "Alt",
@@ -558,93 +493,53 @@ export default config({
 				}),
 			},
 		}),
-		news: collection({
-			label: "Neuigkeiten",
-			slugField: "title",
-			parseSlugForSort: (slug) => {
-				return slug + "-" + String(new Date().getTime());
-			},
-			path: "src/content/news/*",
-			entryLayout: "content",
-			format: {
-				contentField: "content",
-			},
+		dank: singleton({
+			label: "Dank",
+			path: "src/content/dank",
+			format: { contentField: "content" },
 			schema: {
-				authors: fields.array(
-					fields.object({
-						firstName: fields.text({ label: "Vorname" }),
-						lastName: fields.text({ label: "Nachname" }),
-						middleName: fields.text({ label: "Zweiter Vorname" }),
-					}),
-					{
-						label: "Autor(en)",
-					},
-				),
-				title: fields.slug({
-					name: { label: "Titel" },
-				}),
-				date: fields.date({
-					label: "Datum",
-				}),
-				url: fields.text({
-					label: "URL",
-				}),
-				image: fields.image({
-					label: "Titelbild",
-					directory: "public/images/news/title",
-					publicPath: "/images/news/title",
+				title: fields.text({
+					label: "Titel",
 				}),
 				content: fields.mdx({
-					label: "Content",
+					label: "Inhalt",
 					options: {
 						image: {
-							directory: "public/images/news/content",
-							publicPath: "/images/news/content",
+							directory: "public/images/dank",
+							publicPath: "/images/dank",
 						},
 					},
 					components: {
 						TextImage: wrapper({
-							label: "Text and Image",
-							description: "A container with text and an image",
+							label: "Text und Bild",
+							description: "Ein Container mit Text und einem Bild",
 							schema: {
 								text: fields.text({
 									label: "Text",
-									description: "The text to display next to the image.",
-									validation: {
-										length: {
-											min: 20,
-										},
-									},
+									description: "Der Text, der neben dem Bild angezeigt wird.",
 								}),
 								image: fields.image({
-									label: "Image",
-									directory: "public/images/news/component",
-									publicPath: "/images/news/component",
+									label: "Bild",
+									directory: "public/images/dank",
+									publicPath: "/images/dank",
 								}),
 								image_alt: fields.text({
-									label: "Image Alt",
-									description: "The alt text for the image",
+									label: "Bild Alt",
+									description: "Der Alt-Text für das Bild",
 								}),
 							},
 						}),
 						ImageGallery: wrapper({
 							label: "Gallerie",
 							description: "Eine Gallerie mit Bildern",
-							// ContentView: (props) => {
-							// 	const images = props.value.images;
-							// 	if (!images.image) return null;
-							// 	return `<div>
-							// 			<img src="${images.image.filename}" alt="${images.alt}" />
-							// 		</div>`;
-							// },
 							schema: {
 								images: fields.array(
 									fields.object(
 										{
 											image: fields.image({
 												label: "Bild",
-												directory: "public/images/events/component",
-												publicPath: "/images/events/component",
+												directory: "public/images/dank",
+												publicPath: "/images/dank",
 											}),
 											alt: fields.text({
 												label: "Alt",
@@ -668,8 +563,8 @@ export default config({
 									{
 										image: fields.image({
 											label: "Bild",
-											directory: "public/images/news/component",
-											publicPath: "/images/news/component",
+											directory: "public/images/dank",
+											publicPath: "/images/dank",
 										}),
 										alt: fields.text({
 											label: "Alt",

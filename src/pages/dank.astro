@@ -1,14 +1,14 @@
 ---
 import SingleImage from "../components/SingleImage.astro";
 import TextImage from "../components/TextImage.astro";
-import { components, Content } from "../content/corpus.mdx";
+import { components, Content } from "../content/dank.mdx";
 import Page from "../layouts/Page.astro";
 import { createBaseurl } from "../lib/baseurl.ts";
 ---
 
-<Page title="Corpus">
+<Page title="Zitieren, Kontakt">
 	<h1 class="my-6 bg-stone-400 p-0">
-		<img src={createBaseurl("Corpus-Button.jpg")} alt="Corpus Button" />
+		<img src={createBaseurl("Danck.jpg")} alt="Annotation Button" />
 	</h1>
 	<Content components={{ ...components, SingleImage: SingleImage, TextImage: TextImage }} />
 </Page>
@@ -16,5 +16,14 @@ import { createBaseurl } from "../lib/baseurl.ts";
 	p {
 		padding: 0.5rem 0;
 		text-align: justify;
+	}
+
+	a {
+		color: #c00000;
+	}
+
+	td {
+		vertical-align: top;
+		padding: 0.5rem 0;
 	}
 </style>

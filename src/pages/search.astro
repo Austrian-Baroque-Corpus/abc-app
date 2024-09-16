@@ -1,11 +1,17 @@
 ---
+import EditionTable from "../components/EditionTable.astro";
 import Noske from "../components/Noske.astro";
-import Page from "../layouts/Page.astro";
+import PageFullWidth from "../layouts/PageFullWidth.astro";
 import { baseurl } from "../lib/baseurl.ts";
 ---
 
-<Page title="CQL, Regex Suche" baseurl={baseurl}>
-	<div class="flex min-h-[600px] flex-col">
-		<Noske id="hits" />
+<PageFullWidth title="CQL, Regex Suche" baseurl={baseurl}>
+	<div class="grid grid-cols-2">
+		<div class="columns-xl">
+			<EditionTable baseurl={baseurl} />
+		</div>
+		<div class="flex min-h-[600px] columns-7xl flex-col">
+			<Noske id="hits" />
+		</div>
 	</div>
-</Page>
+</PageFullWidth>
