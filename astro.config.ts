@@ -2,7 +2,7 @@
 import mdx from "@astrojs/mdx";
 import react from "@astrojs/react";
 import tailwind from "@astrojs/tailwind";
-import keystatic from "@keystatic/astro";
+// import keystatic from "@keystatic/astro";
 import { defineConfig } from "astro/config";
 import icon from "astro-icon";
 
@@ -28,14 +28,14 @@ export default defineConfig({
 			},
 		}),
 		react(),
-		keystatic(),
+		// keystatic(),
 		tailwind(),
 		mdx(),
 	],
 	build: {
 		format: "file",
 	},
-	output: "hybrid",
+	output: "static",
 	server: {
 		port: 3030,
 	},
