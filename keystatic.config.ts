@@ -21,7 +21,7 @@ export default config({
 	singletons: {
 		corpus: singleton({
 			label: "Corpus",
-			path: "src/content/corpus",
+			path: "src/content/corpus/",
 			format: { contentField: "content" },
 			schema: {
 				title: fields.text({
@@ -120,7 +120,7 @@ export default config({
 		}),
 		annotation: singleton({
 			label: "Annotation",
-			path: "src/content/annotation",
+			path: "src/content/annotation/",
 			format: { contentField: "content" },
 			schema: {
 				title: fields.text({
@@ -210,7 +210,7 @@ export default config({
 		}),
 		nutzung: singleton({
 			label: "Nutzung",
-			path: "src/content/nutzung",
+			path: "src/content/nutzung/",
 			format: { contentField: "content" },
 			schema: {
 				title: fields.text({
@@ -305,7 +305,7 @@ export default config({
 		}),
 		cite: singleton({
 			label: "Zitierung, Kontakt",
-			path: "src/content/cite",
+			path: "src/content/cite/",
 			format: { contentField: "content" },
 			schema: {
 				title: fields.text({
@@ -400,7 +400,7 @@ export default config({
 		}),
 		ueber_uns: singleton({
 			label: "Über uns",
-			path: "src/content/ueber_uns",
+			path: "src/content/ueber_uns/",
 			format: { contentField: "content" },
 			schema: {
 				title: fields.text({
@@ -495,7 +495,7 @@ export default config({
 		}),
 		dank: singleton({
 			label: "Dank",
-			path: "src/content/dank",
+			path: "src/content/dank/",
 			format: { contentField: "content" },
 			schema: {
 				title: fields.text({

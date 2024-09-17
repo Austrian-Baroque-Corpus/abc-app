@@ -22,7 +22,6 @@ export const singletons = {
 	}),
 	cite: singleton({
 		label: "Zitierung, Kontakt",
-		path: "cite",
 		schema: {
 			title: fields.text({ label: "Title" }),
 		},
