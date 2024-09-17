@@ -22,6 +22,7 @@ module.exports = {
 			},
 			fontFamily: {
 				antiqua: "Helvetica, Verdana, sans-serif;",
+				segoe: "Segoe UI;",
 				variant: "font-variant: small-caps;",
 				cambria: "Cambria, serif;",
 			},
