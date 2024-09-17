@@ -20,6 +20,9 @@ module.exports = {
 					"5xl": "2550px",
 				},
 			},
+			backgroundImage: {
+				abacus: "url('/bg_pergament.jpg')",
+			},
 			fontFamily: {
 				antiqua: "Helvetica, Verdana, sans-serif;",
 				segoe: "Segoe UI;",

@@ -4,12 +4,12 @@ import { createBaseurl } from "../lib/baseurl";
 const { textcolor } = Astro.props;
 ---
 
-<div class="mx-auto max-w-7xl p-4 sm:px-6 lg:px-8">
+<div class="mx-auto max-w-[1400px] p-4 sm:px-6 lg:px-8">
 	<div class="relative flex items-center justify-between">
 		<div class="absolute inset-y-0 left-0 hidden items-center sm:flex">
 			<button
 				type="button"
-				class="relative inline-flex rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+				class="relative inline-flex rounded-md bg-white p-2 text-gray-400 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
 				aria-controls="mobile-menu"
 				aria-expanded="false"
 			>
@@ -58,59 +58,88 @@ const { textcolor } = Astro.props;
 				<div class="flex space-x-4">
 					<a
 						href={createBaseurl("corpus")}
-						class={`block px-2 text-lg ${textcolor}`}
+						class={`block px-1 text-lg ${textcolor}`}
 						role="menuitem"
 						tabindex="-1"
 					>
-						Corpus
+						<figure>
+							<img class="max-w-[200px]" alt="Corpus" src={createBaseurl("Corpus-Button.jpg")} />
+							<!-- <figcaption class="pt-1 text-sm text-white">Corpus</figcaption> -->
+						</figure>
 					</a>
 					<a
 						href={createBaseurl("search")}
-						class={`block px-2 text-lg ${textcolor}`}
+						class={`block px-1 text-lg ${textcolor}`}
 						role="menuitem"
 						tabindex="-1"
 					>
-						Mensch! probier es
+						<figure>
+							<img
+								class="max-w-[200px]"
+								alt="Mensch! probier es"
+								src={createBaseurl("mensch_probieres.jpg")}
+							/>
+							<!-- <figcaption class="pt-1 text-sm text-white">Mensch! probier es</figcaption> -->
+						</figure>
 					</a>
 					<a
 						href={createBaseurl("annotation")}
-						class={`block px-2 text-lg ${textcolor}`}
+						class={`block px-1 text-lg ${textcolor}`}
 						role="menuitem"
 						tabindex="-1"
 					>
-						Annotation
+						<figure>
+							<img class="max-w-[200px]" alt="Annotation" src={createBaseurl("3Annotation.png")} />
+							<!-- <figcaption class="pt-1 text-sm text-white">Annotation</figcaption> -->
+						</figure>
 					</a>
 					<a
 						href={createBaseurl("nutzung")}
-						class={`block px-2 text-lg ${textcolor}`}
+						class={`block px-1 text-lg ${textcolor}`}
 						role="menuitem"
 						tabindex="-1"
 					>
-						Nutzbarkeit
+						<figure>
+							<img class="max-w-[200px]" alt="Nutzbarkeit" src={createBaseurl("4Nutzung.jpg")} />
+							<!-- <figcaption class="pt-1 text-sm text-white">Nutzbarkeit</figcaption> -->
+						</figure>
 					</a>
 					<a
 						href={createBaseurl("zitieren-kontakt")}
-						class={`block px-2 text-lg ${textcolor}`}
+						class={`block px-1 text-lg ${textcolor}`}
 						role="menuitem"
 						tabindex="-1"
 					>
-						merckts wohl
+						<figure>
+							<img
+								class="max-w-[200px]"
+								alt="merckts wohl"
+								src={createBaseurl("merckts_wohl.jpg")}
+							/>
+							<!-- <figcaption class="pt-1 text-sm text-white">merckts wohl</figcaption> -->
+						</figure>
 					</a>
 					<a
 						href={createBaseurl("ueber-uns")}
-						class={`block px-2 text-lg ${textcolor}`}
+						class={`block px-1 text-lg ${textcolor}`}
 						role="menuitem"
 						tabindex="-1"
 					>
-						über uns
+						<figure>
+							<img class="max-w-[100px]" alt="über uns" src={createBaseurl("6Ueberuns.jpg")} />
+							<!-- <figcaption class="pt-1 text-sm text-white">über uns</figcaption> -->
+						</figure>
 					</a>
 					<a
 						href={createBaseurl("dank")}
-						class={`block px-2 text-lg ${textcolor}`}
+						class={`block px-1 text-lg ${textcolor}`}
 						role="menuitem"
 						tabindex="-1"
 					>
-						Dank!
+						<figure>
+							<img class="max-w-[200px]" alt="Danck!" src={createBaseurl("Danck.jpg")} />
+							<!-- <figcaption class="pt-1 text-sm text-white">Danck!</figcaption> -->
+						</figure>
 					</a>
 				</div>
 			</div>
@@ -121,59 +150,84 @@ const { textcolor } = Astro.props;
 	<div class="space-y-1 px-2 pb-3 pt-2 text-center">
 		<a
 			href={createBaseurl("corpus")}
-			class={`block px-2 text-lg ${textcolor}`}
+			class={`block px-1 text-lg ${textcolor}`}
 			role="menuitem"
 			tabindex="-1"
 		>
-			Corpus
+			<figure>
+				<img class="max-w-[200px]" alt="Corpus" src={createBaseurl("Corpus-Button.jpg")} />
+				<!-- <figcaption class="pt-1 text-sm text-white">Corpus</figcaption> -->
+			</figure>
 		</a>
 		<a
-			href={createBaseurl("abacus")}
-			class={`block px-2 text-lg ${textcolor}`}
+			href={createBaseurl("search")}
+			class={`block px-1 text-lg ${textcolor}`}
 			role="menuitem"
 			tabindex="-1"
 		>
-			Mensch! probier es
+			<figure>
+				<img
+					class="max-w-[200px]"
+					alt="Mensch! probier es"
+					src={createBaseurl("mensch_probieres.jpg")}
+				/>
+				<!-- <figcaption class="pt-1 text-sm text-white">Mensch! probier es</figcaption> -->
+			</figure>
 		</a>
 		<a
 			href={createBaseurl("annotation")}
-			class={`block px-2 text-lg ${textcolor}`}
+			class={`block px-1 text-lg ${textcolor}`}
 			role="menuitem"
 			tabindex="-1"
 		>
-			Annotation
+			<figure>
+				<img class="max-w-[200px]" alt="Annotation" src={createBaseurl("3Annotation.png")} />
+				<!-- <figcaption class="pt-1 text-sm text-white">Annotation</figcaption> -->
+			</figure>
 		</a>
 		<a
 			href={createBaseurl("nutzung")}
-			class={`block px-2 text-lg ${textcolor}`}
+			class={`block px-1 text-lg ${textcolor}`}
 			role="menuitem"
 			tabindex="-1"
 		>
-			Nutzbarkeit
+			<figure>
+				<img class="max-w-[200px]" alt="Nutzbarkeit" src={createBaseurl("4Nutzung.jpg")} />
+				<!-- <figcaption class="pt-1 text-sm text-white">Nutzbarkeit</figcaption> -->
+			</figure>
 		</a>
 		<a
 			href={createBaseurl("zitieren-kontakt")}
-			class={`block px-2 text-lg ${textcolor}`}
+			class={`block px-1 text-lg ${textcolor}`}
 			role="menuitem"
 			tabindex="-1"
 		>
-			merckts wohl
+			<figure>
+				<img class="max-w-[200px]" alt="merckts wohl" src={createBaseurl("merckts_wohl.jpg")} />
+				<!-- <figcaption class="pt-1 text-sm text-white">merckts wohl</figcaption> -->
+			</figure>
 		</a>
 		<a
 			href={createBaseurl("ueber-uns")}
-			class={`block px-2 text-lg ${textcolor}`}
+			class={`block px-1 text-lg ${textcolor}`}
 			role="menuitem"
 			tabindex="-1"
 		>
-			über uns
+			<figure>
+				<img class="max-w-[100px]" alt="über uns" src={createBaseurl("6Ueberuns.jpg")} />
+				<!-- <figcaption class="pt-1 text-sm text-white">über uns</figcaption> -->
+			</figure>
 		</a>
 		<a
 			href={createBaseurl("dank")}
-			class={`block px-2 text-lg ${textcolor}`}
+			class={`block px-1 text-lg ${textcolor}`}
 			role="menuitem"
 			tabindex="-1"
 		>
-			Dank!
+			<figure>
+				<img class="max-w-[200px]" alt="Danck!" src={createBaseurl("Danck.jpg")} />
+				<!-- <figcaption class="pt-1 text-sm text-white">Danck!</figcaption> -->
+			</figure>
 		</a>
 	</div>
 </div>
