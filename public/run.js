@@ -53,23 +53,23 @@ new LoadEditor({
 					class: "features-1",
 				},
 			},
-			{
-				opt: "pos",
-				opt_slider: "pos-features-slider",
-				title: "PoS",
-				color: "none",
-				html_class: "pos",
-				css_class: "pos-active",
-				default: false,
-				hide: {
-					hidden: true,
-					class: "pos",
-				},
-				features: {
-					all: false,
-					class: "features-1",
-				},
-			},
+			// {
+			// 	opt: "pos",
+			// 	opt_slider: "pos-features-slider",
+			// 	title: "PoS",
+			// 	color: "none",
+			// 	html_class: "pos",
+			// 	css_class: "pos-active",
+			// 	default: false,
+			// 	hide: {
+			// 		hidden: true,
+			// 		class: "pos",
+			// 	},
+			// 	features: {
+			// 		all: false,
+			// 		class: "features-1",
+			// 	},
+			// },
 		],
 		span_element: {
 			css_class: "badge-item",

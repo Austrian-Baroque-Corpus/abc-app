@@ -134,14 +134,14 @@
 </xsl:template> -->
 
 <xsl:template match="tei:w[parent::tei:item]">
-	<xsl:apply-templates/><span class="pos text-cyan-400">[ l=<xsl:value-of select="@lemma"/> | t=<xsl:value-of select="@type"/> ]</span>
+	<span data-lemma="{@lemma}" data-type="{@type}" id="{@xml:id}" class="word"><xsl:apply-templates/></span>
 	<xsl:if test="following-sibling::*[1]/name() = 'pc'">
 		<xsl:value-of select="following-sibling::*[1]"/>
 	</xsl:if>
 </xsl:template>
 
 <xsl:template match="tei:w[not(parent::tei:item)]">
-	<xsl:apply-templates/><span class="pos text-cyan-500">[ l=<xsl:value-of select="@lemma"/> | t=<xsl:value-of select="@type"/> ]</span>
+	<span data-lemma="{@lemma}" data-type="{@type}" id="{@xml:id}" class="word"><xsl:apply-templates/></span>
 	<xsl:if test="following-sibling::*[1]/name() = 'pc'">
 		<xsl:value-of select="following-sibling::*[1]"/>
 	</xsl:if>
