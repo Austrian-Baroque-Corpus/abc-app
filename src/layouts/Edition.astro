@@ -10,7 +10,7 @@ import Header from "../components/Header.astro";
 import { baseurl, createBaseurl } from "../lib/baseurl.js";
 
 const { title, issue, source, name } = Astro.props;
-const backgroundcolor = "bg-stone-400";
+const backgroundcolor = "bg-abacus";
 const githuburl = "https://github.com/wiener-diarium/";
 const textcolor = "text-stone-700";
 // const matomoUrl = "https://matomo.acdh.oeaw.ac.at/";
@@ -27,7 +27,7 @@ const textcolor = "text-stone-700";
 		/>
 	</head>
 	<body class="flex flex-col">
-		<header id="header">
+		<header id="header" class="sticky top-0">
 			<Header backgroundcolor={backgroundcolor} baseurl={baseurl} />
 		</header>
 		<main class="container mb-auto flex flex-row font-antiqua">
@@ -116,13 +116,9 @@ const textcolor = "text-stone-700";
 		<script is:inline src="https://unpkg.com/de-micro-editor@0.4.0/dist/de-editor.min.js"></script>
 		<script is:inline src={createBaseurl("run.js")}></script>
 		<style is:global>
-			/* :target::after {
-				content: "Lemma: " attr(data-lemma) " Pos: " attr(data-type);
-				position: absolute;
-				margin-top: 1.5rem;
-				padding: 0.4rem;
-				background-color: #f1f1f1;
-			} */
+			.word:target {
+				scroll-margin-top: 6rem;
+			}
 
 			.word:hover::after {
 				content: "\ALemma: " attr(data-lemma) "\APos: " attr(data-type);

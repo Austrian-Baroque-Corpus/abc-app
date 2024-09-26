@@ -38,7 +38,7 @@
 		</div>
 	</div>
 	<div class="basis-5/12 facsimiles sm:hidden md:hidden">
-		<div id="viewer-1" class="sticky top-4">
+		<div id="viewer-1" class="sticky top-24">
 			<div id="container_facs_1">
 			</div>
 		</div>

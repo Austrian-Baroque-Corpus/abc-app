@@ -8,7 +8,7 @@ import Header from "../components/Header.astro";
 // import MatomoAnalytics from "../components/MatomoAnalytics.astro";
 import { baseurl } from "../lib/baseurl.js";
 
-const backgroundcolor = "bg-stone-400";
+const backgroundcolor = "bg-abacus";
 const githuburl = "https://github.com/Austrian-Baroque-Corpus/";
 const textcolor = "text-stone-700";
 const { title } = Astro.props;
@@ -21,7 +21,7 @@ const { title } = Astro.props;
 		<BaseHead title={title} />
 	</head>
 	<body class="flex min-h-screen flex-col justify-between">
-		<header id="header">
+		<header id="header" class="sticky top-0">
 			<Header backgroundcolor={backgroundcolor} baseurl={baseurl} />
 		</header>
 		<main class="container mx-auto mb-auto max-w-[1400px] font-antiqua" id="main">
