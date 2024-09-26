@@ -38,7 +38,7 @@
 		</div>
 	</div>
 	<div class="basis-5/12 facsimiles sm:hidden md:hidden">
-		<div id="viewer-1" class="sticky top-4">
+		<div id="viewer-1" class="sticky top-24">
 			<div id="container_facs_1">
 			</div>
 		</div>
@@ -134,14 +134,14 @@
 </xsl:template> -->
 
 <xsl:template match="tei:w[parent::tei:item]">
-	<xsl:apply-templates/><span class="pos text-cyan-400">[ l=<xsl:value-of select="@lemma"/> | t=<xsl:value-of select="@type"/> ]</span>
+	<span data-lemma="{@lemma}" data-type="{@type}" id="{@xml:id}" class="word"><xsl:apply-templates/></span>
 	<xsl:if test="following-sibling::*[1]/name() = 'pc'">
 		<xsl:value-of select="following-sibling::*[1]"/>
 	</xsl:if>
 </xsl:template>
 
 <xsl:template match="tei:w[not(parent::tei:item)]">
-	<xsl:apply-templates/><span class="pos text-cyan-500">[ l=<xsl:value-of select="@lemma"/> | t=<xsl:value-of select="@type"/> ]</span>
+	<span data-lemma="{@lemma}" data-type="{@type}" id="{@xml:id}" class="word"><xsl:apply-templates/></span>
 	<xsl:if test="following-sibling::*[1]/name() = 'pc'">
 		<xsl:value-of select="following-sibling::*[1]"/>
 	</xsl:if>

@@ -27,12 +27,13 @@
 	const search = new NoskeSearch({
 		container: "noske-search",
 		autocomplete: true,
-		wordlistattr: ["word", "lemma", "type", "placeName", "persName"],
+		wordlistattr: ["word", "lemma", "type", "id", "placeName", "persName"],
 	});
 
 	search.minQueryLength = 2;
 
 	search.search({
+		debug: false,
 		client: {
 			//base: "http://localhost:8080",
 			base: "https://abacus-noske.acdh-dev.oeaw.ac.at",
@@ -76,8 +77,8 @@
 			},
 		},
 		config: {
-			customUrl: "edition",
-			urlparam: "&img=on&aside=closed",
+			customUrl: "/edition",
+			urlparam: { img: "on", aside: "closed" },
 		},
 	});
 </script>
