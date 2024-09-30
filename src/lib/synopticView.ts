@@ -135,7 +135,7 @@ initialize osd
 		const tiledImage = viewer.world.getItemAt(viewer.world.getItemCount() - 1);
 		const new_height: number =
 			// @ts-expect-error in development
-			ration > titledImage.contentAspectX ? tiledImage.normHeight : 1 / ratio;
+			ratio > tiledImage.contentAspectX ? tiledImage.normHeight : 1 / ratio;
 		// @ts-expect-error in development
 		const normed_height: number = tiledImage.normHeight;
 		// @ts-expect-error in development
