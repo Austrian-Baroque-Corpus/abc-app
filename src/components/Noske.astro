@@ -1,5 +1,5 @@
 ---
-
+import EditionFragment from "./EditionFragment.astro";
 ---
 
 <div class="my-8">
@@ -11,11 +11,20 @@
 					>Erweiterte Suche in Crystal</a
 				>
 			</div>
-			<div id="noske-search" class="text-center"></div>
-			<div id="hitsbox"></div>
-			<div class="mx-auto grid grid-cols-2">
-				<div id="noske-pagination" class="text-right"></div>
-				<div id="statsbox" class="text-left"></div>
+			<div class="grid grid-cols-2">
+				<div class="w-full p-4">
+					<div id="noske-search" class="text-center"></div>
+					<div id="hitsbox"></div>
+					<div class="mx-auto grid grid-cols-2">
+						<div id="noske-pagination" class="text-right"></div>
+						<div id="statsbox" class="text-left"></div>
+					</div>
+				</div>
+				<div class="w-full p-4">
+					<EditionFragment>
+						<div id="noske-synoptic-view" class="h-[1000px] overflow-y-auto"></div>
+					</EditionFragment>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -23,6 +32,7 @@
 
 <script>
 	import { NoskeSearch } from "acdh-noske-search";
+	import { loadContent } from "../lib/synopticView";
 
 	const search = new NoskeSearch({
 		container: "noske-search",
@@ -77,8 +87,19 @@
 			},
 		},
 		config: {
-			customUrl: "/edition",
-			urlparam: { img: "on", aside: "closed" },
+			// customUrl: "/edition",
+			// urlparam: { img: "on", aside: "closed" },
+			customSynopticView: (resultLineId) => {
+				console.log(resultLineId);
+				// const synopticView = document.getElementById("noske-synoptic-view");
+				Object.entries(resultLineId).forEach(([key, value]) => {
+					document.getElementById(key)?.addEventListener("click", () => {
+						let id = key.split("__")[1];
+						let hash = key.split("__")[2];
+						loadContent(id, "noske-synoptic-view", hash);
+					});
+				});
+			},
 		},
 	});
 </script>

@@ -1,0 +1,95 @@
+---
+import { createBaseurl } from "../lib/baseurl.js";
+
+// const { title, issue, source, name } = Astro.props;
+// const backgroundcolor = "bg-abacus";
+// const textcolor = "text-stone-700";
+---
+
+<div class="flex flex-col rounded-md border border-gray-400 p-2">
+	<div class="container mx-auto mb-auto flex flex-row font-antiqua">
+		<div class="basis-10/12" id="edition-content">
+			<slot />
+		</div>
+	</div>
+</div>
+<!-- <script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js"></script>
+<script type="text/javascript" is:inline src={createBaseurl("mark.js")}></script> -->
+<script type="text/javascript" is:inline src={createBaseurl("listStopProp.js")}></script>
+<!-- <MatomoAnalytics matomoUrl={matomoUrl} siteId={siteId} /> -->
+<!-- <script>
+	(() => {
+		const url = new URL(window.location.href);
+		const urlparam = url.searchParams;
+		const aside = document.getElementById("edition-aside");
+		const asideButton = document.getElementById("aside-button");
+		asideButton!.addEventListener("click", () => {
+			aside!.classList.toggle("active");
+			aside!.classList.toggle("hidden");
+			aside!.classList.toggle("translate-x-full");
+			const asideW = document.getElementsByTagName("aside")[0];
+			asideW.classList.toggle("basis-2/12");
+			asideButton!.classList.contains("open")
+				? (asideButton!.innerHTML =
+						'<svg width="24" height="24" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M15 2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1zM0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm4.5 5.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5z"/></svg>')
+				: (asideButton!.innerHTML =
+						'<svg	width="24" height="24" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M15 2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1zM0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm11.5 5.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5z"/></svg>');
+			asideButton;
+
+			const editionContent = document.getElementById("edition-content");
+			editionContent!.classList.toggle("basis-10/12");
+			editionContent!.classList.toggle("basis-full");
+			asideButton!.classList.toggle("open")
+				? (urlparam.set("aside", "open"),
+					window.history.pushState({}, "", "?" + urlparam.toString()))
+				: (urlparam.set("aside", "closed"),
+					window.history.pushState({}, "", "?" + urlparam.toString()));
+		});
+	})();
+	(() => {
+		const url = new URL(window.location.href);
+		const urlparam = url.searchParams;
+		const asideParam = urlparam.get("aside");
+		const aside = document.getElementById("edition-aside");
+		const asideButton = document.getElementById("aside-button");
+		if (asideParam == null) {
+			urlparam.set("aside", "open");
+			window.history.pushState({}, "", "?" + urlparam.toString());
+		} else if (asideParam !== "open") {
+			aside!.classList.toggle("active");
+			aside!.classList.toggle("hidden");
+			aside!.classList.toggle("translate-x-full");
+			const asideW = document.getElementsByTagName("aside")[0];
+			asideW.classList.toggle("basis-2/12");
+			asideButton!.classList.toggle("open");
+			const editionContent = document.getElementById("edition-content");
+			editionContent!.classList.toggle("basis-10/12");
+			editionContent!.classList.toggle("basis-full");
+			asideButton!.innerHTML =
+				'<svg width="24" height="24" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M15 2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1zM0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm4.5 5.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5z"/></svg>';
+		}
+	})();
+</script> -->
+<!-- <script is:inline src="https://unpkg.com/de-micro-editor@0.4.0/dist/de-editor.min.js"></script>
+<script is:inline src={createBaseurl("run.js")}></script> -->
+<style is:global>
+	.word {
+		scroll-margin-top: 20rem;
+	}
+
+	.word:hover::after {
+		content: "\ALemma: " attr(data-lemma) "\APos: " attr(data-type);
+		position: absolute;
+		top: 22%;
+		left: 75%;
+		z-index: 1;
+		min-width: 200px;
+		padding: 12px;
+		border: 1px #aaa solid;
+		border-radius: 10px;
+		background-color: #ffc;
+		color: #000;
+		font-size: 14px;
+		white-space: pre;
+	}
+</style>

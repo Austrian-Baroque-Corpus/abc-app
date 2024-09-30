@@ -1,5 +1,5 @@
 ---
-import Page from "../layouts/Page.astro";
+import PageNoImg from "../layouts/PageNoImg.astro";
 import { baseurl } from "../lib/baseurl.ts";
 
 async function impressum() {
@@ -10,9 +10,9 @@ async function impressum() {
 const imprint = impressum();
 ---
 
-<Page title="Imprint" baseurl={baseurl}>
+<PageNoImg title="Imprint" baseurl={baseurl}>
 	<div class="m-4 p-4" set:html={imprint} />
-</Page>
+</PageNoImg>
 <style is:global>
 	h2 {
 		padding: 0.5rem 0;
