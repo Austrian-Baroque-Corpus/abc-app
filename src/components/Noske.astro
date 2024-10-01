@@ -2,26 +2,25 @@
 import EditionFragment from "./EditionFragment.astro";
 ---
 
-<div class="mx-auto my-8">
-	<div class="py-4 text-center sm:px-2 md:px-2">
-		<div class="px-4">
-			<h4 class="pt-2 text-lg">Einfache Suche in den Abacus Transkripten</h4>
-			<div class="text-sm text-gray-600">
-				<a target="_blank" href="https://abacus-noske.acdh-dev.oeaw.ac.at/crystal"
-					>Erweiterte Suche in Crystal</a
-				>
-			</div>
-			<div class="flex flex-row">
-				<div class="w-full p-4">
-					<div id="noske-search" class="text-center"></div>
-					<div id="hitsbox"></div>
-					<div class="mx-auto grid grid-cols-2">
-						<div id="noske-pagination" class="text-right"></div>
-						<div id="statsbox" class="text-left"></div>
-					</div>
+<div class="mx-auto my-8 py-4 text-center sm:px-2 md:px-2">
+	<div class="px-4">
+		<h4 class="pt-2 text-lg">Einfache Suche in den Abacus Transkripten</h4>
+		<div class="text-sm text-gray-600">
+			<a target="_blank" href="https://abacus-noske.acdh-dev.oeaw.ac.at/crystal"
+				>Erweiterte Suche in Crystal</a
+			>
+		</div>
+		<div class="flex flex-row">
+			<div class="basis-1/2 p-4">
+				<div id="noske-search" class="min-w-[800px] text-center sm:min-w-[400px] md:min-w-[600px]">
 				</div>
-				<EditionFragment />
+				<div id="hitsbox"></div>
+				<div class="mx-auto grid grid-cols-2">
+					<div id="noske-pagination" class="text-right"></div>
+					<div id="statsbox" class="text-left"></div>
+				</div>
 			</div>
+			<EditionFragment />
 		</div>
 	</div>
 </div>
