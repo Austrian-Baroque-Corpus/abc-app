@@ -2,6 +2,7 @@
 <project basedir="../.." name="tei2html">
 	<property name="target" value="${basedir}/edition"/>
 	<mkdir dir="${target}"/>
+	<mkdir dir="${target}/pages"/>
 	<delete>
 			<fileset dir="${target}" includes="*.html"/>
 	</delete>
@@ -19,7 +20,6 @@
 			<classpath location="${basedir}/saxon/saxon9he.jar"/>
 	</xslt>
 	<delete file="${basedir}/data/editons/about.xml"/>
-	<mkdir dir="${target}/pages"/>
 	<xslt style="${basedir}/scripts/xslt/editions.xsl"  basedir="${basedir}/data/editions/tmp" destdir="${target}/pages" includes="*.xml">
 			<factory name="net.sf.saxon.TransformerFactoryImpl"/>
 			<classpath location="${basedir}/saxon/saxon9he.jar"/>
