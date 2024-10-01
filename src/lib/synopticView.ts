@@ -22,12 +22,16 @@ function transform(options: { fileDir: string; fileName: string; htmlID: string;
 		.then((html) => {
 			const container = document.getElementById(options.htmlID);
 			if (container) {
+				if (container.classList.contains("hidden")) {
+					container.classList.toggle("hidden");
+					container.classList.toggle("active");
+				}
 				container.innerHTML = html;
 				scroll_synoptic();
 			}
 			const word = document.getElementById(options.hash);
 			if (word) {
-				word.scrollIntoView({ behavior: "instant", block: "center", inline: "center" });
+				// word.scrollIntoView({ behavior: "instant", block: "center", inline: "center" });
 				word.style.backgroundColor = "yellow";
 			}
 		})
@@ -58,7 +62,7 @@ get container wrapper of osd viewer
 	let width = text ? text.clientWidth : screen.width;
 	const facs = document.getElementById("container_facs_1");
 	let container = facs ? facs : document.createElement("div");
-	const wrapper = document.getElementsByClassName("facsimiles")[0];
+	// const wrapper = document.getElementsByClassName("facsimiles")[0];
 	const url = "http://clarin.oeaw.ac.at/cr-images";
 
 	/*
@@ -69,22 +73,14 @@ if false get with from sibling container divided by half
 height is always the screen height minus some offset
 ##################################################################
 */
-	if (!wrapper.classList.contains("fade")) {
-		container.style.height = `${String(height / 1.3)}px`;
-		// set osd wrapper container width
-		container = document.querySelector(".section") ?? document.createElement("div");
-		width = container.clientWidth;
-		container = document.getElementById("viewer-1") ?? document.createElement("div");
-		container.style.width = `${String(width / 1.16)}px`;
-		container.style.height = `${String(width / 1.16)}px`;
-	} else {
-		container.style.height = `${String(height / 1.3)}px`;
-		// set osd wrapper container width
-		container = document.querySelector(".section") ?? document.createElement("div");
-		width = container.clientWidth;
-		container = document.getElementById("viewer-1") ?? document.createElement("div");
-		container.style.width = `${String(width / 1.16)}px`;
-	}
+
+	container.style.height = `${String(height)}px`;
+	// set osd wrapper container width
+	container = document.querySelector(".section") ?? document.createElement("div");
+	width = container.clientWidth;
+	container = document.getElementById("viewer-1") ?? document.createElement("div");
+	container.style.width = `${String(width / 1.16)}px`;
+	container.style.height = `${String(width / 1.16)}px`;
 
 	/*
 ##################################################################
@@ -93,14 +89,14 @@ creates an array for osd viewer with static images
 ##################################################################
 */
 	const element = document.getElementsByClassName("pb");
-	const tileSources = [];
 	const img1 = element[0].getAttribute("id");
 	const img = url + img1;
-	const imageURL = {
-		type: "image",
-		url: img,
-	};
-	tileSources.push(imageURL);
+	const tileSources = [
+		{
+			type: "image",
+			url: img,
+		},
+	];
 
 	/*
 ##################################################################
@@ -113,12 +109,12 @@ initialize osd
 		prefixUrl: "https://cdnjs.cloudflare.com/ajax/libs/openseadragon/4.0.0/images/",
 		// @ts-expect-error in development
 		tileSources: tileSources,
-		visibilityRatio: 1,
-		sequenceMode: true,
-		showNavigationControl: true,
+		visibilityRatio: 2,
+		sequenceMode: false,
+		showNavigationControl: false,
 		showNavigator: false,
-		showSequenceControl: true,
-		showZoomControl: true,
+		showSequenceControl: false,
+		showZoomControl: false,
 		zoomInButton: "osd_zoom_in_button",
 		zoomOutButton: "osd_zoom_out_button",
 		homeButton: "osd_zoom_reset_button",
@@ -160,191 +156,5 @@ initialize osd
 		// 	var new_bounds = new OpenSeadragon.Rect(0, bounds_y, 1, new_height);
 		// }
 		viewer.viewport.fitBounds(new_bounds, true);
-	}
-
-	/*
-##################################################################
-remove container holding the images url
-##################################################################
-*/
-	// setTimeout(function() {
-	//     document.getElementById("container_facs_2").remove();
-	// }, 500);
-
-	/*
-##################################################################
-index and previous index for click navigation in osd viewer
-locate index of anchor element
-##################################################################
-*/
-	let idx = 0;
-	let prev_idx = -1;
-
-	/*
-##################################################################
-triggers on scroll and switches osd viewer image base on
-viewport position of next and previous element with class pb
-pb = pagebreaks
-##################################################################
-*/
-	const scollContainer = document.getElementById("noske-synoptic-view");
-	// @ts-expect-error in development
-	scollContainer.addEventListener("scroll", () => {
-		// elements in view
-		const esiv = [];
-		for (const el of element) {
-			// @ts-expect-error in development
-			if (isInViewportAll(el)) {
-				esiv.push(el);
-			}
-		}
-		if (esiv.length !== 0) {
-			// first element in view
-			const eiv = esiv[0];
-			// get idx of element
-			const eiv_idx = Array.from(element).findIndex((el) => el === eiv);
-			idx = eiv_idx + 1;
-			prev_idx = eiv_idx - 1;
-			// test if element is in viewport position to load correct image
-			// @ts-expect-error in development
-			if (isInViewport(element[eiv_idx])) {
-				// @ts-expect-error in development
-				loadNewImage(element[eiv_idx]);
-			}
-		}
-	});
-
-	setTimeout(() => {
-		const esiv = [];
-		for (const el of element) {
-			// @ts-expect-error in development
-			if (isInViewportAll(el)) {
-				esiv.push(el);
-			}
-		}
-		if (esiv.length !== 0) {
-			// first element in view
-			const eiv = esiv[0];
-			// get idx of element
-			const eiv_idx = Array.from(element).findIndex((el) => el === eiv);
-			idx = eiv_idx + 1;
-			prev_idx = eiv_idx - 1;
-			// test if element is in viewport position to load correct image
-			// @ts-expect-error in development
-			if (isInViewport(element[eiv_idx])) {
-				// @ts-expect-error in development
-				loadNewImage(element[eiv_idx]);
-			}
-		}
-	}, 500);
-
-	/*
-##################################################################
-function to trigger image load and remove events
-##################################################################
-*/
-	function loadNewImage(new_item: HTMLElement) {
-		// source attribute hold image item id without url
-		const new_image1 = new_item.getAttribute("id");
-		const new_image = url + new_image1;
-		// const old_image = viewer.world.getItemAt(0);
-		// get url from current/old image and replace the image id with
-		// new id of image to be loaded
-		// access osd viewer and add simple image and remove current image
-		viewer.addSimpleImage({
-			url: new_image,
-			success: function (event) {
-				function ready(): void {
-					setTimeout(() => {
-						viewer.world.removeItem(viewer.world.getItemAt(0));
-					}, 200);
-				}
-				// test if item was loaded and trigger function to remove previous item
-				// @ts-expect-error in development
-				if (event.item) {
-					// .getFullyLoaded()
-					ready();
-				} else {
-					// @ts-expect-error in development
-					event.item.addOnceHandler("fully-loaded-change", ready);
-				}
-			},
-		});
-	}
-
-	/*
-##################################################################
-accesses osd viewer prev and next button to switch image and
-scrolls to next or prev span element with class pb (pagebreak)
-##################################################################
-*/
-	const element_a = document.getElementsByClassName("anchor-pb");
-	const prev = document.querySelector("div[title='Previous page']");
-	const next = document.querySelector("div[title='Next page']");
-	// @ts-expect-error in development
-	prev.style.opacity = 1;
-	// @ts-expect-error in development
-	next.style.opacity = 1;
-	// @ts-expect-error in development
-	prev.addEventListener("click", () => {
-		if (idx === 0) {
-			element_a[idx].scrollIntoView();
-		} else {
-			element_a[prev_idx].scrollIntoView();
-		}
-	});
-	// @ts-expect-error in development
-	next.addEventListener("click", () => {
-		element_a[idx].scrollIntoView();
-	});
-
-	/*
-##################################################################
-function to check if element is close to top of window viewport
-##################################################################
-*/
-	function isInViewport(element: HTMLElement) {
-		// Get the bounding client rectangle position in the viewport
-		const bounding = element.getBoundingClientRect();
-		// Checking part. Here the code checks if el is close to top of viewport.
-		// console.log("Top");
-		// console.log(bounding.top);
-		// console.log("Bottom");
-		// console.log(bounding.bottom);
-		if (
-			bounding.top <= 180 &&
-			bounding.bottom <= 210 &&
-			bounding.top >= 0 &&
-			bounding.bottom >= 0
-		) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	/*
-##################################################################
-function to check if element is anywhere in window viewport
-##################################################################
-*/
-	function isInViewportAll(element: HTMLElement) {
-		// Get the bounding client rectangle position in the viewport
-		const bounding = element.getBoundingClientRect();
-		// Checking part. Here the code checks if el is close to top of viewport.
-		// console.log("Top");
-		// console.log(bounding.top);
-		// console.log("Bottom");
-		// console.log(bounding.bottom);
-		if (
-			bounding.top >= 0 &&
-			bounding.left >= 0 &&
-			bounding.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
-			bounding.right <= (window.innerWidth || document.documentElement.clientWidth)
-		) {
-			return true;
-		} else {
-			return false;
-		}
 	}
 }

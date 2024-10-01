@@ -25,6 +25,7 @@ jobs:
       - name: Fetch Edition Data
         run: |
           ./scripts/shellscripts/fetch_data.sh
+          ./scripts/shellscripts/split_pages.sh
       - name: Build the site
         run: |
           ant -f ./scripts/ant/build.xml

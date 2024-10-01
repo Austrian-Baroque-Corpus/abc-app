@@ -20,8 +20,8 @@
         <xsl:variable name="url" select="concat('/abacus/', $doc ,'/default/')"/>
         <xsl:variable name="graphic-url" select="concat($url, $graphic-id)"/>
 				<xsl:variable name="page-id" select="if(following-sibling::*[1][self::tei:titlePage]) then('title') else(@xml:id)"/>
-				<span class="my-2 block mt-[200px] anchor-pb" id="abc_page_{$page-id}"></span>
-				<span class="my-2 block pb text-gray-400" id="{$graphic-url}">-----[<xsl:value-of select="./@n"/>]-----</span>
+				<span class="my-2 block anchor-pb" id="abc_page_{$page-id}"></span>
+				<span class="my-2 block pb text-gray-400" id="{$graphic-url}"></span>
         <xsl:if test="following-sibling::*[1][self::tei:pb] and not(parent::tei:p)">
             <div class="min-h-[250px]">
             </div>
