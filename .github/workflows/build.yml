@@ -25,6 +25,18 @@ jobs:
       - name: Fetch Edition Data
         run: |
           ./scripts/shellscripts/fetch_data.sh
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+          cache: "pipenv"
+      - name: Install dependencies
+        run: |
+          python --version
+          python -m pip install pipenv
+          pipenv install
+      - name: split data
+        run: |
           ./scripts/shellscripts/split_pages.sh
       - name: Build the site
         run: |
