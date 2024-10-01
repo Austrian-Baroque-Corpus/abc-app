@@ -1,8 +1,8 @@
 ---
-
+import EditionFragment from "./EditionFragment.astro";
 ---
 
-<div class="my-8">
+<div class="mx-auto my-8">
 	<div class="py-4 text-center sm:px-2 md:px-2">
 		<div class="px-4">
 			<h4 class="pt-2 text-lg">Einfache Suche in den Abacus Transkripten</h4>
@@ -11,11 +11,16 @@
 					>Erweiterte Suche in Crystal</a
 				>
 			</div>
-			<div id="noske-search" class="text-center"></div>
-			<div id="hitsbox"></div>
-			<div class="mx-auto grid grid-cols-2">
-				<div id="noske-pagination" class="text-right"></div>
-				<div id="statsbox" class="text-left"></div>
+			<div class="flex flex-row">
+				<div class="w-full p-4">
+					<div id="noske-search" class="text-center"></div>
+					<div id="hitsbox"></div>
+					<div class="mx-auto grid grid-cols-2">
+						<div id="noske-pagination" class="text-right"></div>
+						<div id="statsbox" class="text-left"></div>
+					</div>
+				</div>
+				<EditionFragment />
 			</div>
 		</div>
 	</div>
@@ -23,11 +28,12 @@
 
 <script>
 	import { NoskeSearch } from "acdh-noske-search";
+	import { loadContent } from "../lib/synopticView";
 
 	const search = new NoskeSearch({
 		container: "noske-search",
 		autocomplete: true,
-		wordlistattr: ["word", "lemma", "type", "id", "placeName", "persName"],
+		wordlistattr: ["word", "lemma", "pos", "id", "placeName", "persName", "pbId"],
 	});
 
 	search.minQueryLength = 2;
@@ -38,7 +44,7 @@
 			//base: "http://localhost:8080",
 			base: "https://abacus-noske.acdh-dev.oeaw.ac.at",
 			corpname: "abacus",
-			attrs: "word,lemma,type,id,placeName,persName",
+			attrs: "word,lemma,pos,id,placeName,persName,pbId",
 			structs: "doc,g",
 			refs: "doc.id,doc.title",
 		},
@@ -77,8 +83,23 @@
 			},
 		},
 		config: {
-			customUrl: "/edition",
-			urlparam: { img: "on", aside: "closed" },
+			// customUrl: "/edition",
+			// urlparam: { img: "on", aside: "closed" },
+			customSynopticView: (resultLineId) => {
+				console.log(resultLineId);
+				// const synopticView = document.getElementById("noske-synoptic-view");
+				Object.entries(resultLineId).forEach(([key, value]) => {
+					let kwic = document.getElementById(key) as HTMLElement;
+					kwic?.classList.add("cursor-pointer");
+					kwic?.addEventListener("click", () => {
+						let attr = value.kwic_attr?.split("/");
+						let pdId = attr![attr!.length - 1];
+						// let id = key.split("__")[1];
+						let hash = key.split("__")[2];
+						loadContent(pdId, "noske-synoptic-view", hash);
+					});
+				});
+			},
 		},
 	});
 </script>

@@ -1,0 +1,75 @@
+---
+
+---
+
+<div id="noske-synoptic-view" class="hidden h-[1000px] w-full overflow-y-auto p-2 font-antiqua">
+</div>
+
+<style is:global>
+	@keyframes fadein {
+		from {
+			opacity: 0%;
+		}
+
+		to {
+			opacity: 100%;
+		}
+	}
+
+	/* Firefox < 16 */
+	@keyframes fadein {
+		from {
+			opacity: 0%;
+		}
+
+		to {
+			opacity: 100%;
+		}
+	}
+
+	/* Safari, Chrome and Opera > 12.1 */
+	@keyframes fadein {
+		from {
+			opacity: 0%;
+		}
+
+		to {
+			opacity: 100%;
+		}
+	}
+
+	/* Internet Explorer */
+	@keyframes fadein {
+		from {
+			opacity: 0%;
+		}
+
+		to {
+			opacity: 100%;
+		}
+	}
+
+	.word {
+		scroll-margin-top: 20rem;
+	}
+
+	.word:hover::after {
+		content: "\ALemma: " attr(data-lemma) "\APos: " attr(data-type);
+		position: absolute;
+		top: 22%;
+		left: 75%;
+		z-index: 1;
+		min-width: 200px;
+		padding: 12px;
+		border: 1px #aaa solid;
+		border-radius: 10px;
+		background-color: #ffc;
+		color: #000;
+		font-size: 14px;
+		white-space: pre;
+	}
+
+	#noske-synoptic-view.active {
+		animation: fadein 2s;
+	}
+</style>

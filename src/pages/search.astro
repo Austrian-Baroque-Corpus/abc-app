@@ -1,13 +1,13 @@
 ---
 import Noske from "../components/Noske.astro";
-import Page from "../layouts/PageNoImg.astro";
+import SearchLayout from "../layouts/Search.astro";
 import { baseurl } from "../lib/baseurl.ts";
 ---
 
-<Page title="CQL, Regex Suche" baseurl={baseurl}>
+<SearchLayout title="CQL, Regex Suche" baseurl={baseurl}>
 	<div class="grid grid-cols-1">
-		<div class="flex min-h-[600px] columns-7xl flex-col">
+		<div class="flex min-h-[600px] flex-col">
 			<Noske id="hits" />
 		</div>
 	</div>
-</Page>
+</SearchLayout>

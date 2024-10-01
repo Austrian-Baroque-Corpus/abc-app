@@ -1,0 +1,43 @@
+---
+import "@fontsource-variable/inter/standard.css";
+import "tailwindcss/tailwind.css";
+
+import BaseHead from "../components/BaseHead.astro";
+import Footer from "../components/Footer.astro";
+import Header from "../components/Header.astro";
+// import MatomoAnalytics from "../components/MatomoAnalytics.astro";
+import { baseurl, createBaseurl } from "../lib/baseurl.js";
+
+const backgroundcolor = "bg-abacus";
+const githuburl = "https://github.com/Austrian-Baroque-Corpus/";
+const textcolor = "text-stone-700";
+const { title } = Astro.props;
+// const matomoUrl = "https://matomo.acdh.oeaw.ac.at/";
+// const siteId = 99999;
+---
+
+<html lang="de">
+	<head>
+		<BaseHead title={title} />
+	</head>
+	<body class="flex min-h-screen flex-col justify-between">
+		<header id="header" class="sticky top-0">
+			<Header backgroundcolor={backgroundcolor} baseurl={baseurl} />
+		</header>
+		<main class="container mx-auto mb-auto max-w-full font-antiqua" id="main">
+			<slot />
+		</main>
+		<Footer
+			backgroundcolor="bg-white"
+			github_url={githuburl}
+			textcolor={textcolor}
+			baseurl={baseurl}
+		/>
+		<!-- <MatomoAnalytics matomoUrl={matomoUrl} siteId={siteId} /> -->
+		<script
+			is:inline
+			src="https://cdnjs.cloudflare.com/ajax/libs/openseadragon/4.1.0/openseadragon.min.js"
+		></script>
+		<script is:inline src={createBaseurl("osd_scroll_synoptic.js")}></script>
+	</body>
+</html>
