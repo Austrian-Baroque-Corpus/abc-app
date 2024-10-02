@@ -38,6 +38,7 @@ jobs:
       - name: split data
         run: |
           ./scripts/shellscripts/split_pages.sh
+          ./scripts/shellscripts/attributes.sh
       - name: Build the site
         run: |
           ant -f ./scripts/ant/build.xml

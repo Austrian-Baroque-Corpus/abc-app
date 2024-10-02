@@ -27,6 +27,7 @@ function transform(options: { fileDir: string; fileName: string; htmlID: string;
 					container.classList.toggle("active");
 				}
 				container.innerHTML = html;
+				container.classList.add("h-auto");
 				scroll_synoptic();
 			}
 			const word = document.getElementById(options.hash);
@@ -57,8 +58,8 @@ get container wrapper of osd viewer
 */
 	// var container = document.getElementById("container_facs_2");
 	// container.style.display = "none";
-	const height = 800;
 	const text = document.querySelector(".text");
+	const height = text?.clientHeight;
 	let width = text ? text.clientWidth : screen.width;
 	const facs = document.getElementById("container_facs_1");
 	let container = facs ? facs : document.createElement("div");
@@ -109,7 +110,7 @@ initialize osd
 		prefixUrl: "https://cdnjs.cloudflare.com/ajax/libs/openseadragon/4.0.0/images/",
 		// @ts-expect-error in development
 		tileSources: tileSources,
-		visibilityRatio: 2,
+		visibilityRatio: 1,
 		sequenceMode: false,
 		showNavigationControl: false,
 		showNavigator: false,
@@ -134,27 +135,14 @@ initialize osd
 			ratio > tiledImage.contentAspectX ? tiledImage.normHeight : 1 / ratio;
 		// @ts-expect-error in development
 		const normed_height: number = tiledImage.normHeight;
-		// @ts-expect-error in development
-		const bounds_y: number = -(new_height - tiledImage.normHeight);
+		// const bounds_y: number = -(new_height - tiledImage.normHeight);
 		const new_bounds =
 			// @ts-expect-error in development
 			ratio > tiledImage.contentAspectX
 				? // @ts-expect-error in development
 					new OpenSeadragon.Rect(0, 0, new_height, normed_height)
 				: // @ts-expect-error in development
-					new OpenSeadragon.Rect(0, bounds_y, 1, new_height);
-		// if (ratio > tiledImage.contentAspectX) {
-		// 	// @ts-expect-error in development
-		// 	const new_width = tiledImage.normHeight * ratio;
-		// 	// @ts-expect-error in development
-		// 	var new_bounds = new OpenSeadragon.Rect(0, 0, new_width, tiledImage.normHeight);
-		// } else {
-		// 	const new_height = 1 / ratio;
-		// 	// @ts-expect-error in development
-		// 	const bounds_y = -(new_height - tiledImage.normHeight);
-		// 	// @ts-expect-error in development
-		// 	var new_bounds = new OpenSeadragon.Rect(0, bounds_y, 1, new_height);
-		// }
+					new OpenSeadragon.Rect(0, 0, 1, new_height);
 		viewer.viewport.fitBounds(new_bounds, true);
 	}
 }

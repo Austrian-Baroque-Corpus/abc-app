@@ -20,11 +20,11 @@
 			<classpath location="${basedir}/saxon/saxon9he.jar"/>
 	</xslt>
 	<delete file="${basedir}/data/editons/about.xml"/>
-	<xslt style="${basedir}/scripts/xslt/editions.xsl"  basedir="${basedir}/data/editions/tmp" destdir="${target}/pages" includes="*.xml">
+	<xslt style="${basedir}/scripts/xslt/editions-raw.xsl"  basedir="${basedir}/data/editions/tmp" destdir="${target}/pages" includes="*.xml">
 			<factory name="net.sf.saxon.TransformerFactoryImpl"/>
 			<classpath location="${basedir}/saxon/saxon9he.jar"/>
 	</xslt>
-	<xslt style="${basedir}/scripts/xslt/editions.xsl"  basedir="${basedir}/data/editions" destdir="${target}" includes="*.xml">
+	<xslt style="${basedir}/scripts/xslt/editions.xsl"  basedir="${basedir}/data/editions/tmp" destdir="${target}" includes="*.xml">
 			<factory name="net.sf.saxon.TransformerFactoryImpl"/>
 			<classpath location="${basedir}/saxon/saxon9he.jar"/>
 	</xslt>
