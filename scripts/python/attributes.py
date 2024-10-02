@@ -33,6 +33,5 @@ base_value = "https://abacus.acdh.oeaw.ac.at"
 add_base_id_next_prev(input_dir, base_value)
 
 input_dir = "./data/editions/tmp/*.xml"
-base_value = "https://abacus.acdh.oeaw.ac.at"
 
 add_base_id_next_prev(input_dir, base_value)
