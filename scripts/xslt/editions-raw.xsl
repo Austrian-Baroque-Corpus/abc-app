@@ -25,35 +25,14 @@
 		<xsl:value-of select="replace($teiSource, '.xml', '')"/>
 </xsl:variable>
 <xsl:variable name="doc_title">
-		<xsl:value-of select=".//tei:titleStmt/tei:title[@type='num']/text()|.//tei:titleStmt/tei:title[@level='a']/text()"/>
+		<xsl:value-of select=".//tei:titleStmt/tei:title[1]/text()"/>
 </xsl:variable>
 
 <xsl:template match="/">
-<div class="grid grid-cols-2 mx-auto p-4">
-	<div>
-		<xsl:if test="$prev">
-			<a>
-				<xsl:attribute name="href">
-					<xsl:value-of select="$prev"/>
-				</xsl:attribute>
-				<svg style="width:25px;" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-				</svg>
-			</a>
-		</xsl:if>
-	</div>
-	<div>
-		<xsl:if test="$next">
-			<a>
-				<xsl:attribute name="href">
-					<xsl:value-of select="$next"/>
-				</xsl:attribute>
-				<svg style="width:25px;" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-				</svg>
-			</a>
-		</xsl:if>
-	</div>
+<div class="grid grid-cols-1 p-4 text-left">
+	<a href="edition/{$link}">
+		<h1 class="text-lg text-red-500"><xsl:value-of select="$doc_title"/></h1>
+	</a>
 </div>
 <div class="flex flex-row transcript active p-2 sm:flex-col">
 	<div class="basis-7/12 text px-4 yes-index sm:px-2 sm:basis-full md:basis-full min-h-[800px]">

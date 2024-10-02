@@ -7,8 +7,9 @@ get container wrapper of osd viewer
 */
 // var container = document.getElementById("container_facs_2");
 // container.style.display = "none";
-var height = screen.height;
-var width = document.querySelector(".text").clientWidth;
+var screen = document.querySelector(".text");
+var height = screen.clientHeight;
+var width = screen.clientWidth;
 var container = document.getElementById("container_facs_1");
 var wrapper = document.getElementsByClassName("facsimiles")[0];
 var url = "http://clarin.oeaw.ac.at/cr-images";
@@ -22,7 +23,7 @@ height is always the screen height minus some offset
 ##################################################################
 */
 if (!wrapper.classList.contains("fade")) {
-	container.style.height = `${String(height / 1.3)}px`;
+	container.style.height = `${String(height)}px`;
 	// set osd wrapper container width
 	var container = document.querySelector(".section");
 	if (container !== null) {
@@ -30,9 +31,9 @@ if (!wrapper.classList.contains("fade")) {
 	}
 	var container = document.getElementById("viewer-1");
 	container.style.width = `${String(width / 1.16)}px`;
-	container.style.height = `${String(width / 1.16)}px`;
+	container.style.height = `${String(width)}px`;
 } else {
-	container.style.height = `${String(height / 1.3)}px`;
+	container.style.height = `${String(height)}px`;
 	// set osd wrapper container width
 	var container = document.querySelector(".section");
 	if (container !== null) {
@@ -67,12 +68,15 @@ var viewer = OpenSeadragon({
 	id: "container_facs_1",
 	prefixUrl: "https://cdnjs.cloudflare.com/ajax/libs/openseadragon/4.0.0/images/",
 	tileSources: tileSources,
-	visibilityRatio: 1,
-	sequenceMode: true,
-	showNavigationControl: true,
-	showNavigator: false,
-	showSequenceControl: true,
+	visibilityRatio: 0.75,
+	sequenceMode: false,
+	showNavigationControl: false,
+	showNavigator: true,
+	showSequenceControl: false,
 	showZoomControl: true,
+	defaultZoomLevel: 0,
+	autoHideControls: false,
+	preserveImageSizeOnResize: true,
 	zoomInButton: "osd_zoom_in_button",
 	zoomOutButton: "osd_zoom_out_button",
 	homeButton: "osd_zoom_reset_button",
@@ -92,8 +96,8 @@ function fitVertically_align_left_bottom() {
 		var new_bounds = new OpenSeadragon.Rect(0, 0, new_width, tiledImage.normHeight);
 	} else {
 		var new_height = 1 / ratio;
-		let bounds_y = -(new_height - tiledImage.normHeight);
-		var new_bounds = new OpenSeadragon.Rect(0, bounds_y, 1, new_height);
+		// let bounds_y = -(new_height - tiledImage.normHeight);
+		var new_bounds = new OpenSeadragon.Rect(0, 0, 1, new_height);
 	}
 	viewer.viewport.fitBounds(new_bounds, true);
 }

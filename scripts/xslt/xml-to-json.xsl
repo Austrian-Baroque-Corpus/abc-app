@@ -8,7 +8,7 @@
 	<xsl:output encoding="UTF-8" method="text" indent="yes" omit-xml-declaration="yes"/>
 
 	<xsl:template match="/">
-		<xsl:variable name="files" select="collection('../../data/editions')"/>
+		<xsl:variable name="files" select="collection('../../data/editions/tmp')"/>
 		<xsl:variable name="xml">
 			<map>
 				<xsl:for-each select="$files//tei:TEI">
