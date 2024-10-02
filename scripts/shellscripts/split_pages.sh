@@ -10,4 +10,8 @@ done
 
 echo add namespaces to root
 pipenv run python scripts/python/milestone_cleanup.py
+
+echo add attributes
+pipenv run python scripts/python/attributes.py
+
 echo done
