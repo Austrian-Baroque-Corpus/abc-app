@@ -4,8 +4,10 @@ import EditionFragment from "./EditionFragment.astro";
 
 <div class="mx-auto my-8 py-4 text-center sm:px-2 md:px-2">
 	<div class="px-4">
-		<h4 class="pt-2 text-lg">Einfache Suche in den Abacus Transkripten</h4>
-		<div class="text-sm text-gray-600">
+		<h4 class="pt-2 font-segoe text-xl">
+			<img class="inline" src="/Suche.jpg" alt="Suche" /> in den Abacus Transkripten
+		</h4>
+		<div class="font-segoe text-lg text-gray-600">
 			<a target="_blank" href="https://abacus-noske.acdh-dev.oeaw.ac.at/crystal"
 				>Erweiterte Suche in Crystal</a
 			>
@@ -24,6 +26,16 @@ import EditionFragment from "./EditionFragment.astro";
 		</div>
 	</div>
 </div>
+
+<style is:global>
+	.bg-abacus-search {
+		min-width: 130px;
+		background-image: url("/ihr_findet_padded.jpg");
+		background-position: center;
+		background-size: cover;
+		background-repeat: no-repeat;
+	}
+</style>
 
 <script>
 	import { NoskeSearch } from "acdh-noske-search";
@@ -59,6 +71,9 @@ import EditionFragment from "./EditionFragment.astro";
 			id: "noske-input",
 			placeholder: "Tippe zumindest zwei Zeichen um Wortvorschläge zu erhalten...",
 			button: "Suchen",
+			css: {
+				button: "text-xl bg-abacus-search text-transparent shadow-lg border border-gray-300 ",
+			},
 		},
 		pagination: {
 			id: "noske-pagination",

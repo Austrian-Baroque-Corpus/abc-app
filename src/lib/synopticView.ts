@@ -21,10 +21,11 @@ function transform(options: { fileDir: string; fileName: string; htmlID: string;
 		})
 		.then((html) => {
 			const container = document.getElementById(options.htmlID);
-			if (container) {
-				if (container.classList.contains("hidden")) {
-					container.classList.toggle("hidden");
-					container.classList.toggle("active");
+			const parent = container?.parentElement;
+			if (container && parent) {
+				if (parent.classList.contains("hidden")) {
+					parent.classList.toggle("hidden");
+					parent.classList.toggle("active");
 				}
 				container.innerHTML = html;
 				container.classList.add("h-auto");
