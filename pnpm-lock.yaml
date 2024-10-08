@@ -66,8 +66,8 @@ importers:
         specifier: ^18.2.19
         version: 18.2.19
       acdh-noske-search:
-        specifier: ^0.1.4
-        version: 0.1.4
+        specifier: ^0.1.6
+        version: 0.1.6
       algoliasearch:
         specifier: ^4.22.1
         version: 4.22.1
@@ -196,6 +196,10 @@ packages:
     peerDependencies:
       eslint: 8.x
       typescript: '>=5'
+
+  '@acdh-oeaw/lib@0.1.12':
+    resolution: {integrity: sha512-yNAjUxcoqvEXX+YsqWqOqCOJeFg6oYL2Q+bVdhu6LEQU1MGpcMbo7haSTX12X8UYZjIU6oWpHrZfdKZZxRH23Q==}
+    engines: {node: '>=20', pnpm: '>=9'}
 
   '@acdh-oeaw/prettier-config@2.0.0':
     resolution: {integrity: sha512-PhjHkJRb5K5uWMZ6s6IzNLvBns4Ei+osR6g/XmItFb0B844VOsU6iO3DbRyrHo8zTpMzsftkxVxT9S/b3KVmtQ==}
@@ -1890,8 +1894,8 @@ packages:
   abbrev@1.1.1:
     resolution: {integrity: sha512-nne9/IiQ/hzIhY6pdDnbBtz7DjPTKrY00P/zvPSm5pOFkl6xuGrGnXn/VtTNNfNtAfZ9/1RtehkszU9qcTii0Q==}
 
-  acdh-noske-search@0.1.4:
-    resolution: {integrity: sha512-G+pI/mr7fFSbhqDreaBWusLWMVpWI8NvnnD1ovg3NPCxGBEU8uxsOTe/xgPfIf+S9KEeaaZe93EBc5aV8uFN7g==}
+  acdh-noske-search@0.1.6:
+    resolution: {integrity: sha512-s08jLqJYIbNVaW1OhmUHEHxM35l4up3guyt98OzXcnAX09jg0vOuzg0Uh9O4A17dGcC7hkpf3wnon+QN9w4VEg==}
     engines: {node: ^20.x, npm: ^10.x}
 
   acorn-jsx@5.3.2:
@@ -5261,6 +5265,8 @@ snapshots:
       - eslint-import-resolver-webpack
       - supports-color
 
+  '@acdh-oeaw/lib@0.1.12': {}
+
   '@acdh-oeaw/prettier-config@2.0.0(prettier@3.2.5)':
     dependencies:
       prettier: 3.2.5
@@ -7711,7 +7717,9 @@ snapshots:
 
   abbrev@1.1.1: {}
 
-  acdh-noske-search@0.1.4: {}
+  acdh-noske-search@0.1.6:
+    dependencies:
+      '@acdh-oeaw/lib': 0.1.12
 
   acorn-jsx@5.3.2(acorn@8.11.3):
     dependencies:

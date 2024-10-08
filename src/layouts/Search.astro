@@ -6,7 +6,7 @@ import BaseHead from "../components/BaseHead.astro";
 import Footer from "../components/Footer.astro";
 import Header from "../components/Header.astro";
 // import MatomoAnalytics from "../components/MatomoAnalytics.astro";
-import { baseurl, createBaseurl } from "../lib/baseurl.js";
+import { baseurl } from "../lib/baseurl.js";
 
 const backgroundcolor = "bg-abacus";
 const githuburl = "https://github.com/Austrian-Baroque-Corpus/";
@@ -38,6 +38,5 @@ const { title } = Astro.props;
 			is:inline
 			src="https://cdnjs.cloudflare.com/ajax/libs/openseadragon/4.1.0/openseadragon.min.js"
 		></script>
-		<script is:inline src={createBaseurl("osd_scroll_synoptic.js")}></script>
 	</body>
 </html>

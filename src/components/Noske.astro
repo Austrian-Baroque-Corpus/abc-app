@@ -91,17 +91,13 @@ import EditionFragment from "./EditionFragment.astro";
 		autocompleteOptions: {
 			id: "noske-autocomplete",
 			css: {
-				div: "max-w-4xl w-4xl bg-white border border-gray-300 absolute ml-[10%] mt-10 text-left overflow-y-scroll overflow-x-hidden max-h-[400px]",
+				div: "max-w-4xl w-4xl bg-white border border-gray-300 absolute ml-[112px] mt-10 text-left overflow-y-scroll overflow-x-hidden max-h-[400px]",
 				ul: "p-0",
 				li: "p-2 hover:bg-gray-100 text-sm text-gray-500 hover:cursor-pointer",
 			},
 		},
 		config: {
-			// customUrl: "/edition",
-			// urlparam: { img: "on", aside: "closed" },
 			customSynopticView: (resultLineId) => {
-				console.log(resultLineId);
-				// const synopticView = document.getElementById("noske-synoptic-view");
 				Object.entries(resultLineId).forEach(([key, value]) => {
 					let kwic = document.getElementById(key) as HTMLElement;
 					kwic?.classList.add("cursor-pointer");
