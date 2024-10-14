@@ -63,7 +63,7 @@ import EditionFragment from "./EditionFragment.astro";
 			id: "hitsbox",
 			css: {
 				table: "table-auto",
-				kwic: "text-cyan-600 text-lg",
+				kwic: "text-red-500 text-lg",
 				trHead: "bg-gray-200",
 			},
 		},
@@ -91,21 +91,48 @@ import EditionFragment from "./EditionFragment.astro";
 		autocompleteOptions: {
 			id: "noske-autocomplete",
 			css: {
-				div: "max-w-4xl w-4xl bg-white border border-gray-300 absolute ml-[112px] mt-10 text-left overflow-y-scroll overflow-x-hidden max-h-[400px]",
+				div: "bg-white border border-gray-300 absolute ml-[112px] mt-10 text-left overflow-y-scroll overflow-x-hidden max-h-[400px]",
 				ul: "p-0",
 				li: "p-2 hover:bg-gray-100 text-sm text-gray-500 hover:cursor-pointer",
+				loader:
+					"m-2 border-4 border-gray-300 border-t-4 border-t-black rounded-full relative w-[40px] h-[40px] text-center",
 			},
 		},
 		config: {
 			customSynopticView: (resultLineId) => {
+				let first_entry = Object.entries(resultLineId)[0];
+				if (first_entry) {
+					let key = first_entry[0];
+					let value = first_entry[1];
+					let kwic = document.getElementById(key)?.parentElement as HTMLElement;
+					kwic?.classList.add("active");
+					let attr = value.kwic_attr?.split("/");
+					let pdId = attr![attr!.length - 1];
+					let hash = key.split("__")[2];
+					loadContent(pdId, "noske-synoptic-view", hash);
+				}
+				const input = document.querySelector("#noske-input input") as HTMLInputElement;
+				input?.addEventListener("input", (e) => {
+					// @ts-ignore
+					if (e.target?.value === "") {
+						let view = document.getElementById("noske-synoptic-view") as HTMLElement;
+						view?.parentElement?.classList.toggle("hidden");
+						view?.parentElement?.classList.toggle("active");
+					}
+				});
 				Object.entries(resultLineId).forEach(([key, value]) => {
-					let kwic = document.getElementById(key) as HTMLElement;
-					kwic?.classList.add("cursor-pointer");
+					let kwic = document.getElementById(key)?.parentElement as HTMLElement;
+					kwic?.classList.add("kwic");
 					kwic?.addEventListener("click", () => {
+						let active = document.querySelectorAll(".kwic.active");
+						active.forEach((element) => {
+							element.classList.remove("active");
+						});
+						kwic?.classList.add("active");
 						let attr = value.kwic_attr?.split("/");
 						let pdId = attr![attr!.length - 1];
-						// let id = key.split("__")[1];
 						let hash = key.split("__")[2];
+						// let id = key.split("__")[1];
 						loadContent(pdId, "noske-synoptic-view", hash);
 					});
 				});
@@ -113,3 +140,13 @@ import EditionFragment from "./EditionFragment.astro";
 		},
 	});
 </script>
+<style is:global>
+	.kwic.active {
+		border: 2px solid rgb(239 68 68);
+		border-radius: 0.25rem;
+	}
+
+	.kwic {
+		cursor: pointer;
+	}
+</style>
