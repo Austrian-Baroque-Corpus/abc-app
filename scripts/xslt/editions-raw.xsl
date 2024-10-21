@@ -34,15 +34,15 @@
 		<h1 class="text-lg text-red-500"><xsl:value-of select="$doc_title"/></h1>
 	</a>
 </div>
-<div class="flex flex-row transcript active p-2 sm:flex-col">
-	<div class="basis-7/12 text px-4 yes-index sm:px-2 sm:basis-full md:basis-full min-h-[800px]">
+<div class="flex flex-row transcript active p-2 lg:flex-col md:flex-col sm:flex-col">
+	<div class="basis-7/12 text px-4 yes-index sm:px-2 min-h-[800px]">
 		<div class="flex flex-col section font-cambria text-xl">
 			<xsl:for-each select=".//tei:front|.//tei:body|.//tei:back">
 				<xsl:apply-templates/>
 			</xsl:for-each>
 		</div>
 	</div>
-	<div class="basis-5/12 facsimiles sm:hidden md:hidden">
+	<div class="basis-5/12 facsimiles">
 		<div id="viewer-1" class="sticky top-24">
 			<div id="container_facs_1">
 			</div>
