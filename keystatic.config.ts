@@ -36,6 +36,15 @@ export default config({
 						},
 					},
 					components: {
+						CurrentDate: wrapper({
+							label: "Aktuelles Datum",
+							description: "Das aktuelle Datum",
+							schema: {
+								date: fields.text({
+									label: "Placeholder Datum",
+								}),
+							},
+						}),
 						TextImage: wrapper({
 							label: "Text und Bild",
 							description: "Ein Container mit Text und einem Bild",

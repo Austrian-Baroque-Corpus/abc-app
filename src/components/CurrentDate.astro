@@ -1,0 +1,14 @@
+---
+
+---
+
+<span class="currentDate inline"></span>
+
+<script>
+	const currentDate = document.getElementsByClassName("currentDate");
+	const date = new Date();
+	const options = { year: "numeric", month: "numeric", day: "numeric" };
+	[...currentDate].forEach((el) => {
+		el.innerHTML = date.toLocaleDateString("de-AT", options);
+	});
+</script>
