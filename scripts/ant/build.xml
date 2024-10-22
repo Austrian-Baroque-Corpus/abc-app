@@ -3,6 +3,7 @@
 	<property name="target" value="${basedir}/edition"/>
 	<mkdir dir="${target}"/>
 	<mkdir dir="${target}/pages"/>
+	<mkdir dir="${target}/register"/>
 	<delete>
 			<fileset dir="${target}" includes="*.html"/>
 	</delete>
@@ -15,6 +16,10 @@
 	<delete>
 			<fileset dir="${target}/pages" includes="*.html"/>
 	</delete>
+	<xslt in="${basedir}/data/editions/about.xml" out="${target}/register.html" style="${basedir}/scripts/xslt/register.xsl">
+			<factory name="net.sf.saxon.TransformerFactoryImpl"/>
+			<classpath location="${basedir}/saxon/saxon9he.jar"/>
+	</xslt>
 	<xslt in="${basedir}/data/editions/about.xml" out="${target}/about.json" style="${basedir}/scripts/xslt/xml-to-json.xsl">
 			<factory name="net.sf.saxon.TransformerFactoryImpl"/>
 			<classpath location="${basedir}/saxon/saxon9he.jar"/>

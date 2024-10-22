@@ -1,132 +1,41 @@
 ---
+import { readFile } from "fs/promises";
+
 import EditionFragment from "./EditionFragment.astro";
+import VirtualKeyboard from "./VirtualKeyboard.astro";
+
+const html = await readFile("edition/register.html", "utf-8");
 ---
 
-<div class="mx-auto my-8 py-4 text-center sm:px-2 md:px-2">
-	<div class="px-4">
-		<div
-			class="xs:w-[250px] mx-auto w-[1200px] max-w-[1200px] sm:w-[300px] md:w-[600px] lg:w-[800px]"
-		>
-			<h4 class="pt-2 font-segoe text-xl">
-				<img class="inline" src="/Suche.jpg" alt="Suche" /> in den Abacus Transkripten
-			</h4>
-			<div class="font-segoe text-lg text-gray-600">
-				<a target="_blank" href="https://abacus-noske.acdh-dev.oeaw.ac.at/crystal"
-					>Erweiterte Suche in Crystal</a
-				>
-				<form class="m-2 h-full">
-					<span
-						class="relative mt-4 h-[27px] w-[90%] overflow-visible rounded-sm bg-white p-0.5 align-top font-antiqua"
-						id="input-query"
-						><input
-							type="checkbox"
-							value="unused"
-							class="m-0 w-[1px] p-0 opacity-0"
-							id="vkbtquery"
-						/><label
-							for="vkbtquery"
-							class="left-0 top-0 m-2 h-[32px] cursor-pointer rounded-md border border-gray-300 bg-gray-300 p-2 align-middle text-sm shadow-md"
-							>äāâ</label
-						><ul
-							id="vkbtquerymenu"
-							role="menu"
-							class="absolute bottom-0 left-14 z-50 m-0 mt-[8px] hidden list-none whitespace-nowrap border border-gray-300 bg-white p-0.5"
-							data-context="abacus"
-						>
-							<!-- note that newlines are erased when this is loaded on demand. There are side effects as
-					new lines count as some space character which are missing in the on demand loaded variant of this
-					HTML snippet because of how jQuery's cloning works! The following is one way of making sure there is no space so it can be set by css in a consistent way.-->
-
-							<li
-								role="menuitem"
-								class="m-1 inline-block w-8 cursor-default bg-gray-300 pl-0 text-center shadow-md"
-							>
-								ä
-							</li><li
-								role="menuitem"
-								class="m-1 inline-block w-8 cursor-default bg-gray-300 pl-0 text-center shadow-md"
-							>
-								ā
-							</li><li
-								role="menuitem"
-								class="m-1 inline-block w-8 cursor-default bg-gray-300 pl-0 text-center shadow-md"
-							>
-								â
-							</li><li
-								role="menuitem"
-								class="m-1 inline-block w-8 cursor-default bg-gray-300 pl-0 text-center shadow-md"
-							>
-								æ
-							</li><li
-								role="menuitem"
-								class="m-1 inline-block w-8 cursor-default bg-gray-300 pl-0 text-center shadow-md"
-							>
-								ë
-							</li><li
-								role="menuitem"
-								class="m-1 inline-block w-8 cursor-default bg-gray-300 pl-0 text-center shadow-md"
-							>
-								e̅
-							</li><li
-								role="menuitem"
-								class="m-1 inline-block w-8 cursor-default bg-gray-300 pl-0 text-center shadow-md"
-							>
-								m̅
-							</li><li
-								role="menuitem"
-								class="m-1 inline-block w-8 cursor-default bg-gray-300 pl-0 text-center shadow-md"
-							>
-								n̅
-							</li><li
-								role="menuitem"
-								class="m-1 inline-block w-8 cursor-default bg-gray-300 pl-0 text-center shadow-md"
-							>
-								œ
-							</li><li
-								role="menuitem"
-								class="m-1 inline-block w-8 cursor-default bg-gray-300 pl-0 text-center shadow-md"
-							>
-								ö
-							</li><li
-								role="menuitem"
-								class="m-1 inline-block w-8 cursor-default bg-gray-300 pl-0 text-center shadow-md"
-							>
-								ü
-							</li><li
-								role="menuitem"
-								class="m-1 inline-block w-8 cursor-default bg-gray-300 pl-0 text-center shadow-md"
-							>
-								ß
-							</li><li
-								role="menuitem"
-								class="m-1 inline-block w-8 cursor-default bg-gray-300 pl-0 text-center shadow-md"
-							>
-								’
-							</li>
-						</ul></span
-					>
-				</form>
-			</div>
-			<div
-				id="noske-search"
-				class="xs:w-[200px] mx-auto w-[800px] text-center sm:w-[200px] md:w-[600px]"
+<div>
+	<div class="flex flex-row">
+		<div class="relative z-0 flex min-h-screen w-10 max-w-[25%] bg-gray-200 bg-repeat-y pt-10">
+			<div id="abacus-register" set:html={html} class="hidden" />
+			<button
+				id="rg-button"
+				class="-ml-7 flex rotate-90 self-start py-2 align-middle uppercase tracking-widest"
 			>
+				Register
+			</button>
+		</div>
+		<div class="w-[100%] p-4 text-center">
+			<div
+				class="xs:max-w-[200px] mx-auto max-w-[1000px] sm:max-w-[300px] md:max-w-[600px] lg:max-w-[800px]"
+			>
+				<h4 class="pt-2 font-segoe text-xl">
+					<img class="inline" src="/Suche.jpg" alt="Suche" /> in den Abacus Transkripten
+				</h4>
+				<VirtualKeyboard />
+				<div id="noske-search" class="text-center"></div>
+			</div>
+
+			<div id="hitsbox"></div>
+			<div class="mx-auto grid grid-cols-2">
+				<div id="noske-pagination" class="text-right"></div>
+				<div id="statsbox" class="text-left"></div>
 			</div>
 		</div>
-		<div
-			class="xs:grid-cols-1 grid grid-cols-2 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 xl:grid-cols-1"
-		>
-			<div class="p-4">
-				<div id="hitsbox"></div>
-				<div class="mx-auto grid grid-cols-2">
-					<div id="noske-pagination" class="text-right"></div>
-					<div id="statsbox" class="text-left"></div>
-				</div>
-			</div>
-			<div class="p-4">
-				<EditionFragment />
-			</div>
-		</div>
+		<EditionFragment />
 	</div>
 </div>
 
@@ -149,20 +58,37 @@ import EditionFragment from "./EditionFragment.astro";
 	}
 </style>
 <script>
-	const vkbtlabel = document.getElementById("vkbtquery");
-	const vkbtmenu = document.getElementById("vkbtquerymenu");
-	vkbtlabel?.addEventListener("click", () => {
-		vkbtmenu?.classList.toggle("hidden");
-	});
-	const vkbtmenuitems = document.querySelectorAll("#vkbtquerymenu li");
-	vkbtmenuitems.forEach((item) => {
-		item.addEventListener("click", (e) => {
-			const noskeInput = document.getElementById("noske-input-input") as HTMLInputElement;
-			// @ts-ignore
-			noskeInput.value += e.target!.textContent;
-			noskeInput.dispatchEvent(new Event("input", { bubbles: true }));
+	import { loadContent } from "../lib/synopticView";
+
+	const register = document.querySelectorAll<HTMLElement>(".register-menu li");
+	[...register].forEach((element) => {
+		element.addEventListener("click", () => {
+			let id = element.dataset.link;
+			let content = document.getElementById(id!);
+			content?.classList.toggle("hidden");
 		});
 	});
+
+	const button = document.getElementById("rg-button");
+	button?.addEventListener("click", () => {
+		let register = document.getElementById("abacus-register") as HTMLElement;
+		register.classList.toggle("hidden");
+		register.parentElement?.classList.toggle("w-10");
+		register.parentElement?.classList.toggle("w-[50%]");
+	});
+
+	const range = 5;
+	for (let i = 1; i <= range; i++) {
+		const content = document.querySelectorAll<HTMLElement>(`#rg-${i} div ul li`);
+		if (content) {
+			content.forEach((element) => {
+				element.addEventListener("click", async () => {
+					let id = element.dataset.link;
+					loadContent(id!, "noske-synoptic-view", "");
+				});
+			});
+		}
+	}
 </script>
 <script>
 	import { NoskeSearch } from "acdh-noske-search";
