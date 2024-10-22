@@ -1,4 +1,5 @@
 ---
+import CurrentDate from "../components/CurrentDate.astro";
 import SingleImage from "../components/SingleImage.astro";
 import TextImage from "../components/TextImage.astro";
 import { Content } from "../content/corpus/index.mdx";
@@ -10,11 +11,17 @@ import { createBaseurl } from "../lib/baseurl.ts";
 	<h1 class="my-6 bg-abacus p-0">
 		<img src={createBaseurl("Corpus-Button.jpg")} alt="Corpus Button" />
 	</h1>
-	<Content components={{ SingleImage: SingleImage, TextImage: TextImage }} />
+	<Content
+		components={{ SingleImage: SingleImage, TextImage: TextImage, CurrentDate: CurrentDate }}
+	/>
 </Page>
 <style is:global>
 	p {
 		padding: 0.5rem 0;
 		text-align: justify;
+	}
+
+	article p:nth-child(2) {
+		display: inline;
 	}
 </style>

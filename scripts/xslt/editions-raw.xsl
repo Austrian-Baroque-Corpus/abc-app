@@ -29,9 +29,12 @@
 </xsl:variable>
 
 <xsl:template match="/">
-<div class="grid grid-cols-1 p-4 text-left">
+<div class="p-2 text-left border-b border-b-gray-300">
+	<h1 class="text-lg text-red-500">
+		<xsl:value-of select="$doc_title"/><xsl:text> [</xsl:text><xsl:value-of select="//tei:pb[1]/@n"/><xsl:text>]</xsl:text>
+	</h1>
 	<a href="edition/{$link}">
-		<h1 class="text-lg text-red-500"><xsl:value-of select="$doc_title"/></h1>
+		<span class="text-gray-300 text-md">Detailansicht öffnen</span>
 	</a>
 </div>
 <div class="flex flex-row transcript active p-2 lg:flex-col md:flex-col sm:flex-col">

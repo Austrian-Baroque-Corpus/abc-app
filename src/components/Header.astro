@@ -4,6 +4,6 @@ import Navigation from "./Navigation.astro";
 const { backgroundcolor, baseurl } = Astro.props;
 ---
 
-<nav class={`${backgroundcolor} border-b border-l-2 border-red-700`}>
+<nav class={`${backgroundcolor} z-10 border-b border-l-2 border-red-700`}>
 	<Navigation textcolor="text-white" baseurl={baseurl} />
 </nav>
