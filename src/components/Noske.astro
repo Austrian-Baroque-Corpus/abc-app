@@ -215,8 +215,6 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 
 	[...wordlist].forEach((element) => {
 		element.addEventListener("click", async () => {
-			wordslistHtml.innerHTML = "";
-
 			let id = element.id;
 
 			let words = await search.getWordsList({
@@ -237,8 +235,19 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 				.sort()
 				.join("");
 
-			wordslistHtml.innerHTML = `<ul>${wordlist}</ul>`;
-			wordslistHtml.classList.toggle("hidden");
+			if (wordslistHtml.classList.contains("active")) {
+				wordslistHtml.innerHTML = "";
+			} else {
+				wordslistHtml.classList.toggle("hidden");
+				wordslistHtml.classList.toggle("active");
+			}
+			wordslistHtml.innerHTML = `<span id="rg-reset" class="cursor-pointer text-gray-500">zurücksetzen</span>
+																	<ul>${wordlist}</ul>`;
+
+			const reset = document.getElementById("rg-reset") as HTMLElement;
+			reset.addEventListener("click", () => {
+				wordslistHtml.innerHTML = "";
+			});
 
 			const wordlistResult = document.querySelectorAll(
 				"#abacus-wordslist div ul li",

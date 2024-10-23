@@ -12,7 +12,7 @@
 <xsl:template match="/">
 <div>
 	<xsl:for-each select="collection('../../data/editions')//tei:TEI">
-		<h4><xsl:value-of select="replace(.//tei:titleStmt/tei:title[1], ', digitale Ausgabe', '')"/></h4>
+		<h4 class="mt-4"><xsl:value-of select="replace(.//tei:titleStmt/tei:title[1], ', digitale Ausgabe', '')"/></h4>
 		<hr class="border-b border-b-gray-300"/>
 		<ul class="register-menu">
 			<li data-link="wk-{position()}" class="p-2 cursor-pointer inline">
@@ -21,8 +21,6 @@
 			<li data-link="rg-{position()}" class="text-red-500 p-2 cursor-pointer inline">Inhalt</li>
 			<li data-link="md-{position()}" class="text-gray-500 p-2 cursor-pointer inline">Metadaten</li>
 		</ul>
-		<div id="wk-{position()}" class="hidden">
-		</div>
 		<div id="rg-{position()}" class="hidden">
 			<xsl:apply-templates select="//tei:front|//tei:body|//tei:back"/>
 		</div>
