@@ -10,9 +10,9 @@
 <xsl:output encoding="UTF-8" media-type="text/html" method="xhtml" indent="yes" omit-xml-declaration="yes"/>
 
 <xsl:template match="/">
-<div class="p-2">
+<div>
 	<xsl:for-each select="collection('../../data/editions')//tei:TEI">
-		<h4><xsl:value-of select=".//tei:titleStmt/tei:title[1]"/></h4>
+		<h4><xsl:value-of select="replace(.//tei:titleStmt/tei:title[1], ', digitale Ausgabe', '')"/></h4>
 		<hr class="border-b border-b-gray-300"/>
 		<ul class="register-menu">
 			<li data-link="wk-{position()}" class="text-red-500 p-2 cursor-pointer inline">Werk</li>
@@ -29,7 +29,7 @@
 </xsl:template>
 
 <xsl:template match="tei:front">
-	<div class="p-2 m-2">
+	<div>
 		<h5>Titelei</h5>
 		<ul>
 		<xsl:for-each select=".//tei:pb">
@@ -41,7 +41,7 @@
 	</div>
 </xsl:template>
 <xsl:template match="tei:back">
-	<div class="p-2 m-2">
+	<div>
 		<h5>Anhang</h5>
 		<ul>
 		<xsl:for-each select=".//tei:pb">
@@ -53,10 +53,10 @@
 	</div>
 </xsl:template>
 <xsl:template match="tei:body">
-	<div class="p-2 m-2">
+	<div>
 		<xsl:for-each select=".//tei:div[@type='chapter']">
 			<h5>
-				<xsl:value-of select=".//tei:head"/>
+				<xsl:value-of select="@n"/>
 			</h5>
 			<ul>
 				<li data-link="{preceding-sibling::tei:pb[1]/@xml:id}" class="whitespace-pre p-2 text-red-500 inline cursor-pointer">

@@ -23,6 +23,9 @@ module.exports = {
 			backgroundImage: {
 				abacus: "url('/bg_pergament.jpg')",
 			},
+			backgroundColor: {
+				cabacus: "#c5c4b6",
+			},
 			fontFamily: {
 				antiqua: "Helvetica, Verdana, sans-serif;",
 				segoe: "Segoe UI;",
