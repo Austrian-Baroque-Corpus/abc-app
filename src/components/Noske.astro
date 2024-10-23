@@ -10,7 +10,7 @@ const html = await readFile("edition/register.html", "utf-8");
 <div>
 	<div class="flex flex-row">
 		<div
-			class="xs:hidden relative z-0 flex min-h-screen w-10 max-w-[350px] border-r border-r-red-600 bg-cabacus bg-repeat-y px-4 pt-10 sm:hidden md:hidden"
+			class="xs:hidden relative z-0 flex max-h-screen min-h-screen w-10 max-w-[350px] overflow-y-auto border-r border-r-red-600 bg-cabacus bg-repeat-y px-4 pt-10 sm:hidden md:hidden"
 		>
 			<div id="abacus-register" set:html={html} class="hidden" />
 			<div class="flex">
@@ -22,7 +22,9 @@ const html = await readFile("edition/register.html", "utf-8");
 				</button>
 			</div>
 		</div>
-		<div class="xs:flex-col flex w-[100%] flex-row sm:flex-col md:flex-col lg:flex-col">
+		<div
+			class="xs:flex-col sticky top-24 flex w-[100%] flex-row sm:flex-col md:flex-col lg:flex-col"
+		>
 			<div class="w-[100%] p-4 text-center">
 				<div
 					class="xs:max-w-[200px] mx-auto max-w-[1000px] sm:max-w-[300px] md:max-w-[600px] lg:max-w-[800px]"
@@ -32,6 +34,44 @@ const html = await readFile("edition/register.html", "utf-8");
 					</h4>
 					<VirtualKeyboard />
 					<div id="noske-search" class="text-center"></div>
+					<div class="py-4">
+						<h5>Beispiele:</h5>
+						<ul>
+							<li class="inline px-2">
+								<a
+									href="search?corpname=abacus&q=q%22Waitzen%3DK%C3%B6rnlein%22&viewmode=kwic&attrs=word%2Clemma%2Cpos%2Cid%2CplaceName%2CpersName%2CpbId&format=json&structs=doc%2Cg&kwicrightctx=100%23&kwicleftctx=100%23&refs=doc.title&pagesize=20&fromp=1&selectQueryValue=url"
+									><code>1:"Waitzen=Körnlein"</code></a
+								>
+							</li>
+							<li class="inline px-2">
+								<a
+									href="search?corpname=abacus&q=q%22arme%22+%22Seelen%22+&viewmode=kwic&attrs=word%2Clemma%2Cpos%2Cid%2CplaceName%2CpersName%2CpbId&format=json&structs=doc%2Cg&kwicrightctx=100%23&kwicleftctx=100%23&refs=doc.title&pagesize=20&fromp=1&selectQueryValue=url"
+									><code>2:"arme" "Seelen"</code></a
+								>
+							</li>
+							<li class="inline px-2">
+								<a
+									href="search?corpname=abacus&q=q%22Seele%22+%7C+%22Fegefeuer%22&viewmode=kwic&attrs=word%2Clemma%2Cpos%2Cid%2CplaceName%2CpersName%2CpbId&format=json&structs=doc%2Cg&kwicrightctx=100%23&kwicleftctx=100%23&refs=doc.title&pagesize=20&fromp=1&selectQueryValue=url"
+									><code>3:"Seele | Fegefeuer"</code></a
+								>
+							</li>
+						</ul>
+						<ul>
+							<li class="inline px-2">
+								<a
+									href="search?corpname=abacus&q=q%5Blemma%3D%22Fegefeuer%22%5D&viewmode=kwic&attrs=word%2Clemma%2Cpos%2Cid%2CplaceName%2CpersName%2CpbId&format=json&structs=doc%2Cg&kwicrightctx=100%23&kwicleftctx=100%23&refs=doc.title&pagesize=20&fromp=1&selectQueryValue=url"
+									><code>4:[lemma="Fegefeuer"]</code></a
+								>
+							</li>
+							<li class="inline px-2">
+								<a
+									href="search?corpname=abacus&q=q%5Blemma%3D%22ja%22+%26+pos%3D%22PTKANT%22%5D&viewmode=kwic&attrs=word%2Clemma%2Cpos%2Cid%2CplaceName%2CpersName%2CpbId&format=json&structs=doc%2Cg&kwicrightctx=100%23&kwicleftctx=100%23&refs=doc.title&pagesize=20&fromp=1&selectQueryValue=url"
+									><code>5:[lemma="ja" &amp; pos="PTKANT"]</code></a
+								>
+							</li>
+							<li class="inline px-2"><a href="nutzung" class="text-red-600 underline">mehr</a></li>
+						</ul>
+					</div>
 				</div>
 
 				<div id="hitsbox"></div>
