@@ -1,3 +1,5 @@
+import { request } from "@acdh-oeaw/lib";
+
 export function loadContent(documentId: string, synopticViewId: string, hash: string) {
 	// choose html class for node to be removed
 	removeColumnContent(synopticViewId);
@@ -6,7 +8,7 @@ export function loadContent(documentId: string, synopticViewId: string, hash: st
 	const dir = "../edition-raw/";
 
 	// column one result
-	transform({
+	return transform({
 		fileDir: dir,
 		fileName: documentId,
 		htmlID: synopticViewId,
@@ -14,32 +16,41 @@ export function loadContent(documentId: string, synopticViewId: string, hash: st
 	});
 }
 
-function transform(options: { fileDir: string; fileName: string; htmlID: string; hash: string }) {
-	fetch(options.fileDir + options.fileName + ".html")
-		.then((res) => {
-			return res.text();
-		})
-		.then((html) => {
-			const container = document.getElementById(options.htmlID);
-			const parent = container?.parentElement;
-			if (container && parent) {
-				if (parent.classList.contains("hidden")) {
-					parent.classList.toggle("hidden");
-					parent.classList.toggle("active");
-				}
-				container.innerHTML = html;
-				container.classList.add("h-auto");
-				scroll_synoptic();
+async function transform(options: {
+	fileDir: string;
+	fileName: string;
+	htmlID: string;
+	hash: string;
+}) {
+	try {
+		const url = options.fileDir + options.fileName + ".html";
+		const html = (await request(url, { responseType: "text" })) as string;
+
+		const container = document.getElementById(options.htmlID);
+		const parent = container?.parentElement;
+
+		if (container && parent) {
+			if (parent.classList.contains("hidden")) {
+				parent.classList.toggle("hidden");
+				parent.classList.toggle("active");
 			}
-			const word = document.getElementById(options.hash);
-			if (word) {
-				// word.scrollIntoView({ behavior: "instant", block: "center", inline: "center" });
-				word.style.backgroundColor = "yellow";
-			}
-		})
-		.catch((error) => {
-			console.error("Error:", error);
-		});
+
+			container.innerHTML = html;
+			container.classList.add("h-auto");
+			scroll_synoptic();
+		}
+
+		if (!options.hash || options.hash === "") return;
+
+		const word = document.getElementById(options.hash);
+
+		if (word) {
+			// word.scrollIntoView({ behavior: "instant", block: "center", inline: "center" });
+			word.style.backgroundColor = "yellow";
+		}
+	} catch (error) {
+		console.error(error);
+	}
 }
 
 function removeColumnContent(id: string) {

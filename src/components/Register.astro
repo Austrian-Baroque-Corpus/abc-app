@@ -1,0 +1,67 @@
+---
+import { readFile } from "fs/promises";
+
+const html = await readFile("edition/register.html", "utf-8");
+---
+
+<div
+	class="xs:hidden relative z-0 max-h-screen min-h-screen w-10 max-w-[350px] overflow-y-auto border-r border-r-red-600 bg-cabacus bg-repeat-y px-4 pt-10 sm:hidden md:hidden"
+>
+	<div id="abacus-wordslist" class="my-2 hidden">
+		<ul>
+			<li class="cursor-pointer underline" id="word">Wortformen</li>
+			<li class="cursor-pointer underline" id="lemma">Lemmata</li>
+			<li class="cursor-pointer underline" id="pos">Wortarten</li>
+			<li class="cursor-pointer underline" id="persName">Personennamen</li>
+			<li class="cursor-pointer underline" id="placeName">Ortsnamen</li>
+		</ul>
+		<div class="mt-4 hidden"></div>
+	</div>
+	<div id="abacus-register" set:html={html} class="relative my-4 hidden" />
+	<div class="absolute -left-8 top-14 rotate-90">
+		<a role="button" id="rg-button" class="uppercase tracking-widest text-black"> Register </a>
+	</div>
+</div>
+<script>
+	import { loadContent } from "../lib/synopticView";
+
+	const register = document.querySelectorAll<HTMLElement>(".register-menu li");
+
+	[...register].forEach((element) => {
+		element.addEventListener("click", () => {
+			let id = element.dataset.link;
+			let content = document.getElementById(id!);
+			content?.classList.toggle("hidden");
+		});
+	});
+
+	const button = document.getElementById("rg-button");
+
+	button?.addEventListener("click", () => {
+		button.parentElement!.classList.toggle("rotate-90");
+		button.parentElement!.classList.toggle("-left-8");
+		button.parentElement!.classList.toggle("top-14");
+		button.parentElement!.classList.toggle("top-4");
+		let register = document.getElementById("abacus-register") as HTMLElement;
+		register.classList.toggle("hidden");
+		register.parentElement?.classList.toggle("w-10");
+		register.parentElement?.classList.toggle("w-[50%]");
+		let wordslist = document.getElementById("abacus-wordslist") as HTMLElement;
+		wordslist.classList.toggle("hidden");
+	});
+
+	const range = 5;
+
+	for (let i = 1; i <= range; i++) {
+		const content = document.querySelectorAll<HTMLElement>(`#rg-${i} div ul li`);
+
+		if (content) {
+			content.forEach((element) => {
+				element.addEventListener("click", async () => {
+					let id = element.dataset.link;
+					loadContent(id!, "noske-synoptic-view", "");
+				});
+			});
+		}
+	}
+</script>
