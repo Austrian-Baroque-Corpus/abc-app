@@ -6,8 +6,54 @@
 	<div class="bg-abacus">
 		<img src="/snippet_Seitenansicht.jpg" alt="Seitenansicht" />
 	</div>
+	<div class="mx-auto grid grid-cols-2 p-4" id="prevNextLinks">
+		<div class="flex justify-start">
+			<a role="button" aria-label="vorherige Seite" data-link="prev">
+				<svg
+					style="width:25px;"
+					fill="none"
+					stroke="currentColor"
+					viewBox="0 0 24 24"
+					xmlns="http://www.w3.org/2000/svg"
+				>
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"
+					></path>
+				</svg>
+			</a>
+		</div>
+		<div class="flex justify-end">
+			<a role="button" aria-label="nächste Seite" data-link="next">
+				<svg
+					style="width:25px;"
+					fill="none"
+					stroke="currentColor"
+					viewBox="0 0 24 24"
+					xmlns="http://www.w3.org/2000/svg"
+				>
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"
+					></path>
+				</svg>
+			</a>
+		</div>
+	</div>
 	<div id="noske-synoptic-view"></div>
 </div>
+
+<script>
+	import { loadContent } from "../lib/synopticView";
+
+	const prevNextLinks = document.querySelectorAll<HTMLElement>("#prevNextLinks a");
+
+	[...prevNextLinks].forEach((element) => {
+		element.addEventListener("click", (e) => {
+			// @ts-ignore
+			const prevOrNext = e.target!.dataset.link;
+			const content = document.getElementById("edition-content");
+			const id = prevOrNext === "prev" ? content!.dataset.prev : content!.dataset.next;
+			loadContent(id!, "noske-synoptic-view", "");
+		});
+	});
+</script>
 
 <style is:global>
 	@keyframes fadein {

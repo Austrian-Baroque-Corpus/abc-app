@@ -92,7 +92,7 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 	import { NoskeSearch } from "acdh-noske-search";
 	import { loadContent } from "../lib/synopticView";
 
-	const screeWidth = window.innerWidth > 1199 ? true : false;
+	const screeWidth = window.innerWidth >= 1024 ? true : false;
 
 	const search = new NoskeSearch({
 		container: "noske-search",
@@ -237,7 +237,9 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 			// @ts-ignore
 			const wordlist = [...words.Items].filter((item) => item.str !== "");
 
-			if (id === "word" || id === "lemma" || id === "persName" || id === "placeName") {
+			wordslistHtml.innerHTML = `<span id="rg-reset" class="cursor-pointer text-gray-500">zurücksetzen</span>`;
+
+			if (id !== "pos") {
 				let abc: {
 					[key: string]: Array<string>;
 				} = {};
@@ -245,19 +247,8 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 				wordlist.map((item) => {
 					let firstLetter: string = item.str.charAt(0).toUpperCase();
 
-					try {
-						abc[firstLetter].push(
-							`<li class="cursor-pointer text-red-600">${item.str} <small>(${item.frq})</small></li>`,
-						);
-					} catch (error) {
-						abc[firstLetter] = [];
-						abc[firstLetter].push(
-							`<li class="cursor-pointer text-red-600">${item.str} <small>(${item.frq})</small></li>`,
-						);
-					}
+					pushOrCreate(abc, firstLetter, item);
 				});
-
-				wordslistHtml.innerHTML = `<span id="rg-reset" class="cursor-pointer text-gray-500">zurücksetzen</span>`;
 
 				for (const [key, value] of Object.entries(abc).sort()) {
 					wordslistHtml.innerHTML += `<div id="rg-abc"><h4 class="cursor-pointer">${key}</h4><ul class="hidden pl-2">${value.sort().join("")}</ul></div>`;
@@ -269,106 +260,38 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 
 				wordlist.map((item) => {
 					if (item.str.includes("_")) {
-						try {
-							wordTypes["Kontrahierte-Formen-II"].push(
-								`<li class="cursor-pointer text-red-600">${item.str} <small>(${item.frq})</small></li>`,
-							);
-						} catch (error) {
-							wordTypes["Kontrahierte-Formen-II"] = [];
-
-							wordTypes["Kontrahierte-Formen-II"].push(
-								`<li class="cursor-pointer text-red-600">${item.str} <small>(${item.frq})</small></li>`,
-							);
-						}
+						pushOrCreate(wordTypes, "Kontrahierte-Formen-II", item);
 					} else if (
 						item.str.includes("PPER") ||
 						item.str.includes("ARTNN") ||
 						item.str.includes("ADVART")
 					) {
 						if (item.str.startsWith("P")) {
-							try {
-								wordTypes["Pronomen-mit-Klitikon"].push(
-									`<li class="cursor-pointer text-red-600">${item.str} <small>(${item.frq})</small></li>`,
-								);
-							} catch (error) {
-								wordTypes["Pronomen-mit-Klitikon"] = [];
-
-								wordTypes["Pronomen-mit-Klitikon"].push(
-									`<li class="cursor-pointer text-red-600">${item.str} <small>(${item.frq})</small></li>`,
-								);
-							}
+							pushOrCreate(wordTypes, "Pronomen-mit-Klitikon", item);
 						} else if (item.str.startsWith("V")) {
-							try {
-								wordTypes["Verb-mit-Klitikon"].push(
-									`<li class="cursor-pointer text-red-600">${item.str} <small>(${item.frq})</small></li>`,
-								);
-							} catch (error) {
-								wordTypes["Verb-mit-Klitikon"] = [];
-
-								wordTypes["Verb-mit-Klitikon"].push(
-									`<li class="cursor-pointer text-red-600">${item.str} <small>(${item.frq})</small></li>`,
-								);
-							}
+							pushOrCreate(wordTypes, "Verb-mit-Klitikon", item);
 						} else if (item.str.startsWith("ADV")) {
-							try {
-								wordTypes["Adverb-mit-Klitikon"].push(
-									`<li class="cursor-pointer text-red-600">${item.str} <small>(${item.frq})</small></li>`,
-								);
-							} catch (error) {
-								wordTypes["Adverb-mit-Klitikon"] = [];
-
-								wordTypes["Adverb-mit-Klitikon"].push(
-									`<li class="cursor-pointer text-red-600">${item.str} <small>(${item.frq})</small></li>`,
-								);
-							}
+							pushOrCreate(wordTypes, "Adverb-mit-Klitikon", item);
 						} else if (item.str.startsWith("ART")) {
-							try {
-								wordTypes["Nomen-mit-Klitikon"].push(
-									`<li class="cursor-pointer text-red-600">${item.str} <small>(${item.frq})</small></li>`,
-								);
-							} catch (error) {
-								wordTypes["Nomen-mit-Klitikon"] = [];
-
-								wordTypes["Nomen-mit-Klitikon"].push(
-									`<li class="cursor-pointer text-red-600">${item.str} <small>(${item.frq})</small></li>`,
-								);
-							}
+							pushOrCreate(wordTypes, "Nomen-mit-Klitikon", item);
 						} else if (item.str.startsWith("KOU")) {
-							try {
-								wordTypes["Konjunktion-mit-Klitikon"].push(
-									`<li class="cursor-pointer text-red-600">${item.str} <small>(${item.frq})</small></li>`,
-								);
-							} catch (error) {
-								wordTypes["Konjunktion-mit-Klitikon"] = [];
-
-								wordTypes["Konjunktion-mit-Klitikon"].push(
-									`<li class="cursor-pointer text-red-600">${item.str} <small>(${item.frq})</small></li>`,
-								);
-							}
+							pushOrCreate(wordTypes, "Konjunktion-mit-Klitikon", item);
 						}
 					} else {
-						try {
-							wordTypes["Stuttgart-Tübingen-TagSet"].push(
-								`<li class="cursor-pointer text-red-600">${item.str} <small>(${item.frq})</small></li>`,
-							);
-						} catch (error) {
-							wordTypes["Stuttgart-Tübingen-TagSet"] = [];
-
-							wordTypes["Stuttgart-Tübingen-TagSet"].push(
-								`<li class="cursor-pointer text-red-600">${item.str} <small>(${item.frq})</small></li>`,
-							);
-						}
+						pushOrCreate(wordTypes, "Stuttgart-Tübingen-TagSet", item);
 					}
 				});
 
-				wordslistHtml.innerHTML = `<span id="rg-reset" class="cursor-pointer text-gray-500">zurücksetzen</span>`;
-				wordslistHtml.innerHTML += `<div id="rg-abc"><h4 class="cursor-pointer">Kontrahierte-Formen-I</h4><ul class="hidden pl-2" id="rg-abc-types"></ul></div>`;
+				wordslistHtml.innerHTML += `<div id="rg-abc"><h4 class="cursor-pointer">Kontrahierte Formen I</h4><ul class="hidden pl-2" id="rg-abc-types"></ul></div>`;
 
-				for (const [key, value] of Object.entries(wordTypes).sort()) {
+				for (let [key, value] of Object.entries(wordTypes).sort()) {
 					if (key !== "Kontrahierte-Formen-II" && key !== "Stuttgart-Tübingen-TagSet") {
 						document.getElementById("rg-abc-types")!.innerHTML +=
-							`<h4 class="cursor-pointer">${key}</h4><ul class="hidden pl-2">${value.sort().join("")}</ul>`;
+							`<h4 class="cursor-pointer">${key.replace("-", " ").replace("-", " ")}</h4><ul class="hidden pl-2">${value.sort().join("")}</ul>`;
 					} else {
+						if (key !== "Stuttgart-Tübingen-TagSet") {
+							key = key.replace("-", " ").replace("-", " ");
+						}
 						wordslistHtml.innerHTML += `<div id="rg-abc"><h4 class="cursor-pointer">${key}</h4><ul class="hidden pl-2">${value.sort().join("")}</ul></div>`;
 					}
 				}
@@ -392,7 +315,7 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 
 					// @ts-ignore
 					//noskeInput.value = e.target!.textContent;
-					noskeInput.value = `[${id}="${e.target!.textContent}"]`;
+					noskeInput.value = `[${id}="${e.target!.dataset.str}"]`;
 					//noskeInput.dispatchEvent(new Event("", { bubbles: true }));
 					const searchButton = document.getElementById("noske-search-button") as HTMLButtonElement;
 					searchButton.click();
@@ -410,4 +333,18 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 			});
 		});
 	});
+
+	const pushOrCreate = (obj: any, key: string, item: { str: string; frq: string }) => {
+		try {
+			obj[key].push(createListItem(item));
+		} catch (error) {
+			obj[key] = [];
+
+			obj[key].push(createListItem(item));
+		}
+	};
+
+	const createListItem = (item: { str: string; frq: string }) => {
+		return `<li class="cursor-pointer text-red-600" data-str="${item.str}">${item.str} <small>(${item.frq})</small></li>`;
+	};
 </script>

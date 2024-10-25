@@ -29,7 +29,7 @@
 </xsl:variable>
 
 <xsl:template match="/">
-<div class="p-2 text-left border-b border-b-gray-300">
+<div class="p-2 text-left border-b border-b-gray-300" id="edition-content" data-prev="{$prev}" data-next="{$next}">
 	<h1 class="text-lg text-red-500">
 		<xsl:value-of select="$doc_title"/><xsl:text> </xsl:text><xsl:value-of select="//tei:pb[1]/@n"/>
 	</h1>

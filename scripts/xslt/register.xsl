@@ -15,8 +15,8 @@
 		<h4 class="mt-4"><xsl:value-of select="replace(.//tei:titleStmt/tei:title[1], ', digitale Ausgabe', '')"/></h4>
 		<hr class="border-b border-b-gray-300"/>
 		<ul class="register-menu">
-			<li data-link="wk-{position()}" class="p-2 cursor-pointer inline">
-				<a class="text-red-500" href="edition/{//tei:body/tei:pb[1]/@xml:id}">Werk</a>
+			<li data-link="wk-{position()}" class="text-red-500 p-2 cursor-pointer inline" data-content="{.//tei:body/tei:pb[1]/@xml:id}">
+				Werk
 			</li>
 			<li data-link="rg-{position()}" class="text-red-500 p-2 cursor-pointer inline">Inhalt</li>
 			<li data-link="md-{position()}" class="text-gray-500 p-2 cursor-pointer inline">Metadaten</li>

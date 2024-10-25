@@ -28,10 +28,22 @@ const html = await readFile("edition/register.html", "utf-8");
 	const register = document.querySelectorAll<HTMLElement>(".register-menu li");
 
 	[...register].forEach((element) => {
-		element.addEventListener("click", () => {
-			let id = element.dataset.link;
-			let content = document.getElementById(id!);
-			content?.classList.toggle("hidden");
+		element.addEventListener("click", (e) => {
+			// @ts-ignore
+			const id = e.target!.dataset.link;
+
+			if (id.startsWith("rg-")) {
+				let content = document.getElementById(id!);
+
+				content?.classList.toggle("hidden");
+			} else if (id.startsWith("wk-")) {
+				// @ts-ignore
+				let content = e.target!.dataset.content;
+
+				loadContent(content, "noske-synoptic-view", "");
+			} else {
+				// to be defined
+			}
 		});
 	});
 
