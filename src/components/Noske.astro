@@ -345,6 +345,6 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 	};
 
 	const createListItem = (item: { str: string; frq: string }) => {
-		return `<li class="cursor-pointer text-red-600" data-str="${item.str}">${item.str} <small>(${item.frq})</small></li>`;
+		return `<li class="cursor-pointer text-red-600" data-str="${item.str}">${item.str} (${item.frq})</li>`;
 	};
 </script>
