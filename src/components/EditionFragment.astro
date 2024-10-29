@@ -45,9 +45,9 @@
 	const prevNextLinks = document.querySelectorAll<HTMLElement>("#prevNextLinks a");
 
 	[...prevNextLinks].forEach((element) => {
-		element.addEventListener("click", (e) => {
+		element.addEventListener("click", () => {
 			// @ts-ignore
-			const prevOrNext = e.target!.dataset.link;
+			const prevOrNext = element.dataset.link;
 			const content = document.getElementById("edition-content");
 			const id = prevOrNext === "prev" ? content!.dataset.prev : content!.dataset.next;
 			loadContent(id!, "noske-synoptic-view", "");
