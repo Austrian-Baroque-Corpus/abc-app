@@ -16,10 +16,10 @@
 		],
 		"jsx": "react-jsx",
 		"jsxImportSource": "react",
-		"noImplicitAny": true,
-		"lib": ["DOM", "ES2017"]
+		"noImplicitAny": false,
+		"lib": ["DOM", "ES2015"]
 	},
-	"include": ["./**/*"],
+	"include": ["./**/*", ".astro/types.d.ts"],
 	"exclude": [
 		"dist",
 		"node_modules",

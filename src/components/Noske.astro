@@ -176,6 +176,10 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 				let hash = pdId!.split("__")[2];
 				loadContent(pdId, "noske-synoptic-view", hash, pdN);
 
+				console.log(lines);
+
+				let issues = {};
+
 				let count = 0;
 				for (const line of lines) {
 					const hitItem = document.createElement("div");
@@ -242,20 +246,23 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 					let kwic_attr = line.kwic_attr.split(" ");
 					let pageAttr = kwic_attr[0].split("/")[9];
 
-					var facs = line.refs[0].replace("doc.id=", "");
+					var facs = line.refs[0].replace("doc.title=", "");
+					var issueId = line.refs[1].split("doc.id=")[1];
+
+					issues[issueId] ? issues[issueId]++ : (issues[issueId] = 1);
 
 					try {
-						var pageNr: string = pageAttr.replace("_", " ").replace(/[\[\]]/g, "");
+						var pageNr: string = pageAttr.replaceAll("_", " ").replace(/[\[\]]/g, "");
 					} catch (error) {
 						var pageNr = "S. 1";
 						console.log("No issue in kwic_attr", issue);
 					}
 
 					var page = document.createElement("span");
-					page.classList.add("page");
+					page.classList.add(...["page"]);
 
 					try {
-						page.innerHTML = `${facs.split("doc.title=")[1]} ${pageNr}`;
+						page.innerHTML = `${pageNr}: ${facs}`;
 					} catch (error) {
 						page.innerHTML = "TITEL S. 1";
 					}
@@ -283,6 +290,35 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 						});
 					}
 				}
+
+				const issuesBox = document.createElement("div");
+				issuesBox.classList.add("mt-4", "text-gray-600", "text-left");
+				issuesBox.innerHTML = `<h4 class="text-lg">Anzahl der Treffer pro Ausgabe:</h4>`;
+				issuesBox.innerHTML += `<ul class="pl-4 list-none">`;
+				issuesBox.innerHTML += `<li class="text-red-600 cursor-pointer" data-key=".*">Alle</li>`;
+				for (const [key, value] of Object.entries(issues)) {
+					issuesBox.innerHTML += `<li class="text-red-600 cursor-pointer" data-key="${key}">${value} ${key.replace("_", " ")}</li>`;
+				}
+
+				hitsBox!.prepend(issuesBox);
+
+				issuesBox.addEventListener("click", (e) => {
+					// @ts-ignore
+					const key = e.target!.dataset.key;
+					if (key) {
+						let searchInput = document.getElementById("noske-input-input") as HTMLInputElement;
+						let searchSelect = document.getElementById("noske-input-select") as HTMLSelectElement;
+						searchSelect.value = "cql";
+						if (searchInput.value.includes("within")) {
+							searchInput.value = searchInput.value.replace(
+								/ within .+/g,
+								` within <doc id="${key}"/>`,
+							);
+						} else {
+							searchInput.value += ` within <doc id="${key}"/>`;
+						}
+					}
+				});
 			},
 			// customSynopticView: screeWidth
 			// 	? (resultLineId: any) => {
