@@ -8,7 +8,7 @@
 	const currentDate = document.getElementsByClassName("currentDate");
 	const date = new Date();
 	const options = { year: "numeric", month: "numeric", day: "numeric" };
-	[...currentDate].forEach((el) => {
+	Array.from(currentDate).forEach((el) => {
 		// @ts-ignore
 		el.innerHTML = date.toLocaleDateString("de-AT", options);
 	});

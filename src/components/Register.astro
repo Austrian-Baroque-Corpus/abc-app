@@ -27,7 +27,7 @@ const html = await readFile("edition/register.html", "utf-8");
 
 	const register = document.querySelectorAll<HTMLElement>(".register-menu li");
 
-	[...register].forEach((element) => {
+	Array.from(register).forEach((element) => {
 		element.addEventListener("click", (e) => {
 			// @ts-ignore
 			const id = e.target!.dataset.link;
@@ -40,7 +40,7 @@ const html = await readFile("edition/register.html", "utf-8");
 				// @ts-ignore
 				let content = e.target!.dataset.content;
 
-				loadContent(content, "noske-synoptic-view", "");
+				loadContent(content, "noske-synoptic-view", "", "");
 			} else {
 				// to be defined
 			}
@@ -71,7 +71,7 @@ const html = await readFile("edition/register.html", "utf-8");
 			content.forEach((element) => {
 				element.addEventListener("click", async () => {
 					let id = element.dataset.link;
-					loadContent(id!, "noske-synoptic-view", "");
+					loadContent(id!, "noske-synoptic-view", "", "");
 				});
 			});
 		}
