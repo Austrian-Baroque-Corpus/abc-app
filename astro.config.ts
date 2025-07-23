@@ -39,6 +39,6 @@ export default defineConfig({
 	server: {
 		port: 3030,
 	},
-	site: "https://austrian-baroque-corpus.github.io/abc-app",
+	site: "https://abacus.acdh-ch-dev.oeaw.ac.at",
 	base: "/",
 });

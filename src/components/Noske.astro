@@ -24,34 +24,34 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 						<ul>
 							<li class="inline px-2">
 								<a
-									href="search?corpname=abacus&q=q%22Waitzen%3DK%C3%B6rnlein%22&viewmode=kwic&attrs=word%2Clemma%2Cpos%2Cid%2CplaceName%2CpersName%2CpbId&format=json&structs=doc%2Cg&kwicrightctx=100%23&kwicleftctx=100%23&refs=doc.title&pagesize=20&fromp=1&selectQueryValue=url"
-									><code>1:"Waitzen=Körnlein"</code></a
+									href="search?corpname=abacus&q=q%22Waitzen%3DK%C3%B6rnlein%22&viewmode=kwic&attrs=word%2Clemma%2Cpos%2Cid%2Cplc%2CplcType%2Cprs%2CprsType%2CpbId%2CpbN&format=json&structs=doc%2Cg&kwicrightctx=100%23&kwicleftctx=100%23&refs=doc.title%2Cdoc.id&pagesize=20&fromp=1&selectQueryValue=url"
+									>1:<code>"Waitzen=Körnlein"</code></a
 								>
 							</li>
 							<li class="inline px-2">
 								<a
-									href="search?corpname=abacus&q=q%22arme%22+%22Seelen%22+&viewmode=kwic&attrs=word%2Clemma%2Cpos%2Cid%2CplaceName%2CpersName%2CpbId&format=json&structs=doc%2Cg&kwicrightctx=100%23&kwicleftctx=100%23&refs=doc.title&pagesize=20&fromp=1&selectQueryValue=url"
-									><code>2:"arme" "Seelen"</code></a
+									href="search?corpname=abacus&q=q%22arme%22+%22Seelen%22&viewmode=kwic&attrs=word%2Clemma%2Cpos%2Cid%2Cplc%2CplcType%2Cprs%2CprsType%2CpbId%2CpbN&format=json&structs=doc%2Cg&kwicrightctx=100%23&kwicleftctx=100%23&refs=doc.title%2Cdoc.id&pagesize=20&fromp=1&selectQueryValue=url"
+									>2:<code>"arme" "Seelen"</code></a
 								>
 							</li>
 							<li class="inline px-2">
 								<a
-									href="search?corpname=abacus&q=q%22Seele%22+%7C+%22Fegefeuer%22&viewmode=kwic&attrs=word%2Clemma%2Cpos%2Cid%2CplaceName%2CpersName%2CpbId&format=json&structs=doc%2Cg&kwicrightctx=100%23&kwicleftctx=100%23&refs=doc.title&pagesize=20&fromp=1&selectQueryValue=url"
-									><code>3:"Seele | Fegefeuer"</code></a
+									href="search?corpname=abacus&q=q%22Seele%22+%7C+%22Fegefeuer%22&viewmode=kwic&attrs=word%2Clemma%2Cpos%2Cid%2Cplc%2CplcType%2Cprs%2CprsType%2CpbId%2CpbN&format=json&structs=doc%2Cg&kwicrightctx=100%23&kwicleftctx=100%23&refs=doc.title%2Cdoc.id&pagesize=20&fromp=1&selectQueryValue=url"
+									>3:<code>"Seele | Fegefeuer"</code></a
 								>
 							</li>
 						</ul>
 						<ul>
 							<li class="inline px-2">
 								<a
-									href="search?corpname=abacus&q=q%5Blemma%3D%22Fegefeuer%22%5D&viewmode=kwic&attrs=word%2Clemma%2Cpos%2Cid%2CplaceName%2CpersName%2CpbId&format=json&structs=doc%2Cg&kwicrightctx=100%23&kwicleftctx=100%23&refs=doc.title&pagesize=20&fromp=1&selectQueryValue=url"
-									><code>4:[lemma="Fegefeuer"]</code></a
+									href="search?corpname=abacus&q=q%5Blemma%3D%22Fegefeuer%22%5D&viewmode=kwic&attrs=word%2Clemma%2Cpos%2Cid%2Cplc%2CplcType%2Cprs%2CprsType%2CpbId%2CpbN&format=json&structs=doc%2Cg&kwicrightctx=100%23&kwicleftctx=100%23&refs=doc.title%2Cdoc.id&pagesize=20&fromp=1&selectQueryValue=url"
+									>4:<code>[lemma="Fegefeuer"]</code></a
 								>
 							</li>
 							<li class="inline px-2">
 								<a
-									href="search?corpname=abacus&q=q%5Blemma%3D%22ja%22+%26+pos%3D%22PTKANT%22%5D&viewmode=kwic&attrs=word%2Clemma%2Cpos%2Cid%2CplaceName%2CpersName%2CpbId&format=json&structs=doc%2Cg&kwicrightctx=100%23&kwicleftctx=100%23&refs=doc.title&pagesize=20&fromp=1&selectQueryValue=url"
-									><code>5:[lemma="ja" &amp; pos="PTKANT"]</code></a
+									href="search?corpname=abacus&q=q%5Blemma%3D%22ja%22+%26+pos%3D%22PTKANT%22%5D&viewmode=kwic&attrs=word%2Clemma%2Cpos%2Cid%2Cplc%2CplcType%2Cprs%2CprsType%2CpbId%2CpbN&format=json&structs=doc%2Cg&kwicrightctx=100%23&kwicleftctx=100%23&refs=doc.title%2Cdoc.id&pagesize=20&fromp=1&selectQueryValue=url"
+									>5:<code>[lemma="ja" &amp; pos="PTKANT"]</code></a
 								>
 							</li>
 							<li class="inline px-2"><a href="nutzung" class="text-red-600 underline">mehr</a></li>
@@ -97,7 +97,7 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 	const search = new NoskeSearch({
 		container: "noske-search",
 		autocomplete: true,
-		wordlistattr: ["word", "lemma", "pos", "id", "placeName", "persName", "pbId"],
+		wordlistattr: ["word", "lemma", "pos", "id", "plc", "plcType", "prs", "prsType", "pbId", "pbN"],
 	});
 
 	search.minQueryLength = 2;
@@ -108,14 +108,14 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 			//base: "http://localhost:8080",
 			base: "https://abacus-noske.acdh-dev.oeaw.ac.at",
 			corpname: "abacus",
-			attrs: "word,lemma,pos,id,placeName,persName,pbId",
+			attrs: "word,lemma,pos,id,plc,plcType,prs,prsType,pbId,pbN",
 			structs: "doc,g",
-			refs: "doc.title",
+			refs: "doc.title,doc.id",
 		},
 		hits: {
 			id: "hitsbox",
 			css: {
-				div: "grid grid-cols-2 gap-2 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 xl:grid-cols-1 xs:grid-cols-1",
+				div: "grid grid-cols-1 gap-2 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 xl:grid-cols-1 xs:grid-cols-1",
 				table: "table-auto",
 				kwic: "text-red-500 text-lg",
 				trHead: "bg-gray-200",
@@ -156,9 +156,9 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 			tableView: false,
 			customUrlTransform: screeWidth
 				? undefined
-				: (lines) => {
+				: (lines: { kwic_attr?: string }) => {
 						let kwic_attr = lines.kwic_attr?.split("/")[1];
-						let pageId = lines.kwic_attr?.split("/")[6];
+						let pageId = lines.kwic_attr?.split("/")[8];
 						// let refs = lines.refs;
 						// let docID = refs[0].split("=")[1];
 						let url = new URL("https://abacus.acdh-ch-dev.oeaw.ac.at/edition/" + pageId);
@@ -167,53 +167,173 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 						url.searchParams.set("place", "on");
 						return url;
 					},
-			customSynopticView: screeWidth
-				? (resultLineId) => {
-						let first_entry = Object.entries(resultLineId)[0];
-						if (first_entry) {
-							let key = first_entry[0];
-							let value = first_entry[1];
-							let kwic = document.getElementById(key) as HTMLElement;
-							kwic?.classList.add("active");
-							let attr = value.kwic_attr?.split("/");
-							let pdId = attr![attr!.length - 1];
-							let hash = key.split("__")[2];
-							loadContent(pdId, "noske-synoptic-view", hash);
-						}
-						const input = document.querySelector("#noske-input input") as HTMLInputElement;
-						input?.addEventListener("input", (e) => {
-							// @ts-ignore
-							if (e.target?.value === "") {
-								let view = document.getElementById("noske-synoptic-view") as HTMLElement;
-								view?.parentElement!.classList.toggle("hidden");
-								view?.parentElement!.classList.toggle("active");
-							}
-						});
-						Object.entries(resultLineId).forEach(([key, value]) => {
-							let kwic = document.getElementById(key) as HTMLElement;
-							kwic?.classList.add("kwic");
-							kwic?.addEventListener("click", () => {
-								let active = document.querySelectorAll(".kwic.active");
-								active.forEach((element) => {
-									element.classList.remove("active");
-								});
-								kwic?.classList.add("active");
-								let attr = value.kwic_attr?.split("/");
-								let pdId = attr![attr!.length - 1];
-								let hash = key.split("__")[2];
-								// let id = key.split("__")[1];
-								loadContent(pdId, "noske-synoptic-view", hash);
-							});
+			customResponseHtml: (lines: any, containerId: string, hits: any, client_attrs: any) => {
+				const hitsBox = document.getElementById(containerId);
+
+				const attr = lines[0].kwic_attr?.split("/");
+				let pdId = attr![attr!.length - 2];
+				let pdN = attr![attr!.length - 1];
+				let hash = pdId!.split("__")[2];
+				loadContent(pdId, "noske-synoptic-view", hash, pdN);
+
+				let count = 0;
+				for (const line of lines) {
+					const hitItem = document.createElement("div");
+					hitItem.style.cursor = "pointer";
+					hitItem!.classList.add(...["mt-4"]);
+
+					let hitId = line.kwic_attr.split("/")[8];
+					// let docTitle = line.refs[1].split("doc.id=")[1];
+					// hitId = `line-${count}__${docTitle}__${hitId}`;
+					hitItem.id = hitId;
+
+					// let hitCss = hits.css.div.split(" ");
+					// hitItem.classList.add(...hitCss);
+
+					const context = document.createElement("div");
+					context.classList.add("flex", "items-center");
+					context.style.fontSize = "1em";
+					context.style.color = "#454545";
+
+					const searchIcon = document.createElement("span");
+					searchIcon.style.marginRight = "2em";
+					searchIcon.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+                </svg>`;
+					searchIcon.style.color = "#454545";
+					context.appendChild(searchIcon);
+
+					const left = document.createElement("span");
+					left.style.color = "#454545";
+					let leftKwic = line.left.split(" ").reverse().slice(0, 4).reverse().join(" ");
+					left.innerHTML = `...${leftKwic}`;
+					context.appendChild(left);
+
+					const kwic = document.createElement("span");
+					kwic.style.padding = "0 0.5em";
+					let kwicCss = hits.css.kwic.split(" ");
+					kwic.classList.add(...kwicCss);
+					kwic.classList.add("text-red-600");
+					kwic.innerHTML = line.kwic;
+					context.appendChild(kwic);
+
+					const right = document.createElement("span");
+					right.style.color = "#454545";
+					let rightKwic = line.right.split(" ").slice(0, 4).join(" ");
+					right.innerHTML = ` ${rightKwic}...`;
+					context.appendChild(right);
+
+					hitItem.append(context);
+
+					const issue = document.createElement("div");
+					issue.classList.add("flex", "items-center");
+					issue.style.borderBottom = "1px solid #e0e0e0";
+					issue.style.padding = "0 0 1em 0";
+					issue.style.color = "#454545";
+
+					const issueIcon = document.createElement("span");
+					issueIcon.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-file-earmark" viewBox="0 0 16 16">
+                                    <path d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5zm-3 0A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5z"/>
+                                    </svg>`;
+					issueIcon.style.color = "#454545";
+					issueIcon.style.marginRight = "2em";
+					issue.appendChild(issueIcon);
+
+					let kwic_attr = line.kwic_attr.split(" ");
+					let pageAttr = kwic_attr[0].split("/")[9];
+
+					var facs = line.refs[0].replace("doc.id=", "");
+
+					try {
+						var pageNr: string = pageAttr.replace("_", " ").replace(/[\[\]]/g, "");
+					} catch (error) {
+						var pageNr = "S. 1";
+						console.log("No issue in kwic_attr", issue);
+					}
+
+					var page = document.createElement("span");
+					page.classList.add("page");
+
+					try {
+						page.innerHTML = `${facs.split("doc.title=")[1]} ${pageNr}`;
+					} catch (error) {
+						page.innerHTML = "TITEL S. 1";
+					}
+
+					const arrow = document.createElement("span");
+					arrow.style.marginLeft = "1em";
+					arrow.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"/>
+                                    </svg>`;
+
+					issue.appendChild(page);
+
+					hitItem.appendChild(issue);
+
+					hitsBox!.appendChild(hitItem);
+					count++;
+
+					if (screeWidth) {
+						hitItem.addEventListener("click", () => {
+							let attr = line.kwic_attr?.split("/");
+							let pdId = attr![attr!.length - 2];
+							let pdN = attr![attr!.length - 1];
+							let hash = hitId.split("__")[2];
+							loadContent(pdId, "noske-synoptic-view", hash, pdN);
 						});
 					}
-				: undefined,
+				}
+			},
+			// customSynopticView: screeWidth
+			// 	? (resultLineId: any) => {
+			// 			let first_entry: [string, any] = Object.entries(resultLineId)[0];
+			// 			if (first_entry) {
+			// 				let key = first_entry[0];
+			// 				let value = first_entry[1];
+			// 				let kwic = document.getElementById(key) as HTMLElement;
+			// 				kwic?.classList.add("active");
+			// 				let attr = value!.kwic_attr?.split("/");
+			// 				let pdId = attr![attr!.length - 2];
+			// 				let pdN = attr![attr!.length - 1];
+			// 				let hash = key.split("__")[2];
+			// 				loadContent(pdId, "noske-synoptic-view", hash, pdN);
+			// 			}
+			// 			const input = document.querySelector("#noske-input input") as HTMLInputElement;
+			// 			input?.addEventListener("input", (e) => {
+			// 				// @ts-ignore
+			// 				if (e.target?.value === "") {
+			// 					let view = document.getElementById("noske-synoptic-view") as HTMLElement;
+			// 					view?.parentElement!.classList.toggle("hidden");
+			// 					view?.parentElement!.classList.toggle("active");
+			// 				}
+			// 			});
+			// 			Object.entries(resultLineId).forEach(([key, value]) => {
+			// 				console.log(key, value);
+			// 				let kwic = document.getElementById(key) as HTMLElement;
+			// 				kwic?.classList.add("kwic");
+			// 				kwic?.addEventListener("click", () => {
+			// 					let active = document.querySelectorAll(".kwic.active");
+			// 					active.forEach((element) => {
+			// 						element.classList.remove("active");
+			// 					});
+			// 					kwic?.classList.add("active");
+			// 					let attr = value!.kwic_attr?.split("/");
+			// 					let pdId = attr![attr!.length - 2];
+			// 					let pdN = attr![attr!.length - 1];
+			// 					let hash = key.split("__")[2];
+			// 					// let id = key.split("__")[1];
+			// 					loadContent(pdId, "noske-synoptic-view", hash, pdN);
+			// 				});
+			// 			});
+			// 		}
+			// 	: undefined,
 		},
 	});
 
 	const wordlist = document.querySelectorAll("#abacus-wordslist ul li") as NodeListOf<HTMLElement>;
 	const wordslistHtml = document.querySelector("#abacus-wordslist div") as HTMLDivElement;
 
-	[...wordlist].forEach((element) => {
+	Array.from(wordlist).forEach((element) => {
 		element.addEventListener("click", async () => {
 			let id = element.id;
 
@@ -306,7 +426,7 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 				"#abacus-wordslist div ul li",
 			) as NodeListOf<HTMLElement>;
 
-			[...wordlistResult].forEach((item) => {
+			Array.from(wordlistResult).forEach((item) => {
 				item.addEventListener("click", (e) => {
 					const noskeInput = document.getElementById("noske-input-input") as HTMLInputElement;
 
@@ -324,7 +444,7 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 
 			const rgAbc = document.querySelectorAll("#rg-abc h4") as NodeListOf<HTMLElement>;
 
-			[...rgAbc].forEach((item) => {
+			Array.from(rgAbc).forEach((item) => {
 				item.addEventListener("click", (e) => {
 					// @ts-ignore
 					const ul = e.target!.nextElementSibling as HTMLElement;

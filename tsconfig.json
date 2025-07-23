@@ -16,7 +16,8 @@
 		],
 		"jsx": "react-jsx",
 		"jsxImportSource": "react",
-		"noImplicitAny": true
+		"noImplicitAny": true,
+		"lib": ["ES2015", "DOM", "ES2017"],
 	},
 	"include": ["./**/*"],
 	"exclude": [

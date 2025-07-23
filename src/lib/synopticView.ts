@@ -1,6 +1,11 @@
 import { request } from "@acdh-oeaw/lib";
 
-export function loadContent(documentId: string, synopticViewId: string, hash: string) {
+export function loadContent(
+	documentId: string,
+	synopticViewId: string,
+	hash: string,
+	pdN: string,
+): Promise<void> {
 	// choose html class for node to be removed
 	removeColumnContent(synopticViewId);
 
@@ -13,6 +18,7 @@ export function loadContent(documentId: string, synopticViewId: string, hash: st
 		fileName: documentId,
 		htmlID: synopticViewId,
 		hash: hash,
+		page: pdN,
 	});
 }
 
@@ -21,7 +27,8 @@ async function transform(options: {
 	fileName: string;
 	htmlID: string;
 	hash: string;
-}) {
+	page: string;
+}): Promise<void> {
 	try {
 		const url = options.fileDir + options.fileName + ".html";
 		const html = (await request(url, { responseType: "text" })) as string;
