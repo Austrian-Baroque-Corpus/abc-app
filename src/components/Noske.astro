@@ -22,37 +22,25 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 					<div class="py-4">
 						<h5>Beispiele:</h5>
 						<ul>
-							<li class="inline px-2">
-								<a
-									href="search?corpname=abacus&q=q%22Waitzen%3DK%C3%B6rnlein%22&viewmode=kwic&attrs=word%2Clemma%2Cpos%2Cid%2Cplc%2CplcType%2Cprs%2CprsType%2CpbId%2CpbN&format=json&structs=doc%2Cg&kwicrightctx=100%23&kwicleftctx=100%23&refs=doc.title%2Cdoc.id&pagesize=20&fromp=1&selectQueryValue=url"
-									>1:<code>"Waitzen=Körnlein"</code></a
-								>
+							<li class="inline cursor-pointer px-2">
+								1:<a class="hit-examples">"Waitzen=Körnlein"</a>
 							</li>
-							<li class="inline px-2">
-								<a
-									href="search?corpname=abacus&q=q%22arme%22+%22Seelen%22&viewmode=kwic&attrs=word%2Clemma%2Cpos%2Cid%2Cplc%2CplcType%2Cprs%2CprsType%2CpbId%2CpbN&format=json&structs=doc%2Cg&kwicrightctx=100%23&kwicleftctx=100%23&refs=doc.title%2Cdoc.id&pagesize=20&fromp=1&selectQueryValue=url"
-									>2:<code>"arme" "Seelen"</code></a
-								>
+							<li class="inline cursor-pointer px-2">
+								2:<a class="hit-examples">"arme" "Seelen"</a>
 							</li>
-							<li class="inline px-2">
-								<a
-									href="search?corpname=abacus&q=q%22Seele%22+%7C+%22Fegefeuer%22&viewmode=kwic&attrs=word%2Clemma%2Cpos%2Cid%2Cplc%2CplcType%2Cprs%2CprsType%2CpbId%2CpbN&format=json&structs=doc%2Cg&kwicrightctx=100%23&kwicleftctx=100%23&refs=doc.title%2Cdoc.id&pagesize=20&fromp=1&selectQueryValue=url"
-									>3:<code>"Seele | Fegefeuer"</code></a
-								>
+							<li class="inline cursor-pointer px-2">
+								3:<a class="hit-examples">"Seele" | "Fegefeuer"</a>
 							</li>
 						</ul>
 						<ul>
-							<li class="inline px-2">
-								<a
-									href="search?corpname=abacus&q=q%5Blemma%3D%22Fegefeuer%22%5D&viewmode=kwic&attrs=word%2Clemma%2Cpos%2Cid%2Cplc%2CplcType%2Cprs%2CprsType%2CpbId%2CpbN&format=json&structs=doc%2Cg&kwicrightctx=100%23&kwicleftctx=100%23&refs=doc.title%2Cdoc.id&pagesize=20&fromp=1&selectQueryValue=url"
-									>4:<code>[lemma="Fegefeuer"]</code></a
-								>
+							<li class="inline cursor-pointer px-2">
+								4:<a class="hit-examples">[w="Feegfeuer"]</a>
 							</li>
-							<li class="inline px-2">
-								<a
-									href="search?corpname=abacus&q=q%5Blemma%3D%22ja%22+%26+pos%3D%22PTKANT%22%5D&viewmode=kwic&attrs=word%2Clemma%2Cpos%2Cid%2Cplc%2CplcType%2Cprs%2CprsType%2CpbId%2CpbN&format=json&structs=doc%2Cg&kwicrightctx=100%23&kwicleftctx=100%23&refs=doc.title%2Cdoc.id&pagesize=20&fromp=1&selectQueryValue=url"
-									>5:<code>[lemma="ja" &amp; pos="PTKANT"]</code></a
-								>
+							<li class="inline cursor-pointer px-2">
+								5:<a class="hit-examples">[l="Fegefeuer"]</a>
+							</li>
+							<li class="inline cursor-pointer px-2">
+								6:<a class="hit-examples">[l="ja" &amp; pos="PTKANT"]</a>
 							</li>
 							<li class="inline px-2"><a href="nutzung" class="text-red-600 underline">mehr</a></li>
 						</ul>
@@ -92,7 +80,20 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 	const search = new NoskeSearch({
 		container: "noske-search",
 		autocomplete: true,
-		wordlistattr: ["word", "lemma", "pos", "id", "plc", "plcType", "prs", "prsType", "pbId", "pbN"],
+		wordlistattr: [
+			"word",
+			"lemma",
+			"w",
+			"l",
+			"pos",
+			"id",
+			"placeName",
+			"placeType",
+			"persName",
+			"persType",
+			"pbId",
+			"pbN",
+		],
 	});
 
 	search.minQueryLength = 2;
@@ -103,7 +104,7 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 			//base: "http://localhost:8080",
 			base: "https://abacus-noske.acdh-dev.oeaw.ac.at",
 			corpname: "abacus",
-			attrs: "word,lemma,pos,id,plc,plcType,prs,prsType,pbId,pbN",
+			attrs: "word,lemma,w,l,pos,id,placeName,placeType,persName,persType,pbId,pbN",
 			structs: "doc,g",
 			refs: "doc.title,doc.id",
 		},
@@ -164,6 +165,8 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 					},
 			customResponseHtml: (lines: any, containerId: string, hits: any, client_attrs: any) => {
 				const hitsBox = document.getElementById(containerId);
+
+				console.log(lines);
 
 				const attr = lines[0].kwic_attr?.split("/");
 				let pdId = attr![attr!.length - 2];
@@ -236,7 +239,7 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 					issue.appendChild(issueIcon);
 
 					let kwic_attr = line.kwic_attr.split(" ");
-					let pageAttr = kwic_attr[0].split("/")[9];
+					let pageAttr = kwic_attr[0].split("/")[11];
 
 					var facs = line.refs[0].replace("doc.title=", "");
 					var issueId = line.refs[1].split("doc.id=")[1];
@@ -307,14 +310,34 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 					if (key) {
 						let searchInput = document.getElementById("noske-input-input") as HTMLInputElement;
 						let searchSelect = document.getElementById("noske-input-select") as HTMLSelectElement;
-						searchSelect.value = "cql";
 						if (searchInput.value.includes("within")) {
-							searchInput.value = searchInput.value.replace(
-								/ within .+/g,
-								` within <doc id="${key}"/>`,
-							);
+							if (searchSelect.value !== "cql") {
+								searchSelect.value = "cql";
+								let searchInputValue = searchInput.value.replace(
+									/(.+) within .+/g,
+									`"$1" within <doc id="${key}"/>`,
+								);
+								searchInput.value = searchInputValue;
+							} else {
+								searchInput.value = searchInput.value.replace(
+									/(.+) within .+/g,
+									`$1 within <doc id="${key}"/>`,
+								);
+							}
 						} else {
-							searchInput.value += ` within <doc id="${key}"/>`;
+							if (searchSelect.value !== "cql") {
+								searchSelect.value = "cql";
+								let searchInputValue = searchInput.value.replace(
+									/(.+)/g,
+									`"$1" within <doc id="${key}"/>`,
+								);
+								searchInput.value = searchInputValue;
+							} else {
+								searchInput.value = searchInput.value.replace(
+									/(.+)/g,
+									`$1 within <doc id="${key}"/>`,
+								);
+							}
 						}
 						const searchButton = document.getElementById(
 							"noske-search-button",
@@ -367,6 +390,23 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 			// 		}
 			// 	: undefined,
 		},
+	});
+
+	const hitExamples = document.querySelectorAll(".hit-examples") as NodeListOf<HTMLElement>;
+	Array.from(hitExamples).forEach((item) => {
+		item.addEventListener("click", (e) => {
+			// @ts-ignore
+			const key = e.target!.innerHTML.replace("&amp;", "&");
+
+			if (key) {
+				let searchInput = document.getElementById("noske-input-input") as HTMLInputElement;
+				let searchSelect = document.getElementById("noske-input-select") as HTMLSelectElement;
+				searchSelect.value = "cql";
+				searchInput.value = key;
+				const searchButton = document.getElementById("noske-search-button") as HTMLButtonElement;
+				searchButton.click();
+			}
+		});
 	});
 
 	const wordlist = document.querySelectorAll("#abacus-wordslist ul li") as NodeListOf<HTMLElement>;
