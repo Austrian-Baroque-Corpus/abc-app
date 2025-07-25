@@ -80,12 +80,7 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 	}
 
 	.kwic.active {
-		border: 2px solid rgb(239 68 68);
-		border-radius: 0.25rem;
-	}
-
-	.kwic {
-		cursor: pointer;
+		border-bottom: 1px solid rgb(239 68 68);
 	}
 </style>
 <script>
@@ -176,15 +171,12 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 				let hash = pdId!.split("__")[2];
 				loadContent(pdId, "noske-synoptic-view", hash, pdN);
 
-				console.log(lines);
-
 				let issues = {};
 
 				let count = 0;
 				for (const line of lines) {
 					const hitItem = document.createElement("div");
-					hitItem.style.cursor = "pointer";
-					hitItem!.classList.add(...["mt-4"]);
+					hitItem!.classList.add(...["mt-4", "kwic", "cursor-pointer", "text-left", "border-b"]);
 
 					let hitId = line.kwic_attr.split("/")[8];
 					// let docTitle = line.refs[1].split("doc.id=")[1];
@@ -231,7 +223,7 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 
 					const issue = document.createElement("div");
 					issue.classList.add("flex", "items-center");
-					issue.style.borderBottom = "1px solid #e0e0e0";
+					// issue.style.borderBottom = "1px solid #e0e0e0";
 					issue.style.padding = "0 0 1em 0";
 					issue.style.color = "#454545";
 
@@ -249,6 +241,7 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 					var facs = line.refs[0].replace("doc.title=", "");
 					var issueId = line.refs[1].split("doc.id=")[1];
 
+					issues["Alle"] ? issues["Alle"]++ : (issues["Alle"] = 1);
 					issues[issueId] ? issues[issueId]++ : (issues[issueId] = 1);
 
 					try {
@@ -262,7 +255,7 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 					page.classList.add(...["page"]);
 
 					try {
-						page.innerHTML = `${pageNr}: ${facs}`;
+						page.innerHTML = `${pageNr} – ${facs.replace("Abraham-", "").replace("oe", "ö")}`;
 					} catch (error) {
 						page.innerHTML = "TITEL S. 1";
 					}
@@ -274,6 +267,7 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
                                     </svg>`;
 
 					issue.appendChild(page);
+					issue.appendChild(arrow);
 
 					hitItem.appendChild(issue);
 
@@ -282,6 +276,11 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 
 					if (screeWidth) {
 						hitItem.addEventListener("click", () => {
+							let active = document.querySelectorAll(".kwic.active");
+							active.forEach((element) => {
+								element.classList.remove("active");
+							});
+							hitItem.classList.toggle("active");
 							let attr = line.kwic_attr?.split("/");
 							let pdId = attr![attr!.length - 2];
 							let pdN = attr![attr!.length - 1];
@@ -294,10 +293,10 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 				const issuesBox = document.createElement("div");
 				issuesBox.classList.add("mt-4", "text-gray-600", "text-left");
 				issuesBox.innerHTML = `<h4 class="text-lg">Anzahl der Treffer pro Ausgabe:</h4>`;
-				issuesBox.innerHTML += `<ul class="pl-4 list-none">`;
-				issuesBox.innerHTML += `<li class="text-red-600 cursor-pointer" data-key=".*">Alle</li>`;
+				issuesBox.innerHTML += `<ul class="pl-4">`;
 				for (const [key, value] of Object.entries(issues)) {
-					issuesBox.innerHTML += `<li class="text-red-600 cursor-pointer" data-key="${key}">${value} ${key.replace("_", " ")}</li>`;
+					let title = key.replaceAll("_", " ").replace("Abraham-", "").replace("oe", "ö");
+					issuesBox.innerHTML += `<li class="text-red-600 cursor-pointer list-none" data-key="${key == "Alle" ? ".*" : key}">${value} – ${title}</li>`;
 				}
 
 				hitsBox!.prepend(issuesBox);
@@ -317,6 +316,10 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 						} else {
 							searchInput.value += ` within <doc id="${key}"/>`;
 						}
+						const searchButton = document.getElementById(
+							"noske-search-button",
+						) as HTMLButtonElement;
+						searchButton.click();
 					}
 				});
 			},
