@@ -166,11 +166,24 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 			customResponseHtml: (lines: any, containerId: string, hits: any, client_attrs: any) => {
 				const hitsBox = document.getElementById(containerId);
 
-				console.log(lines);
-
 				const attr = lines[0].kwic_attr?.split("/");
-				let pdId = attr![attr!.length - 2];
-				let pdN = attr![attr!.length - 1];
+				attr!.shift();
+				let attr_length = attr!.length / 11;
+				let pdIdx = 9;
+				let pdNdx = 10;
+				if (attr_length > 1) {
+					for (let i = 1; i < attr_length; i++) {
+						if (attr![pdIdx] !== "" && attr![pdNdx] !== "") {
+							pdIdx += 0;
+							pdNdx += 0;
+						} else {
+							pdIdx += 11;
+							pdNdx += 11;
+						}
+					}
+				}
+				let pdId = attr![pdIdx];
+				let pdN = attr![pdNdx];
 				let hash = pdId!.split("__")[2];
 				loadContent(pdId, "noske-synoptic-view", hash, pdN);
 
@@ -284,9 +297,25 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 								element.classList.remove("active");
 							});
 							hitItem.classList.toggle("active");
+							console.log(line);
 							let attr = line.kwic_attr?.split("/");
-							let pdId = attr![attr!.length - 2];
-							let pdN = attr![attr!.length - 1];
+							attr!.shift();
+							let attr_length = attr!.length / 11;
+							let pdIdx = 9;
+							let pdNdx = 10;
+							if (attr_length > 1) {
+								for (let i = 1; i < attr_length; i++) {
+									if (attr![pdIdx] !== "" && attr![pdNdx] !== "") {
+										pdIdx += 0;
+										pdNdx += 0;
+									} else {
+										pdIdx += 11;
+										pdNdx += 11;
+									}
+								}
+							}
+							let pdId = attr![pdIdx];
+							let pdN = attr![pdNdx];
 							let hash = hitId.split("__")[2];
 							loadContent(pdId, "noske-synoptic-view", hash, pdN);
 						});

@@ -4,10 +4,20 @@ import EditionEditor from "./EditionEditor.astro";
 
 const { textcolor, backgroundcolor, width, issue, source, name } = Astro.props;
 
-function verifyArche() {
+function verifyArche(issue: string, names: string = name): string {
+	const issues = {
+		test: names,
+		"Mercks Wienn, digitale Ausgabe": "Abraham-Mercks_Wien.xml",
+		"Lösch Wienn, digitale Ausgabe": "Abraham-Loesch_Wienn.xml",
+		"Grosse Todten Bruderschaft, digitale Ausgabe": "Abraham-Grosse_Todten_Bruderschaft.xml",
+		"Augustini Feuriges Hertz, digitale Ausgabe": "Abraham-Augustini_feuriges_Hertz.xml",
+		"Todten-Capelle, digitale Ausgabe": "Abraham-Todten_Capelle.xml",
+	};
 	const format = "?format=raw";
-	const url = "https://id.acdh.oeaw.ac.at/abacus/";
-	const doc = "ed__" + name.replace(".html", ".xml");
+	// const url = "https://id.acdh.oeaw.ac.at/abacus/";
+	const url = "/xml/";
+	// const doc = "ed__" + name.replace(".html", ".xml");
+	const doc = issues[issue];
 	return url + doc + format;
 }
 ---
@@ -57,7 +67,7 @@ function verifyArche() {
 					{source}
 				</p>
 				<p class="mt-4 flex justify-center">
-					<a href={verifyArche()} aria-label="Download" target="_blank">
+					<a href={verifyArche(issue)} aria-label="Download" target="_blank">
 						<svg width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
 							<path
 								d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5"
