@@ -11,6 +11,29 @@
 
 <xsl:template match="/">
 <div>
+	<!-- <ul>
+		<xsl:for-each select="collection('../../data/register')//tei:TEI">
+			<li><label>Personen</label>
+				<ul>
+					<xsl:for-each-group select="//tei:person" group-by="@type">
+						<li>
+							<a href="#{current-grouping-key()}">
+								<ul>
+									<xsl:for-each select="current-group()">
+										<xsl:sort select=".//tei:persName/@lemma" data-type="text" order="ascending"/>
+										<li data-link="{@xml:id}" data-key="{.//tei:persName/@key}" class="p-2 text-red-500 inline cursor-pointer whitespace-pre">
+											<xsl:value-of select=".//tei:persName/@lemma"/>
+										</li>
+									</xsl:for-each>
+								</ul>
+							</a>
+						</li>
+					</xsl:for-each-group>
+				</ul>
+			</li>
+			<li>Orte</li>
+		</xsl:for-each>
+	</ul> -->
 	<xsl:for-each select="collection('../../data/editions')//tei:TEI">
 		<h4 class="mt-4"><xsl:value-of select="replace(.//tei:titleStmt/tei:title[1], ', digitale Ausgabe', '')"/></h4>
 		<hr class="border-b border-b-gray-300"/>
