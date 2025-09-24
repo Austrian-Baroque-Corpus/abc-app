@@ -5,8 +5,8 @@ name = "pypi"
 
 [packages]
 tqdm = "*"
-lxml = "*"
 acdh-tei-pyutils = "1.4"
+lxml = "*"
 
 [dev-packages]
 

@@ -10,5 +10,8 @@ mv ./abc-data-main/data/editions/* data/editions
 touch "data/editions/about.xml"
 echo "<about><title>Austrian Baroque Corpus ABaC:us</title><description>Austrian Baroque Corpus ABaC:us</description></about>" > data/editions/about.xml
 
+mkdir data/register
+mv ./abc-data-main/data/index/output/* data/register
+
 rm -rf abc-data-main
 rm main.zip

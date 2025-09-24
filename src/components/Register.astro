@@ -47,6 +47,21 @@ const html = await readFile("edition/register.html", "utf-8");
 		});
 	});
 
+	const registerPers = document.querySelectorAll<HTMLElement>("#registerPP");
+
+	Array.from(registerPers).forEach((element) => {
+		element.addEventListener("click", (e) => {
+			const target = e.target as HTMLElement;
+
+			// Check if clicked element is an h4 or h5
+			if (target.tagName === "H4" || target.tagName === "H5") {
+				const nextElement = target.nextElementSibling;
+				nextElement?.classList.toggle("hidden");
+				return;
+			}
+		});
+	});
+
 	const button = document.getElementById("rg-button");
 
 	button?.addEventListener("click", () => {

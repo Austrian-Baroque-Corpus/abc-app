@@ -10,30 +10,39 @@
 <xsl:output encoding="UTF-8" media-type="text/html" method="xhtml" indent="yes" omit-xml-declaration="yes"/>
 
 <xsl:template match="/">
-<div>
-	<!-- <ul>
-		<xsl:for-each select="collection('../../data/register')//tei:TEI">
-			<li><label>Personen</label>
-				<ul>
-					<xsl:for-each-group select="//tei:person" group-by="@type">
-						<li>
-							<a href="#{current-grouping-key()}">
-								<ul>
-									<xsl:for-each select="current-group()">
-										<xsl:sort select=".//tei:persName/@lemma" data-type="text" order="ascending"/>
-										<li data-link="{@xml:id}" data-key="{.//tei:persName/@key}" class="p-2 text-red-500 inline cursor-pointer whitespace-pre">
-											<xsl:value-of select=".//tei:persName/@lemma"/>
-										</li>
-									</xsl:for-each>
-								</ul>
-							</a>
-						</li>
-					</xsl:for-each-group>
-				</ul>
-			</li>
-			<li>Orte</li>
+<div id="registerPP">
+	<h4 class="mt-4 cursor-pointer underline">Personenkategorien</h4>
+		<xsl:for-each select="document('../../data/register/abc_register_persons.xml')//tei:TEI">
+			<div id="rg-pers" class="hidden">
+				<xsl:for-each-group select=".//tei:person" group-by="@role">
+						<h5 class="cursor-pointer"><xsl:value-of select="current-grouping-key()"/></h5>
+							<ul class="hidden">
+								<xsl:for-each select="current-group()">
+									<xsl:sort select=".//tei:persName[@type='main']" data-type="text" order="ascending"/>
+									<li data-link="wk-{position()}" data-str="{.//tei:persName/@key}" class="text-red-500 cursor-pointer whitespace-pre">
+										<xsl:value-of select=".//tei:persName[@type='main']"/>
+									</li>
+								</xsl:for-each>
+							</ul>
+				</xsl:for-each-group>
+			</div>
 		</xsl:for-each>
-	</ul> -->
+	<h4 class="mt-4 cursor-pointer underline">Ortekategorien</h4>
+		<xsl:for-each select="document('../../data/register/abc_register_places.xml')//tei:TEI">
+			<div id="rg-place" class="hidden">
+				<xsl:for-each-group select=".//tei:place" group-by="@type">
+					<h5 class="cursor-pointer"><xsl:value-of select="current-grouping-key()"/></h5>
+						<ul class="hidden">
+							<xsl:for-each select="current-group()">
+								<xsl:sort select=".//tei:placeName[@type='main']" data-type="text" order="ascending"/>
+								<li data-link="wk-{position()}" data-str="{.//tei:placeName/@key}" class="text-red-500 cursor-pointer whitespace-pre">
+									<xsl:value-of select=".//tei:placeName[@type='main']"/>
+								</li>
+							</xsl:for-each>
+						</ul>
+				</xsl:for-each-group>
+			</div>
+	</xsl:for-each>
 	<xsl:for-each select="collection('../../data/editions')//tei:TEI">
 		<h4 class="mt-4"><xsl:value-of select="replace(.//tei:titleStmt/tei:title[1], ', digitale Ausgabe', '')"/></h4>
 		<hr class="border-b border-b-gray-300"/>
@@ -45,7 +54,7 @@
 			<li data-link="md-{position()}" class="text-gray-500 p-2 cursor-pointer inline">Metadaten</li>
 		</ul>
 		<div id="rg-{position()}" class="hidden">
-			<xsl:apply-templates select="//tei:front|//tei:body|//tei:back"/>
+			<xsl:apply-templates select=".//tei:front|.//tei:body|.//tei:back"/>
 		</div>
 	</xsl:for-each>
 </div>

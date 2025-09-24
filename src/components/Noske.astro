@@ -421,6 +421,27 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 		},
 	});
 
+	// Register people/places click handlers
+	const registerpeopleplaces = document.querySelectorAll(
+		"#registerPP div ul li",
+	) as NodeListOf<HTMLElement>;
+
+	Array.from(registerpeopleplaces).forEach((item) => {
+		item.addEventListener("click", (e) => {
+			const noskeInput = document.getElementById("noske-input-input") as HTMLInputElement;
+			const noskeSelect = document.getElementById("noske-input-select") as HTMLSelectElement;
+			noskeSelect.value = "cql";
+
+			// Determine attribute based on context - check parent element or use persName as default
+			const parentId = item.closest("div")?.id || "";
+			const attribute = parentId.includes("place") ? "placeName" : "persName";
+
+			noskeInput.value = `[${attribute}="${(e.target as HTMLElement).dataset.str}"]`;
+			const searchButton = document.getElementById("noske-search-button") as HTMLButtonElement;
+			searchButton.click();
+		});
+	});
+
 	const hitExamples = document.querySelectorAll(".hit-examples") as NodeListOf<HTMLElement>;
 	Array.from(hitExamples).forEach((item) => {
 		item.addEventListener("click", (e) => {
