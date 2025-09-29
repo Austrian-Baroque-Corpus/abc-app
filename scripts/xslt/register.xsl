@@ -10,8 +10,8 @@
 <xsl:output encoding="UTF-8" media-type="text/html" method="xhtml" indent="yes" omit-xml-declaration="yes"/>
 
 <xsl:template match="/">
-<div id="registerPP">
-	<h4 class="mt-4 cursor-pointer underline">Personenkategorien</h4>
+<!--<div id="registerPers">
+	<h4 class="mt-4 cursor-pointer underline">Personenkategorien</h4>-->
 		<xsl:for-each select="document('../../data/register/abc_register_persons.xml')//tei:TEI">
 			<div id="rg-pers" class="hidden">
 				<xsl:for-each-group select=".//tei:person" group-by="@role">
@@ -27,7 +27,9 @@
 				</xsl:for-each-group>
 			</div>
 		</xsl:for-each>
-	<h4 class="mt-4 cursor-pointer underline">Ortekategorien</h4>
+<!--</div>
+<div id="registerPlace">
+	<h4 class="mt-4 cursor-pointer underline">Ortekategorien</h4>-->
 		<xsl:for-each select="document('../../data/register/abc_register_places.xml')//tei:TEI">
 			<div id="rg-place" class="hidden">
 				<xsl:for-each-group select=".//tei:place" group-by="@type">
@@ -43,6 +45,7 @@
 				</xsl:for-each-group>
 			</div>
 	</xsl:for-each>
+<!--</div>-->
 	<xsl:for-each select="collection('../../data/editions')//tei:TEI">
 		<h4 class="mt-4"><xsl:value-of select="replace(.//tei:titleStmt/tei:title[1], ', digitale Ausgabe', '')"/></h4>
 		<hr class="border-b border-b-gray-300"/>
@@ -51,13 +54,12 @@
 				Werk
 			</li>
 			<li data-link="rg-{position()}" class="text-red-500 p-2 cursor-pointer inline">Inhalt</li>
-			<li data-link="md-{position()}" class="text-gray-500 p-2 cursor-pointer inline">Metadaten</li>
+			<!--<li data-link="md-{position()}" class="text-gray-500 p-2 cursor-pointer inline">Metadaten</li>-->
 		</ul>
 		<div id="rg-{position()}" class="hidden">
 			<xsl:apply-templates select=".//tei:front|.//tei:body|.//tei:back"/>
 		</div>
 	</xsl:for-each>
-</div>
 </xsl:template>
 
 <xsl:template match="tei:front">

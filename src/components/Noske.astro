@@ -423,7 +423,7 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 
 	// Register people/places click handlers
 	const registerpeopleplaces = document.querySelectorAll(
-		"#registerPP div ul li",
+		"#rg-pers ul li , #rg-place ul li",
 	) as NodeListOf<HTMLElement>;
 
 	Array.from(registerpeopleplaces).forEach((item) => {
@@ -436,7 +436,8 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 			const parentId = item.closest("div")?.id || "";
 			const attribute = parentId.includes("place") ? "placeName" : "persName";
 
-			noskeInput.value = `[${attribute}="${(e.target as HTMLElement).dataset.str}"]`;
+			// Use the item (li element) instead of e.target to get the data-str
+			noskeInput.value = `[${attribute}="${item.dataset.str}"]`;
 			const searchButton = document.getElementById("noske-search-button") as HTMLButtonElement;
 			searchButton.click();
 		});
@@ -466,6 +467,51 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 		element.addEventListener("click", async () => {
 			let id = element.id;
 
+			// Special handling for persName - show registerPers instead of word list
+			if (id === "persName") {
+				const registerPers = document.getElementById("rg-pers");
+				const registerPlace = document.getElementById("rg-place");
+				registerPers.classList.remove("hidden");
+				registerPlace.classList.add("hidden");
+
+				wordslistHtml.classList.remove("hidden");
+				wordslistHtml.classList.add("active");
+				wordslistHtml.innerHTML = `<span id="rg-reset" class="cursor-pointer text-gray-500">zurücksetzen</span>`;
+				// Add event listener for reset button in case persName was clicked
+				const reset = document.getElementById("rg-reset") as HTMLElement;
+				reset.addEventListener("click", () => {
+					wordslistHtml.innerHTML = "";
+					const registerPers = document.getElementById("rg-pers");
+					registerPers.classList.add("hidden");
+					const registerPlace = document.getElementById("rg-place");
+					registerPlace.classList.add("hidden");
+				});
+				return;
+			}
+
+			// Special handling for placeName - show registerPlace instead of word list
+			if (id === "placeName") {
+				const registerPers = document.getElementById("rg-pers");
+				const registerPlace = document.getElementById("rg-place");
+				registerPlace.classList.remove("hidden");
+				registerPers.classList.add("hidden");
+
+				// Add reset button and show the wordslist div
+				wordslistHtml.classList.remove("hidden");
+				wordslistHtml.classList.add("active");
+				wordslistHtml.innerHTML = `<span id="rg-reset" class="cursor-pointer text-gray-500">zurücksetzen</span>`;
+				// Add event listener for reset button in case placeName was clicked
+				const reset = document.getElementById("rg-reset") as HTMLElement;
+				reset.addEventListener("click", () => {
+					wordslistHtml.innerHTML = "";
+					const registerPers = document.getElementById("rg-pers");
+					registerPers.classList.add("hidden");
+					const registerPlace = document.getElementById("rg-place");
+					registerPlace.classList.add("hidden");
+				});
+				return;
+			}
+
 			let words = await search.getWordsList({
 				corpname: "abacus",
 				wlattr: id,
@@ -478,6 +524,10 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 
 			if (wordslistHtml.classList.contains("active")) {
 				wordslistHtml.innerHTML = "";
+				const registerPers = document.getElementById("rg-pers");
+				registerPers.classList.add("hidden");
+				const registerPlace = document.getElementById("rg-place");
+				registerPlace.classList.add("hidden");
 			} else {
 				wordslistHtml.classList.toggle("hidden");
 				wordslistHtml.classList.toggle("active");
@@ -546,9 +596,14 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 				}
 			}
 
+			// Event listener for reset button
 			const reset = document.getElementById("rg-reset") as HTMLElement;
 			reset.addEventListener("click", () => {
 				wordslistHtml.innerHTML = "";
+				const registerPers = document.getElementById("rg-pers");
+				registerPers.classList.add("hidden");
+				const registerPlace = document.getElementById("rg-place");
+				registerPlace.classList.add("hidden");
 			});
 
 			const wordlistResult = document.querySelectorAll(
