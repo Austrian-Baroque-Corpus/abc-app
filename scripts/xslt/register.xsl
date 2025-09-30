@@ -9,11 +9,39 @@
 
 <xsl:output encoding="UTF-8" media-type="text/html" method="xhtml" indent="yes" omit-xml-declaration="yes"/>
 
+  <xsl:variable name="dictPers">
+    <entry key="bibl">bibliografisch</entry>
+    <entry key="hist">historisch</entry>
+    <entry key="myth">mythologisch</entry>
+  </xsl:variable>
+
+	<xsl:variable name="dictPlace">
+		<entry key="city">Stadt</entry>
+		<entry key="cont">Kontinent</entry>
+		<entry key="coun">Land</entry>
+		<entry key="dist">Bezirk</entry>
+		<entry key="lake">See</entry>
+		<entry key="moun">Berg</entry>
+		<entry key="rive">Fluss</entry>
+		<entry key="sea">Meer</entry>
+		<entry key="sett">Siedlung</entry>
+		<entry key="stre">Straße</entry>
+		<entry key="subu">Vorstadt</entry>
+		<entry key="vill">Dorf</entry>
+	</xsl:variable>
+
 <xsl:template match="/">
 		<xsl:for-each select="document('../../data/register/abc_register_persons.xml')//tei:TEI">
 			<div id="rg-pers" class="hidden">
 				<xsl:for-each-group select=".//tei:person" group-by="@role">
-						<h5 class="cursor-pointer"><xsl:value-of select="current-grouping-key()"/></h5>
+						<h5 class="cursor-pointer">
+							<xsl:choose>
+								<xsl:when test="current-grouping-key()='bibl'">bibliografisch</xsl:when>
+								<xsl:when test="current-grouping-key()='hist'">historisch</xsl:when>
+								<xsl:when test="current-grouping-key()='myth'">mythologisch</xsl:when>
+								<xsl:otherwise><xsl:value-of select="current-grouping-key()"/></xsl:otherwise>
+							</xsl:choose>
+						</h5>
 							<ul class="hidden">
 								<xsl:for-each select="current-group()">
 									<xsl:sort select=".//tei:persName[@type='main']" data-type="text" order="ascending"/>
@@ -28,7 +56,39 @@
 		<xsl:for-each select="document('../../data/register/abc_register_places.xml')//tei:TEI">
 			<div id="rg-place" class="hidden">
 				<xsl:for-each-group select=".//tei:place" group-by="@type">
-					<h5 class="cursor-pointer"><xsl:value-of select="current-grouping-key()"/></h5>
+					<xsl:sort select="
+						if (current-grouping-key()='city') then 'Stadt'
+						else if (current-grouping-key()='cont') then 'Kontinent'
+						else if (current-grouping-key()='coun') then 'Land'
+						else if (current-grouping-key()='dist') then 'Bezirk'
+						else if (current-grouping-key()='lake') then 'See'
+						else if (current-grouping-key()='moun') then 'Berg'
+						else if (current-grouping-key()='rive') then 'Fluss'
+						else if (current-grouping-key()='sea') then 'Meer'
+						else if (current-grouping-key()='sett') then 'Siedlung'
+						else if (current-grouping-key()='stre') then 'Straße'
+						else if (current-grouping-key()='subu') then 'Vorstadt'
+						else if (current-grouping-key()='vill') then 'Dorf'
+						else current-grouping-key()"
+						data-type="text" order="ascending"/>
+					<h5 class="cursor-pointer">
+						<xsl:choose>
+							<xsl:when test="current-grouping-key()='city'">Stadt</xsl:when>
+							<xsl:when test="current-grouping-key()='cont'">Kontinent</xsl:when>
+							<xsl:when test="current-grouping-key()='coun'">Land</xsl:when>
+							<xsl:when test="current-grouping-key()='dist'">Bezirk</xsl:when>
+							<xsl:when test="current-grouping-key()='lake'">See</xsl:when>
+							<xsl:when test="current-grouping-key()='moun'">Berg</xsl:when>
+							<xsl:when test="current-grouping-key()='rive'">Fluss</xsl:when>
+							<xsl:when test="current-grouping-key()='sea'">Meer</xsl:when>
+							<xsl:when test="current-grouping-key()='sett'">Siedlung</xsl:when>
+							<xsl:when test="current-grouping-key()='stre'">Straße</xsl:when>
+							<xsl:when test="current-grouping-key()='subu'">Vorstadt</xsl:when>
+							<xsl:when test="current-grouping-key()='vill'">Dorf</xsl:when>
+							<xsl:otherwise><xsl:value-of select="current-grouping-key()"/></xsl:otherwise>
+						</xsl:choose>
+						(<xsl:value-of select="current-grouping-key()"/>)
+					</h5>
 						<ul class="hidden">
 							<xsl:for-each select="current-group()">
 								<xsl:sort select=".//tei:placeName[@type='main']" data-type="text" order="ascending"/>
