@@ -497,8 +497,8 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 			if (id === "persName") {
 				const registerPers = document.getElementById("rg-pers");
 				const registerPlace = document.getElementById("rg-place");
-				registerPers.classList.remove("hidden");
-				registerPlace.classList.add("hidden");
+				registerPers!.classList.remove("hidden");
+				registerPlace!.classList.add("hidden");
 
 				wordslistHtml.classList.remove("hidden");
 				wordslistHtml.classList.add("active");
@@ -509,12 +509,12 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 				reset.addEventListener("click", () => {
 					wordslistHtml.innerHTML = "";
 					const registerPers = document.getElementById("rg-pers");
-					registerPers.classList.add("hidden");
+					registerPers!.classList.add("hidden");
 					const registerPlace = document.getElementById("rg-place");
-					registerPlace.classList.add("hidden");
+					registerPlace!.classList.add("hidden");
 
 					// Hide all UL elements in rg-pers
-					const rgPersUls = registerPers.querySelectorAll("ul") as NodeListOf<HTMLElement>;
+					const rgPersUls = registerPers!.querySelectorAll("ul") as NodeListOf<HTMLElement>;
 					rgPersUls.forEach((ul) => ul.classList.add("hidden"));
 				});
 
@@ -669,8 +669,8 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 			if (id === "placeName") {
 				const registerPers = document.getElementById("rg-pers");
 				const registerPlace = document.getElementById("rg-place");
-				registerPlace.classList.remove("hidden");
-				registerPers.classList.add("hidden");
+				registerPlace!.classList.remove("hidden");
+				registerPers!.classList.add("hidden");
 
 				// Add reset button and show the wordslist div
 				wordslistHtml.classList.remove("hidden");
@@ -682,12 +682,12 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 				reset.addEventListener("click", () => {
 					wordslistHtml.innerHTML = "";
 					const registerPers = document.getElementById("rg-pers");
-					registerPers.classList.add("hidden");
+					registerPers!.classList.add("hidden");
 					const registerPlace = document.getElementById("rg-place");
-					registerPlace.classList.add("hidden");
+					registerPlace!.classList.add("hidden");
 
 					// Hide all UL elements in rg-place
-					const rgPlaceUls = registerPlace.querySelectorAll("ul") as NodeListOf<HTMLElement>;
+					const rgPlaceUls = registerPlace!.querySelectorAll("ul") as NodeListOf<HTMLElement>;
 					rgPlaceUls.forEach((ul) => ul.classList.add("hidden"));
 				});
 
@@ -851,9 +851,9 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 			if (wordslistHtml.classList.contains("active")) {
 				wordslistHtml.innerHTML = "";
 				const registerPers = document.getElementById("rg-pers");
-				registerPers.classList.add("hidden");
+				registerPers!.classList.add("hidden");
 				const registerPlace = document.getElementById("rg-place");
-				registerPlace.classList.add("hidden");
+				registerPlace!.classList.add("hidden");
 			} else {
 				wordslistHtml.classList.toggle("hidden");
 				wordslistHtml.classList.toggle("active");
@@ -947,9 +947,9 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 			reset.addEventListener("click", () => {
 				wordslistHtml.innerHTML = "";
 				const registerPers = document.getElementById("rg-pers");
-				registerPers.classList.add("hidden");
+				registerPers!.classList.add("hidden");
 				const registerPlace = document.getElementById("rg-place");
-				registerPlace.classList.add("hidden");
+				registerPlace!.classList.add("hidden");
 			});
 
 			// Add event listener for filter with autocomplete (for regular wordlist)
