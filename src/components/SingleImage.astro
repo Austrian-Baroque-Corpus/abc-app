@@ -5,6 +5,7 @@ interface Image {
 	image: string;
 	alt: string;
 	caption: string;
+	title?: string;
 }
 interface Props {
 	image: Image;
@@ -21,6 +22,7 @@ const { image } = Astro.props;
 						class="hover:saturate-50"
 						src={createBaseurl(image.image.slice(1))}
 						alt={image.alt}
+						title={image.title}
 					/>
 					<figcaption class="pr-1 text-sm text-gray-500">{image.caption}</figcaption>
 				</figure>

@@ -1,0 +1,12 @@
+[project]
+name = "abc-app"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "acdh-tei-pyutils>=1.6",
+    "lxml>=6.0.2",
+    "pipenv>=2025.0.4",
+    "tqdm>=4.67.1",
+]

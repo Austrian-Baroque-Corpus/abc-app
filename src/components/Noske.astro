@@ -15,46 +15,72 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 					class="xs:max-w-[200px] mx-auto max-w-[1000px] sm:max-w-[300px] md:max-w-[600px] lg:max-w-[800px]"
 				>
 					<h4 class="pt-2 font-segoe text-xl">
-						<img class="inline" src="/Suche.jpg" alt="Suche" /> in den Abacus Transkripten
+						<img class="inline" src="/Suche.jpg" alt="Suchet" title="Suchet" />
 					</h4>
 					<VirtualKeyboard />
 					<div id="noske-search" class="text-center"></div>
 					<div class="py-4">
-						<h5>Beispiele:</h5>
+						<strong><h5>Beispiele:</h5></strong>
+						<h6>Einfache Suche</h6>
 						<ul>
-							<li class="inline cursor-pointer px-2">
-								1:<a class="hit-examples">"Waitzen=Körnlein"</a>
+							<li class="cursor-pointer px-2">
+								<a class="hit-examples text-red-600 underline">"Feeg=Feuer"</a>: Suche nach einem
+								Wort im Volltext
 							</li>
-							<li class="inline cursor-pointer px-2">
-								2:<a class="hit-examples">"arme" "Seelen"</a>
+							<li class="cursor-pointer px-2">
+								<a class="hit-examples text-red-600 underline">"arme Seelen"</a>: Suche nach zwei
+								aufeinanderfolgenden Wörtern
 							</li>
-							<li class="inline cursor-pointer px-2">
-								3:<a class="hit-examples">"Seele" | "Fegefeuer"</a>
+							<li class="cursor-pointer px-2">
+								<a class="hit-examples text-red-600 underline">"in dem Feegfeuer"</a>: Suche nach
+								drei aufeinanderfolgenden Wörtern
 							</li>
 						</ul>
+						<br />
+						<h6>Erweiterte Suche</h6>
+
 						<ul>
-							<li class="inline cursor-pointer px-2">
-								4:<a class="hit-examples">[w="Feegfeuer"]</a>
+							<li class="cursor-pointer px-2">
+								<a class="hit-examples text-red-600 underline">[w="Feegfeuer"]</a>: Suche nach einer
+								Wortform, hier: "Feeg=Feuer"
 							</li>
-							<li class="inline cursor-pointer px-2">
-								5:<a class="hit-examples">[l="Fegefeuer"]</a>
+							<li class="cursor-pointer px-2">
+								<a class="hit-examples text-red-600 underline">[l="Fegefeuer"]</a>: Suche nach einem
+								Lemma, hier: "Fegefeuer"
 							</li>
-							<li class="inline cursor-pointer px-2">
-								6:<a class="hit-examples">[l="ja" &amp; pos="PTKANT"]</a>
+							<li class="cursor-pointer px-2">
+								<a class="hit-examples text-red-600 underline">[l="ja" &amp; pos="PTKANT"]</a>:
+								Suche nach einer Wortart mit den Tags des Stuttgart-Tübingen-TagSets, hier:
+								Antwortpartikel
 							</li>
-							<li class="inline px-2"><a href="nutzung" class="text-red-600 underline">mehr</a></li>
+							<li class="cursor-pointer px-2">
+								<a class="hit-examples text-red-600 underline">[pos="NN" &amp; l=".*feuer"]</a>:
+								Suche nach einer Wortart kombiniert mit einem Lemma, das mit einem bestimmten
+								Wortteil endet, hier: Nomen mit "-feuer"
+							</li>
+							<li class="cursor-pointer px-2">
+								<a class="hit-examples text-red-600 underline">[pos="ADJA"] [l="Fegefeuer"]</a>:
+								Suche nach einer Sequenz bestehend aus einer Wortart und einem Lemma, hier: Adjektiv
+								und "Fegefeuer"
+							</li>
+							<li class="px-2">
+								Weitere Hinweise zur Abfragesyntax finden Sie <a
+									href="nutzung"
+									class="text-red-600 underline">hier</a
+								>.
+							</li>
 						</ul>
 					</div>
 				</div>
-
-				<div id="hitsbox"></div>
-				<div class="mx-auto grid grid-cols-2">
-					<div id="noske-pagination" class="text-right"></div>
-					<div id="statsbox" class="text-left"></div>
-				</div>
 			</div>
-			<EditionFragment />
+
+			<div id="hitsbox"></div>
+			<div class="mx-auto grid grid-cols-2">
+				<div id="noske-pagination" class="text-right"></div>
+				<div id="statsbox" class="text-left"></div>
+			</div>
 		</div>
+		<EditionFragment />
 	</div>
 </div>
 
@@ -421,6 +447,28 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 		},
 	});
 
+	// Register people/places click handlers
+	const registerpeopleplaces = document.querySelectorAll(
+		"#rg-pers ul li , #rg-place ul li",
+	) as NodeListOf<HTMLElement>;
+
+	Array.from(registerpeopleplaces).forEach((item) => {
+		item.addEventListener("click", (e) => {
+			const noskeInput = document.getElementById("noske-input-input") as HTMLInputElement;
+			const noskeSelect = document.getElementById("noske-input-select") as HTMLSelectElement;
+			noskeSelect.value = "cql";
+
+			// Determine attribute based on context - check parent element or use persName as default
+			const parentId = item.closest("div")?.id || "";
+			const attribute = parentId.includes("place") ? "placeName" : "persName";
+
+			// Use the item (li element) instead of e.target to get the data-str
+			noskeInput.value = `[${attribute}="${item.dataset.str}"]`;
+			const searchButton = document.getElementById("noske-search-button") as HTMLButtonElement;
+			searchButton.click();
+		});
+	});
+
 	const hitExamples = document.querySelectorAll(".hit-examples") as NodeListOf<HTMLElement>;
 	Array.from(hitExamples).forEach((item) => {
 		item.addEventListener("click", (e) => {
@@ -445,6 +493,351 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 		element.addEventListener("click", async () => {
 			let id = element.id;
 
+			// Special handling for persName - show registerPers instead of word list
+			if (id === "persName") {
+				const registerPers = document.getElementById("rg-pers");
+				const registerPlace = document.getElementById("rg-place");
+				registerPers.classList.remove("hidden");
+				registerPlace.classList.add("hidden");
+
+				wordslistHtml.classList.remove("hidden");
+				wordslistHtml.classList.add("active");
+				wordslistHtml.innerHTML = `<div class="relative"><input id="rg-filter" type="text" placeholder="Filter..." class="w-full rounded border border-gray-300 p-2" autocomplete="off" /><div id="rg-autocomplete" class="hidden absolute z-50 w-full bg-white border border-gray-300 mt-1 max-h-60 overflow-y-auto shadow-lg"></div></div><span id="rg-reset" class="cursor-pointer text-gray-500">zurücksetzen</span>`;
+
+				// Add event listener for reset button in case persName was clicked
+				const reset = document.getElementById("rg-reset") as HTMLElement;
+				reset.addEventListener("click", () => {
+					wordslistHtml.innerHTML = "";
+					const registerPers = document.getElementById("rg-pers");
+					registerPers.classList.add("hidden");
+					const registerPlace = document.getElementById("rg-place");
+					registerPlace.classList.add("hidden");
+
+					// Hide all UL elements in rg-pers
+					const rgPersUls = registerPers.querySelectorAll("ul") as NodeListOf<HTMLElement>;
+					rgPersUls.forEach((ul) => ul.classList.add("hidden"));
+				});
+
+				// Add event listener for filter with autocomplete
+				const regfilter = document.getElementById("rg-filter") as HTMLInputElement;
+				const autocompleteDiv = document.getElementById("rg-autocomplete") as HTMLElement;
+				let debounceTimer: number;
+				let selectedIndex = -1;
+				let skipAutocomplete = false;
+
+				// Collect all person names for autocomplete
+				const allPersonNames: string[] = [];
+				const allContainers = Array.from(
+					document.querySelectorAll("#rg-pers") as NodeListOf<HTMLElement>,
+				);
+				allContainers.forEach((container) => {
+					const listItems = container.querySelectorAll("li") as NodeListOf<HTMLElement>;
+					listItems.forEach((li) => {
+						const text = li.textContent?.trim() || "";
+						if (text) allPersonNames.push(text);
+					});
+				});
+
+				regfilter.addEventListener("input", () => {
+					clearTimeout(debounceTimer);
+					debounceTimer = window.setTimeout(() => {
+						const filterValue = regfilter.value.toLowerCase();
+						const regex = filterValue ? new RegExp(filterValue, "i") : null;
+						selectedIndex = -1;
+
+						// Show autocomplete suggestions only if not skipping
+						if (!skipAutocomplete && filterValue && filterValue.length >= 2) {
+							const matches = allPersonNames.filter((name) => regex?.test(name)).slice(0, 10);
+							if (matches.length > 0) {
+								autocompleteDiv.innerHTML = matches
+									.map(
+										(name, idx) =>
+											`<div class="p-2 hover:bg-gray-100 cursor-pointer autocomplete-item" data-index="${idx}">${name}</div>`,
+									)
+									.join("");
+								autocompleteDiv.classList.remove("hidden");
+							} else {
+								autocompleteDiv.classList.add("hidden");
+							}
+						} else {
+							autocompleteDiv.classList.add("hidden");
+						}
+
+						// Reset skip flag after processing
+						if (skipAutocomplete) {
+							skipAutocomplete = false;
+						}
+
+						// Filter display
+						allContainers.forEach((container) => {
+							const h5Elements = container.querySelectorAll("h5") as NodeListOf<HTMLElement>;
+
+							h5Elements.forEach((h5Element) => {
+								const nextUl = h5Element.nextElementSibling as HTMLElement;
+								if (nextUl && nextUl.tagName === "UL") {
+									const listItems = nextUl.querySelectorAll("li") as NodeListOf<HTMLElement>;
+									let hasVisibleItems = false;
+
+									listItems.forEach((li) => {
+										if (!regex) {
+											li.style.display = "";
+										} else {
+											const text = li.textContent?.toLowerCase() || "";
+											if (regex.test(text)) {
+												li.style.display = "";
+												hasVisibleItems = true;
+											} else {
+												li.style.display = "none";
+											}
+										}
+									});
+
+									if (!regex) {
+										h5Element.style.display = "";
+										nextUl.style.display = "none";
+										nextUl.classList.add("hidden");
+									} else if (hasVisibleItems) {
+										h5Element.style.display = "";
+										nextUl.style.display = "";
+										nextUl.classList.remove("hidden");
+									} else {
+										h5Element.style.display = "none";
+										nextUl.style.display = "none";
+									}
+								}
+							});
+						});
+					}, 150);
+				});
+
+				// Autocomplete item click handler
+				autocompleteDiv.addEventListener("click", (e) => {
+					const target = e.target as HTMLElement;
+					if (target.classList.contains("autocomplete-item")) {
+						skipAutocomplete = true;
+						regfilter.value = target.textContent || "";
+						autocompleteDiv.classList.add("hidden");
+						regfilter.dispatchEvent(new Event("input"));
+					}
+				});
+
+				// Keyboard navigation
+				regfilter.addEventListener("keydown", (e) => {
+					// Reset skip flag when user starts typing
+					if (e.key.length === 1 || e.key === "Backspace" || e.key === "Delete") {
+						skipAutocomplete = false;
+					}
+
+					const items = autocompleteDiv.querySelectorAll(
+						".autocomplete-item",
+					) as NodeListOf<HTMLElement>;
+					if (items.length === 0) return;
+
+					if (e.key === "ArrowDown") {
+						e.preventDefault();
+						selectedIndex = Math.min(selectedIndex + 1, items.length - 1);
+						updateSelection(items, selectedIndex);
+					} else if (e.key === "ArrowUp") {
+						e.preventDefault();
+						selectedIndex = Math.max(selectedIndex - 1, -1);
+						updateSelection(items, selectedIndex);
+					} else if (e.key === "Enter" && selectedIndex >= 0) {
+						e.preventDefault();
+						skipAutocomplete = true;
+						regfilter.value = items[selectedIndex].textContent || "";
+						autocompleteDiv.classList.add("hidden");
+						regfilter.dispatchEvent(new Event("input"));
+					} else if (e.key === "Escape") {
+						autocompleteDiv.classList.add("hidden");
+						selectedIndex = -1;
+					}
+				});
+
+				function updateSelection(items: NodeListOf<HTMLElement>, index: number) {
+					items.forEach((item, idx) => {
+						if (idx === index) {
+							item.classList.add("bg-gray-200");
+						} else {
+							item.classList.remove("bg-gray-200");
+						}
+					});
+				}
+				return;
+			}
+
+			// Special handling for placeName - show registerPlace instead of word list
+			if (id === "placeName") {
+				const registerPers = document.getElementById("rg-pers");
+				const registerPlace = document.getElementById("rg-place");
+				registerPlace.classList.remove("hidden");
+				registerPers.classList.add("hidden");
+
+				// Add reset button and show the wordslist div
+				wordslistHtml.classList.remove("hidden");
+				wordslistHtml.classList.add("active");
+				wordslistHtml.innerHTML = `<div class="relative"><input id="rg-filter" type="text" placeholder="Filter..." class="w-full rounded border border-gray-300 p-2" autocomplete="off" /><div id="rg-autocomplete" class="hidden absolute z-50 w-full bg-white border border-gray-300 mt-1 max-h-60 overflow-y-auto shadow-lg"></div></div><span id="rg-reset" class="cursor-pointer text-gray-500">zurücksetzen</span>`;
+
+				// Add event listener for reset button in case placeName was clicked
+				const reset = document.getElementById("rg-reset") as HTMLElement;
+				reset.addEventListener("click", () => {
+					wordslistHtml.innerHTML = "";
+					const registerPers = document.getElementById("rg-pers");
+					registerPers.classList.add("hidden");
+					const registerPlace = document.getElementById("rg-place");
+					registerPlace.classList.add("hidden");
+
+					// Hide all UL elements in rg-place
+					const rgPlaceUls = registerPlace.querySelectorAll("ul") as NodeListOf<HTMLElement>;
+					rgPlaceUls.forEach((ul) => ul.classList.add("hidden"));
+				});
+
+				// Add event listener for filter with autocomplete
+				const regfilter = document.getElementById("rg-filter") as HTMLInputElement;
+				const autocompleteDiv = document.getElementById("rg-autocomplete") as HTMLElement;
+				let debounceTimer: number;
+				let selectedIndex = -1;
+				let skipAutocomplete = false;
+
+				// Collect all place names for autocomplete
+				const allPlaceNames: string[] = [];
+				const allContainers = Array.from(
+					document.querySelectorAll("#rg-place") as NodeListOf<HTMLElement>,
+				);
+				allContainers.forEach((container) => {
+					const listItems = container.querySelectorAll("li") as NodeListOf<HTMLElement>;
+					listItems.forEach((li) => {
+						const text = li.textContent?.trim() || "";
+						if (text) allPlaceNames.push(text);
+					});
+				});
+
+				regfilter.addEventListener("input", () => {
+					clearTimeout(debounceTimer);
+					debounceTimer = window.setTimeout(() => {
+						const filterValue = regfilter.value.toLowerCase();
+						const regex = filterValue ? new RegExp(filterValue, "i") : null;
+						selectedIndex = -1;
+
+						// Show autocomplete suggestions only if not skipping
+						if (!skipAutocomplete && filterValue && filterValue.length >= 2) {
+							const matches = allPlaceNames.filter((name) => regex?.test(name)).slice(0, 10);
+							if (matches.length > 0) {
+								autocompleteDiv.innerHTML = matches
+									.map(
+										(name, idx) =>
+											`<div class="p-2 hover:bg-gray-100 cursor-pointer autocomplete-item" data-index="${idx}">${name}</div>`,
+									)
+									.join("");
+								autocompleteDiv.classList.remove("hidden");
+							} else {
+								autocompleteDiv.classList.add("hidden");
+							}
+						} else {
+							autocompleteDiv.classList.add("hidden");
+						}
+
+						// Reset skip flag after processing
+						if (skipAutocomplete) {
+							skipAutocomplete = false;
+						}
+
+						// Filter display
+						allContainers.forEach((container) => {
+							const h5Elements = container.querySelectorAll("h5") as NodeListOf<HTMLElement>;
+
+							h5Elements.forEach((h5Element) => {
+								const nextUl = h5Element.nextElementSibling as HTMLElement;
+								if (nextUl && nextUl.tagName === "UL") {
+									const listItems = nextUl.querySelectorAll("li") as NodeListOf<HTMLElement>;
+									let hasVisibleItems = false;
+
+									listItems.forEach((li) => {
+										if (!regex) {
+											li.style.display = "";
+										} else {
+											const text = li.textContent?.toLowerCase() || "";
+											if (regex.test(text)) {
+												li.style.display = "";
+												hasVisibleItems = true;
+											} else {
+												li.style.display = "none";
+											}
+										}
+									});
+
+									if (!regex) {
+										h5Element.style.display = "";
+										nextUl.style.display = "none";
+										nextUl.classList.add("hidden");
+									} else if (hasVisibleItems) {
+										h5Element.style.display = "";
+										nextUl.style.display = "";
+										nextUl.classList.remove("hidden");
+									} else {
+										h5Element.style.display = "none";
+										nextUl.style.display = "none";
+									}
+								}
+							});
+						});
+					}, 150);
+				});
+
+				// Autocomplete item click handler
+				autocompleteDiv.addEventListener("click", (e) => {
+					const target = e.target as HTMLElement;
+					if (target.classList.contains("autocomplete-item")) {
+						skipAutocomplete = true;
+						regfilter.value = target.textContent || "";
+						autocompleteDiv.classList.add("hidden");
+						regfilter.dispatchEvent(new Event("input"));
+					}
+				});
+
+				// Keyboard navigation
+				regfilter.addEventListener("keydown", (e) => {
+					// Reset skip flag when user starts typing
+					if (e.key.length === 1 || e.key === "Backspace" || e.key === "Delete") {
+						skipAutocomplete = false;
+					}
+
+					const items = autocompleteDiv.querySelectorAll(
+						".autocomplete-item",
+					) as NodeListOf<HTMLElement>;
+					if (items.length === 0) return;
+
+					if (e.key === "ArrowDown") {
+						e.preventDefault();
+						selectedIndex = Math.min(selectedIndex + 1, items.length - 1);
+						updateSelection(items, selectedIndex);
+					} else if (e.key === "ArrowUp") {
+						e.preventDefault();
+						selectedIndex = Math.max(selectedIndex - 1, -1);
+						updateSelection(items, selectedIndex);
+					} else if (e.key === "Enter" && selectedIndex >= 0) {
+						e.preventDefault();
+						skipAutocomplete = true;
+						regfilter.value = items[selectedIndex].textContent || "";
+						autocompleteDiv.classList.add("hidden");
+						regfilter.dispatchEvent(new Event("input"));
+					} else if (e.key === "Escape") {
+						autocompleteDiv.classList.add("hidden");
+						selectedIndex = -1;
+					}
+				});
+
+				function updateSelection(items: NodeListOf<HTMLElement>, index: number) {
+					items.forEach((item, idx) => {
+						if (idx === index) {
+							item.classList.add("bg-gray-200");
+						} else {
+							item.classList.remove("bg-gray-200");
+						}
+					});
+				}
+				return;
+			}
+
 			let words = await search.getWordsList({
 				corpname: "abacus",
 				wlattr: id,
@@ -457,6 +850,10 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 
 			if (wordslistHtml.classList.contains("active")) {
 				wordslistHtml.innerHTML = "";
+				const registerPers = document.getElementById("rg-pers");
+				registerPers.classList.add("hidden");
+				const registerPlace = document.getElementById("rg-place");
+				registerPlace.classList.add("hidden");
 			} else {
 				wordslistHtml.classList.toggle("hidden");
 				wordslistHtml.classList.toggle("active");
@@ -465,7 +862,21 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 			// @ts-ignore
 			const wordlist = [...words.Items].filter((item) => item.str !== "");
 
-			wordslistHtml.innerHTML = `<span id="rg-reset" class="cursor-pointer text-gray-500">zurücksetzen</span>`;
+			// Custom sorting functions for diacritics-aware sorting
+			const diacriticSort = (a: string, b: string): number => {
+				const normalize = (str: string) => str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+				return normalize(a).localeCompare(normalize(b));
+			};
+
+			const normalizeFirstLetter = (str: string): string => {
+				const normalized = str
+					.charAt(0)
+					.normalize("NFD")
+					.replace(/[\u0300-\u036f]/g, "");
+				return normalized.toUpperCase();
+			};
+
+			wordslistHtml.innerHTML = `<div class="relative"><input id="rg-filter" type="text" placeholder="Filter..." class="w-full rounded border border-gray-300 p-2" autocomplete="off" /><div id="rg-autocomplete" class="hidden absolute z-50 w-full bg-white border border-gray-300 mt-1 max-h-60 overflow-y-auto shadow-lg"></div></div><span id="rg-reset" class="cursor-pointer text-gray-500">zurücksetzen</span>`;
 
 			if (id !== "pos") {
 				let abc: {
@@ -473,13 +884,16 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 				} = {};
 
 				wordlist.map((item) => {
-					let firstLetter: string = item.str.charAt(0).toUpperCase();
+					let firstLetter: string = normalizeFirstLetter(item.str);
 
 					pushOrCreate(abc, firstLetter, item);
 				});
 
-				for (const [key, value] of Object.entries(abc).sort()) {
-					wordslistHtml.innerHTML += `<div id="rg-abc"><h4 class="cursor-pointer">${key}</h4><ul class="hidden pl-2">${value.sort().join("")}</ul></div>`;
+				// Sort sections by normalized keys and words within each section using diacriticSort
+				const sortedSections = Object.entries(abc).sort((a, b) => diacriticSort(a[0], b[0]));
+				for (const [key, value] of sortedSections) {
+					const sortedWords = value.sort((a, b) => diacriticSort(a, b));
+					wordslistHtml.innerHTML += `<div id="rg-abc"><h4 class="cursor-pointer">${key}</h4><ul class="hidden pl-2">${sortedWords.join("")}</ul></div>`;
 				}
 			} else {
 				let wordTypes: {
@@ -512,23 +926,180 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 
 				wordslistHtml.innerHTML += `<div id="rg-abc"><h4 class="cursor-pointer">Kontrahierte Formen I</h4><ul class="hidden pl-2" id="rg-abc-types"></ul></div>`;
 
-				for (let [key, value] of Object.entries(wordTypes).sort()) {
+				// Sort word types using diacriticSort
+				const sortedWordTypes = Object.entries(wordTypes).sort((a, b) => diacriticSort(a[0], b[0]));
+				for (let [key, value] of sortedWordTypes) {
+					const sortedWords = value.sort((a, b) => diacriticSort(a, b));
 					if (key !== "Kontrahierte-Formen-II" && key !== "Stuttgart-Tübingen-TagSet") {
 						document.getElementById("rg-abc-types")!.innerHTML +=
-							`<h4 class="cursor-pointer">${key.replace("-", " ").replace("-", " ")}</h4><ul class="hidden pl-2">${value.sort().join("")}</ul>`;
+							`<h4 class="cursor-pointer">${key.replace("-", " ").replace("-", " ")}</h4><ul class="hidden pl-2">${sortedWords.join("")}</ul>`;
 					} else {
 						if (key !== "Stuttgart-Tübingen-TagSet") {
 							key = key.replace("-", " ").replace("-", " ");
 						}
-						wordslistHtml.innerHTML += `<div id="rg-abc"><h4 class="cursor-pointer">${key}</h4><ul class="hidden pl-2">${value.sort().join("")}</ul></div>`;
+						wordslistHtml.innerHTML += `<div id="rg-abc"><h4 class="cursor-pointer">${key}</h4><ul class="hidden pl-2">${sortedWords.join("")}</ul></div>`;
 					}
 				}
 			}
 
+			// Event listener for reset button
 			const reset = document.getElementById("rg-reset") as HTMLElement;
 			reset.addEventListener("click", () => {
 				wordslistHtml.innerHTML = "";
+				const registerPers = document.getElementById("rg-pers");
+				registerPers.classList.add("hidden");
+				const registerPlace = document.getElementById("rg-place");
+				registerPlace.classList.add("hidden");
 			});
+
+			// Add event listener for filter with autocomplete (for regular wordlist)
+			const regfilter = document.getElementById("rg-filter") as HTMLInputElement;
+			const autocompleteDiv = document.getElementById("rg-autocomplete") as HTMLElement;
+			let debounceTimer: number;
+			let selectedIndex = -1;
+			let skipAutocomplete = false;
+
+			// Collect all words for autocomplete
+			const allWords: Array<{ str: string; frq: string }> = [];
+			wordlist.forEach((item: any) => {
+				allWords.push({ str: item.str, frq: item.frq });
+			});
+
+			regfilter.addEventListener("input", () => {
+				clearTimeout(debounceTimer);
+				debounceTimer = window.setTimeout(() => {
+					const filterValue = regfilter.value.toLowerCase();
+					const regex = filterValue ? new RegExp(filterValue, "i") : null;
+					selectedIndex = -1;
+
+					// Show autocomplete suggestions only if not skipping
+					if (!skipAutocomplete && filterValue && filterValue.length >= 2) {
+						const matches = allWords.filter((word) => regex?.test(word.str)).slice(0, 10);
+						if (matches.length > 0) {
+							autocompleteDiv.innerHTML = matches
+								.map(
+									(word, idx) =>
+										`<div class="p-2 hover:bg-gray-100 cursor-pointer autocomplete-item text-red-600" data-index="${idx}" data-str="${word.str}">${word.str} (${word.frq})</div>`,
+								)
+								.join("");
+							autocompleteDiv.classList.remove("hidden");
+						} else {
+							autocompleteDiv.classList.add("hidden");
+						}
+					} else {
+						autocompleteDiv.classList.add("hidden");
+					}
+
+					// Reset skip flag after processing
+					if (skipAutocomplete) {
+						skipAutocomplete = false;
+					}
+
+					// Get all rg-abc containers only (for regular wordlist)
+					const allContainers = Array.from(
+						document.querySelectorAll("#rg-abc") as NodeListOf<HTMLElement>,
+					);
+
+					allContainers.forEach((container) => {
+						// Find all h4 elements (section headers) in this container
+						const h4Elements = container.querySelectorAll("h4") as NodeListOf<HTMLElement>;
+
+						h4Elements.forEach((h4Element) => {
+							const nextUl = h4Element.nextElementSibling as HTMLElement;
+							if (nextUl && nextUl.tagName === "UL") {
+								const listItems = nextUl.querySelectorAll("li") as NodeListOf<HTMLElement>;
+								let hasVisibleItems = false;
+
+								// Filter li elements in this specific ul
+								listItems.forEach((li) => {
+									if (!regex) {
+										// When filter is empty, reset li visibility but don't set hasVisibleItems
+										li.style.display = "";
+									} else {
+										const text = li.textContent?.toLowerCase() || "";
+										if (regex.test(text)) {
+											li.style.display = "";
+											hasVisibleItems = true;
+										} else {
+											li.style.display = "none";
+										}
+									}
+								});
+
+								// Show/hide h4 and ul based on whether any li items are visible
+								if (!regex) {
+									// When filter is empty, hide all ULs
+									h4Element.style.display = "";
+									nextUl.style.display = "none";
+									nextUl.classList.add("hidden");
+								} else if (hasVisibleItems) {
+									h4Element.style.display = "";
+									nextUl.style.display = "";
+									nextUl.classList.remove("hidden");
+								} else {
+									h4Element.style.display = "none";
+									nextUl.style.display = "none";
+								}
+							}
+						});
+					});
+				}, 150);
+			});
+
+			// Autocomplete item click handler
+			autocompleteDiv.addEventListener("click", (e) => {
+				const target = e.target as HTMLElement;
+				if (target.classList.contains("autocomplete-item")) {
+					skipAutocomplete = true;
+					const dataStr = target.dataset.str || "";
+					regfilter.value = dataStr;
+					autocompleteDiv.classList.add("hidden");
+					regfilter.dispatchEvent(new Event("input"));
+				}
+			});
+
+			// Keyboard navigation
+			regfilter.addEventListener("keydown", (e) => {
+				// Reset skip flag when user starts typing
+				if (e.key.length === 1 || e.key === "Backspace" || e.key === "Delete") {
+					skipAutocomplete = false;
+				}
+
+				const items = autocompleteDiv.querySelectorAll(
+					".autocomplete-item",
+				) as NodeListOf<HTMLElement>;
+				if (items.length === 0) return;
+
+				if (e.key === "ArrowDown") {
+					e.preventDefault();
+					selectedIndex = Math.min(selectedIndex + 1, items.length - 1);
+					updateSelection(items, selectedIndex);
+				} else if (e.key === "ArrowUp") {
+					e.preventDefault();
+					selectedIndex = Math.max(selectedIndex - 1, -1);
+					updateSelection(items, selectedIndex);
+				} else if (e.key === "Enter" && selectedIndex >= 0) {
+					e.preventDefault();
+					skipAutocomplete = true;
+					const dataStr = items[selectedIndex].dataset.str || "";
+					regfilter.value = dataStr;
+					autocompleteDiv.classList.add("hidden");
+					regfilter.dispatchEvent(new Event("input"));
+				} else if (e.key === "Escape") {
+					autocompleteDiv.classList.add("hidden");
+					selectedIndex = -1;
+				}
+			});
+
+			function updateSelection(items: NodeListOf<HTMLElement>, index: number) {
+				items.forEach((item, idx) => {
+					if (idx === index) {
+						item.classList.add("bg-gray-200");
+					} else {
+						item.classList.remove("bg-gray-200");
+					}
+				});
+			}
 
 			const wordlistResult = document.querySelectorAll(
 				"#abacus-wordslist div ul li",

@@ -5,9 +5,9 @@ const html = await readFile("edition/register.html", "utf-8");
 ---
 
 <div
-	class="xs:hidden relative z-0 max-h-screen min-h-screen w-10 max-w-[350px] overflow-y-auto border-r border-r-red-600 bg-cabacus bg-repeat-y px-4 pt-10 sm:hidden md:hidden"
+	class="xs:hidden relative z-0 max-h-screen min-h-screen w-[50%] max-w-[350px] overflow-y-auto border-r border-r-red-600 bg-cabacus bg-repeat-y px-4 pt-10 sm:hidden md:hidden"
 >
-	<div id="abacus-wordslist" class="my-2 hidden">
+	<div id="abacus-wordslist" class="my-2">
 		<ul>
 			<li class="cursor-pointer underline" id="w">Wortformen</li>
 			<li class="cursor-pointer underline" id="l">Lemmata</li>
@@ -17,8 +17,8 @@ const html = await readFile("edition/register.html", "utf-8");
 		</ul>
 		<div class="mt-4 hidden"></div>
 	</div>
-	<div id="abacus-register" set:html={html} class="relative my-4 hidden" />
-	<div class="absolute -left-8 top-14 rotate-90">
+	<div id="abacus-register" set:html={html} class="relative my-4" />
+	<div class="absolute top-4">
 		<a role="button" id="rg-button" class="uppercase tracking-widest text-black"> Register </a>
 	</div>
 </div>
@@ -43,6 +43,22 @@ const html = await readFile("edition/register.html", "utf-8");
 				loadContent(content, "noske-synoptic-view", "", "");
 			} else {
 				// to be defined
+			}
+		});
+	});
+
+	// Click handler for Person and Place categories in the Register
+	const registerPers = document.querySelectorAll<HTMLElement>("#rg-pers h5, #rg-place h5");
+
+	Array.from(registerPers).forEach((element) => {
+		element.addEventListener("click", (e) => {
+			const target = e.target as HTMLElement;
+
+			// Check if clicked element is an h5
+			if (target.tagName === "H5") {
+				const nextElement = target.nextElementSibling;
+				nextElement?.classList.toggle("hidden");
+				return;
 			}
 		});
 	});
