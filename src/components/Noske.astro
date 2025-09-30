@@ -684,6 +684,20 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 			// @ts-ignore
 			const wordlist = [...words.Items].filter((item) => item.str !== "");
 
+			// Custom sorting functions for diacritics-aware sorting
+			const diacriticSort = (a: string, b: string): number => {
+				const normalize = (str: string) => str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+				return normalize(a).localeCompare(normalize(b));
+			};
+
+			const normalizeFirstLetter = (str: string): string => {
+				const normalized = str
+					.charAt(0)
+					.normalize("NFD")
+					.replace(/[\u0300-\u036f]/g, "");
+				return normalized.toUpperCase();
+			};
+
 			wordslistHtml.innerHTML = `<input id="rg-filter" type="text" placeholder="Filter..." class="w-full rounded border border-gray-300 p-2" /><span id="rg-reset" class="cursor-pointer text-gray-500">zurücksetzen</span>`;
 
 			if (id !== "pos") {
@@ -692,13 +706,16 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 				} = {};
 
 				wordlist.map((item) => {
-					let firstLetter: string = item.str.charAt(0).toUpperCase();
+					let firstLetter: string = normalizeFirstLetter(item.str);
 
 					pushOrCreate(abc, firstLetter, item);
 				});
 
-				for (const [key, value] of Object.entries(abc).sort()) {
-					wordslistHtml.innerHTML += `<div id="rg-abc"><h4 class="cursor-pointer">${key}</h4><ul class="hidden pl-2">${value.sort().join("")}</ul></div>`;
+				// Sort sections by normalized keys and words within each section using diacriticSort
+				const sortedSections = Object.entries(abc).sort((a, b) => diacriticSort(a[0], b[0]));
+				for (const [key, value] of sortedSections) {
+					const sortedWords = value.sort((a, b) => diacriticSort(a, b));
+					wordslistHtml.innerHTML += `<div id="rg-abc"><h4 class="cursor-pointer">${key}</h4><ul class="hidden pl-2">${sortedWords.join("")}</ul></div>`;
 				}
 			} else {
 				let wordTypes: {
@@ -731,15 +748,18 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 
 				wordslistHtml.innerHTML += `<div id="rg-abc"><h4 class="cursor-pointer">Kontrahierte Formen I</h4><ul class="hidden pl-2" id="rg-abc-types"></ul></div>`;
 
-				for (let [key, value] of Object.entries(wordTypes).sort()) {
+				// Sort word types using diacriticSort
+				const sortedWordTypes = Object.entries(wordTypes).sort((a, b) => diacriticSort(a[0], b[0]));
+				for (let [key, value] of sortedWordTypes) {
+					const sortedWords = value.sort((a, b) => diacriticSort(a, b));
 					if (key !== "Kontrahierte-Formen-II" && key !== "Stuttgart-Tübingen-TagSet") {
 						document.getElementById("rg-abc-types")!.innerHTML +=
-							`<h4 class="cursor-pointer">${key.replace("-", " ").replace("-", " ")}</h4><ul class="hidden pl-2">${value.sort().join("")}</ul>`;
+							`<h4 class="cursor-pointer">${key.replace("-", " ").replace("-", " ")}</h4><ul class="hidden pl-2">${sortedWords.join("")}</ul>`;
 					} else {
 						if (key !== "Stuttgart-Tübingen-TagSet") {
 							key = key.replace("-", " ").replace("-", " ");
 						}
-						wordslistHtml.innerHTML += `<div id="rg-abc"><h4 class="cursor-pointer">${key}</h4><ul class="hidden pl-2">${value.sort().join("")}</ul></div>`;
+						wordslistHtml.innerHTML += `<div id="rg-abc"><h4 class="cursor-pointer">${key}</h4><ul class="hidden pl-2">${sortedWords.join("")}</ul></div>`;
 					}
 				}
 			}
