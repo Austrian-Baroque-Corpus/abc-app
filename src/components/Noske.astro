@@ -502,7 +502,8 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 
 				wordslistHtml.classList.remove("hidden");
 				wordslistHtml.classList.add("active");
-				wordslistHtml.innerHTML = `<span id="rg-reset" class="cursor-pointer text-gray-500">zurücksetzen</span>`;
+				wordslistHtml.innerHTML = `<input id="rg-filter" type="text" placeholder="Filter..." class="w-full rounded border border-gray-300 p-2" /><span id="rg-reset" class="cursor-pointer text-gray-500">zurücksetzen</span>`;
+
 				// Add event listener for reset button in case persName was clicked
 				const reset = document.getElementById("rg-reset") as HTMLElement;
 				reset.addEventListener("click", () => {
@@ -511,6 +512,66 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 					registerPers.classList.add("hidden");
 					const registerPlace = document.getElementById("rg-place");
 					registerPlace.classList.add("hidden");
+
+					// Hide all UL elements in rg-pers
+					const rgPersUls = registerPers.querySelectorAll("ul") as NodeListOf<HTMLElement>;
+					rgPersUls.forEach((ul) => ul.classList.add("hidden"));
+				});
+
+				// Add event listener for filter
+				const regfilter = document.getElementById("rg-filter") as HTMLInputElement;
+				regfilter.addEventListener("input", () => {
+					const filterValue = regfilter.value.toLowerCase();
+					const regex = filterValue ? new RegExp(filterValue, "i") : null;
+
+					// For persName, only search in rg-pers
+					const allContainers = Array.from(
+						document.querySelectorAll("#rg-pers") as NodeListOf<HTMLElement>,
+					);
+
+					allContainers.forEach((container) => {
+						// Find all h5 elements (section headers) in this container
+						const h5Elements = container.querySelectorAll("h5") as NodeListOf<HTMLElement>;
+
+						h5Elements.forEach((h5Element) => {
+							const nextUl = h5Element.nextElementSibling as HTMLElement;
+							if (nextUl && nextUl.tagName === "UL") {
+								const listItems = nextUl.querySelectorAll("li") as NodeListOf<HTMLElement>;
+								let hasVisibleItems = false;
+
+								// Filter li elements in this specific ul
+								listItems.forEach((li) => {
+									if (!regex) {
+										// When filter is empty, reset li visibility but don't set hasVisibleItems
+										li.style.display = "";
+									} else {
+										const text = li.textContent?.toLowerCase() || "";
+										if (regex.test(text)) {
+											li.style.display = "";
+											hasVisibleItems = true;
+										} else {
+											li.style.display = "none";
+										}
+									}
+								});
+
+								// Show/hide h5 and ul based on whether any li items are visible
+								if (!regex) {
+									// When filter is empty, hide all ULs
+									h5Element.style.display = "";
+									nextUl.style.display = "none";
+									nextUl.classList.add("hidden");
+								} else if (hasVisibleItems) {
+									h5Element.style.display = "";
+									nextUl.style.display = "";
+									nextUl.classList.remove("hidden");
+								} else {
+									h5Element.style.display = "none";
+									nextUl.style.display = "none";
+								}
+							}
+						});
+					});
 				});
 				return;
 			}
@@ -525,7 +586,8 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 				// Add reset button and show the wordslist div
 				wordslistHtml.classList.remove("hidden");
 				wordslistHtml.classList.add("active");
-				wordslistHtml.innerHTML = `<span id="rg-reset" class="cursor-pointer text-gray-500">zurücksetzen</span>`;
+				wordslistHtml.innerHTML = `<input id="rg-filter" type="text" placeholder="Filter..." class="w-full rounded border border-gray-300 p-2" /><span id="rg-reset" class="cursor-pointer text-gray-500">zurücksetzen</span>`;
+
 				// Add event listener for reset button in case placeName was clicked
 				const reset = document.getElementById("rg-reset") as HTMLElement;
 				reset.addEventListener("click", () => {
@@ -534,6 +596,66 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 					registerPers.classList.add("hidden");
 					const registerPlace = document.getElementById("rg-place");
 					registerPlace.classList.add("hidden");
+
+					// Hide all UL elements in rg-place
+					const rgPlaceUls = registerPlace.querySelectorAll("ul") as NodeListOf<HTMLElement>;
+					rgPlaceUls.forEach((ul) => ul.classList.add("hidden"));
+				});
+
+				// Add event listener for filter
+				const regfilter = document.getElementById("rg-filter") as HTMLInputElement;
+				regfilter.addEventListener("input", () => {
+					const filterValue = regfilter.value.toLowerCase();
+					const regex = filterValue ? new RegExp(filterValue, "i") : null;
+
+					// For placeName, only search in rg-place
+					const allContainers = Array.from(
+						document.querySelectorAll("#rg-place") as NodeListOf<HTMLElement>,
+					);
+
+					allContainers.forEach((container) => {
+						// Find all h5 elements (section headers) in this container
+						const h5Elements = container.querySelectorAll("h5") as NodeListOf<HTMLElement>;
+
+						h5Elements.forEach((h5Element) => {
+							const nextUl = h5Element.nextElementSibling as HTMLElement;
+							if (nextUl && nextUl.tagName === "UL") {
+								const listItems = nextUl.querySelectorAll("li") as NodeListOf<HTMLElement>;
+								let hasVisibleItems = false;
+
+								// Filter li elements in this specific ul
+								listItems.forEach((li) => {
+									if (!regex) {
+										// When filter is empty, reset li visibility but don't set hasVisibleItems
+										li.style.display = "";
+									} else {
+										const text = li.textContent?.toLowerCase() || "";
+										if (regex.test(text)) {
+											li.style.display = "";
+											hasVisibleItems = true;
+										} else {
+											li.style.display = "none";
+										}
+									}
+								});
+
+								// Show/hide h5 and ul based on whether any li items are visible
+								if (!regex) {
+									// When filter is empty, hide all ULs
+									h5Element.style.display = "";
+									nextUl.style.display = "none";
+									nextUl.classList.add("hidden");
+								} else if (hasVisibleItems) {
+									h5Element.style.display = "";
+									nextUl.style.display = "";
+									nextUl.classList.remove("hidden");
+								} else {
+									h5Element.style.display = "none";
+									nextUl.style.display = "none";
+								}
+							}
+						});
+					});
 				});
 				return;
 			}
@@ -562,7 +684,7 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 			// @ts-ignore
 			const wordlist = [...words.Items].filter((item) => item.str !== "");
 
-			wordslistHtml.innerHTML = `<span id="rg-reset" class="cursor-pointer text-gray-500">zurücksetzen</span>`;
+			wordslistHtml.innerHTML = `<input id="rg-filter" type="text" placeholder="Filter..." class="w-full rounded border border-gray-300 p-2" /><span id="rg-reset" class="cursor-pointer text-gray-500">zurücksetzen</span>`;
 
 			if (id !== "pos") {
 				let abc: {
@@ -630,6 +752,62 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 				registerPers.classList.add("hidden");
 				const registerPlace = document.getElementById("rg-place");
 				registerPlace.classList.add("hidden");
+			});
+
+			// Add event listener for filter (for regular wordlist)
+			const regfilter = document.getElementById("rg-filter") as HTMLInputElement;
+			regfilter.addEventListener("input", () => {
+				const filterValue = regfilter.value.toLowerCase();
+				const regex = filterValue ? new RegExp(filterValue, "i") : null;
+
+				// Get all rg-abc containers only (for regular wordlist)
+				const allContainers = Array.from(
+					document.querySelectorAll("#rg-abc") as NodeListOf<HTMLElement>,
+				);
+
+				allContainers.forEach((container) => {
+					// Find all h4 elements (section headers) in this container
+					const h4Elements = container.querySelectorAll("h4") as NodeListOf<HTMLElement>;
+
+					h4Elements.forEach((h4Element) => {
+						const nextUl = h4Element.nextElementSibling as HTMLElement;
+						if (nextUl && nextUl.tagName === "UL") {
+							const listItems = nextUl.querySelectorAll("li") as NodeListOf<HTMLElement>;
+							let hasVisibleItems = false;
+
+							// Filter li elements in this specific ul
+							listItems.forEach((li) => {
+								if (!regex) {
+									// When filter is empty, reset li visibility but don't set hasVisibleItems
+									li.style.display = "";
+								} else {
+									const text = li.textContent?.toLowerCase() || "";
+									if (regex.test(text)) {
+										li.style.display = "";
+										hasVisibleItems = true;
+									} else {
+										li.style.display = "none";
+									}
+								}
+							});
+
+							// Show/hide h4 and ul based on whether any li items are visible
+							if (!regex) {
+								// When filter is empty, hide all ULs
+								h4Element.style.display = "";
+								nextUl.style.display = "none";
+								nextUl.classList.add("hidden");
+							} else if (hasVisibleItems) {
+								h4Element.style.display = "";
+								nextUl.style.display = "";
+								nextUl.classList.remove("hidden");
+							} else {
+								h4Element.style.display = "none";
+								nextUl.style.display = "none";
+							}
+						}
+					});
+				});
 			});
 
 			const wordlistResult = document.querySelectorAll(

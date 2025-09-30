@@ -8,28 +8,6 @@
     version="2.0" exclude-result-prefixes="#all">
 
 <xsl:output encoding="UTF-8" media-type="text/html" method="xhtml" indent="yes" omit-xml-declaration="yes"/>
-
-  <xsl:variable name="dictPers">
-    <entry key="bibl">bibliografisch</entry>
-    <entry key="hist">historisch</entry>
-    <entry key="myth">mythologisch</entry>
-  </xsl:variable>
-
-	<xsl:variable name="dictPlace">
-		<entry key="city">Stadt</entry>
-		<entry key="cont">Kontinent</entry>
-		<entry key="coun">Land</entry>
-		<entry key="dist">Bezirk</entry>
-		<entry key="lake">See</entry>
-		<entry key="moun">Berg</entry>
-		<entry key="rive">Fluss</entry>
-		<entry key="sea">Meer</entry>
-		<entry key="sett">Siedlung</entry>
-		<entry key="stre">Straße</entry>
-		<entry key="subu">Vorstadt</entry>
-		<entry key="vill">Dorf</entry>
-	</xsl:variable>
-
 <xsl:template match="/">
 		<xsl:for-each select="document('../../data/register/abc_register_persons.xml')//tei:TEI">
 			<div id="rg-pers" class="hidden">
@@ -100,20 +78,22 @@
 				</xsl:for-each-group>
 			</div>
 	</xsl:for-each>
-	<xsl:for-each select="collection('../../data/editions')//tei:TEI">
-		<h4 class="mt-4"><xsl:value-of select="replace(.//tei:titleStmt/tei:title[1], ', digitale Ausgabe', '')"/></h4>
-		<hr class="border-b border-b-gray-300"/>
-		<ul class="register-menu">
-			<li data-link="wk-{position()}" class="text-red-500 p-2 cursor-pointer inline" data-content="{.//tei:body/tei:pb[1]/@xml:id}">
-				Werk
-			</li>
-			<li data-link="rg-{position()}" class="text-red-500 p-2 cursor-pointer inline">Inhalt</li>
-			<!--<li data-link="md-{position()}" class="text-gray-500 p-2 cursor-pointer inline">Metadaten</li>-->
-		</ul>
-		<div id="rg-{position()}" class="hidden">
-			<xsl:apply-templates select=".//tei:front|.//tei:body|.//tei:back"/>
-		</div>
-	</xsl:for-each>
+	<div id="abacus-overview">
+		<xsl:for-each select="collection('../../data/editions')//tei:TEI">
+			<h4 class="mt-4"><xsl:value-of select="replace(.//tei:titleStmt/tei:title[1], ', digitale Ausgabe', '')"/></h4>
+			<hr class="border-b border-b-gray-300"/>
+			<ul class="register-menu">
+				<li data-link="wk-{position()}" class="text-red-500 p-2 cursor-pointer inline" data-content="{.//tei:body/tei:pb[1]/@xml:id}">
+					Werk
+				</li>
+				<li data-link="rg-{position()}" class="text-red-500 p-2 cursor-pointer inline">Inhalt</li>
+				<!--<li data-link="md-{position()}" class="text-gray-500 p-2 cursor-pointer inline">Metadaten</li>-->
+			</ul>
+			<div id="rg-{position()}" class="hidden">
+				<xsl:apply-templates select=".//tei:front|.//tei:body|.//tei:back"/>
+			</div>
+		</xsl:for-each>
+	</div>
 </xsl:template>
 
 <xsl:template match="tei:front">
