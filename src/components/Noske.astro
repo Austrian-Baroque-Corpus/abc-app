@@ -502,7 +502,7 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 
 				wordslistHtml.classList.remove("hidden");
 				wordslistHtml.classList.add("active");
-				wordslistHtml.innerHTML = `<input id="rg-filter" type="text" placeholder="Filter..." class="w-full rounded border border-gray-300 p-2" /><span id="rg-reset" class="cursor-pointer text-gray-500">zurücksetzen</span>`;
+				wordslistHtml.innerHTML = `<div class="relative"><input id="rg-filter" type="text" placeholder="Filter..." class="w-full rounded border border-gray-300 p-2" autocomplete="off" /><div id="rg-autocomplete" class="hidden absolute z-50 w-full bg-white border border-gray-300 mt-1 max-h-60 overflow-y-auto shadow-lg"></div></div><span id="rg-reset" class="cursor-pointer text-gray-500">zurücksetzen</span>`;
 
 				// Add event listener for reset button in case persName was clicked
 				const reset = document.getElementById("rg-reset") as HTMLElement;
@@ -518,61 +518,150 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 					rgPersUls.forEach((ul) => ul.classList.add("hidden"));
 				});
 
-				// Add event listener for filter
+				// Add event listener for filter with autocomplete
 				const regfilter = document.getElementById("rg-filter") as HTMLInputElement;
-				regfilter.addEventListener("input", () => {
-					const filterValue = regfilter.value.toLowerCase();
-					const regex = filterValue ? new RegExp(filterValue, "i") : null;
+				const autocompleteDiv = document.getElementById("rg-autocomplete") as HTMLElement;
+				let debounceTimer: number;
+				let selectedIndex = -1;
+				let skipAutocomplete = false;
 
-					// For persName, only search in rg-pers
-					const allContainers = Array.from(
-						document.querySelectorAll("#rg-pers") as NodeListOf<HTMLElement>,
-					);
-
-					allContainers.forEach((container) => {
-						// Find all h5 elements (section headers) in this container
-						const h5Elements = container.querySelectorAll("h5") as NodeListOf<HTMLElement>;
-
-						h5Elements.forEach((h5Element) => {
-							const nextUl = h5Element.nextElementSibling as HTMLElement;
-							if (nextUl && nextUl.tagName === "UL") {
-								const listItems = nextUl.querySelectorAll("li") as NodeListOf<HTMLElement>;
-								let hasVisibleItems = false;
-
-								// Filter li elements in this specific ul
-								listItems.forEach((li) => {
-									if (!regex) {
-										// When filter is empty, reset li visibility but don't set hasVisibleItems
-										li.style.display = "";
-									} else {
-										const text = li.textContent?.toLowerCase() || "";
-										if (regex.test(text)) {
-											li.style.display = "";
-											hasVisibleItems = true;
-										} else {
-											li.style.display = "none";
-										}
-									}
-								});
-
-								// Show/hide h5 and ul based on whether any li items are visible
-								if (!regex) {
-									// When filter is empty, hide all ULs
-									h5Element.style.display = "";
-									nextUl.style.display = "none";
-									nextUl.classList.add("hidden");
-								} else if (hasVisibleItems) {
-									h5Element.style.display = "";
-									nextUl.style.display = "";
-									nextUl.classList.remove("hidden");
-								} else {
-									h5Element.style.display = "none";
-									nextUl.style.display = "none";
-								}
-							}
-						});
+				// Collect all person names for autocomplete
+				const allPersonNames: string[] = [];
+				const allContainers = Array.from(
+					document.querySelectorAll("#rg-pers") as NodeListOf<HTMLElement>,
+				);
+				allContainers.forEach((container) => {
+					const listItems = container.querySelectorAll("li") as NodeListOf<HTMLElement>;
+					listItems.forEach((li) => {
+						const text = li.textContent?.trim() || "";
+						if (text) allPersonNames.push(text);
 					});
 				});
+
+				regfilter.addEventListener("input", () => {
+					clearTimeout(debounceTimer);
+					debounceTimer = window.setTimeout(() => {
+						const filterValue = regfilter.value.toLowerCase();
+						const regex = filterValue ? new RegExp(filterValue, "i") : null;
+						selectedIndex = -1;
+
+						// Show autocomplete suggestions only if not skipping
+						if (!skipAutocomplete && filterValue && filterValue.length >= 2) {
+							const matches = allPersonNames.filter((name) => regex?.test(name)).slice(0, 10);
+							if (matches.length > 0) {
+								autocompleteDiv.innerHTML = matches
+									.map(
+										(name, idx) =>
+											`<div class="p-2 hover:bg-gray-100 cursor-pointer autocomplete-item" data-index="${idx}">${name}</div>`,
+									)
+									.join("");
+								autocompleteDiv.classList.remove("hidden");
+							} else {
+								autocompleteDiv.classList.add("hidden");
+							}
+						} else {
+							autocompleteDiv.classList.add("hidden");
+						}
+
+						// Reset skip flag after processing
+						if (skipAutocomplete) {
+							skipAutocomplete = false;
+						}
+
+						// Filter display
+						allContainers.forEach((container) => {
+							const h5Elements = container.querySelectorAll("h5") as NodeListOf<HTMLElement>;
+
+							h5Elements.forEach((h5Element) => {
+								const nextUl = h5Element.nextElementSibling as HTMLElement;
+								if (nextUl && nextUl.tagName === "UL") {
+									const listItems = nextUl.querySelectorAll("li") as NodeListOf<HTMLElement>;
+									let hasVisibleItems = false;
+
+									listItems.forEach((li) => {
+										if (!regex) {
+											li.style.display = "";
+										} else {
+											const text = li.textContent?.toLowerCase() || "";
+											if (regex.test(text)) {
+												li.style.display = "";
+												hasVisibleItems = true;
+											} else {
+												li.style.display = "none";
+											}
+										}
+									});
+
+									if (!regex) {
+										h5Element.style.display = "";
+										nextUl.style.display = "none";
+										nextUl.classList.add("hidden");
+									} else if (hasVisibleItems) {
+										h5Element.style.display = "";
+										nextUl.style.display = "";
+										nextUl.classList.remove("hidden");
+									} else {
+										h5Element.style.display = "none";
+										nextUl.style.display = "none";
+									}
+								}
+							});
+						});
+					}, 150);
+				});
+
+				// Autocomplete item click handler
+				autocompleteDiv.addEventListener("click", (e) => {
+					const target = e.target as HTMLElement;
+					if (target.classList.contains("autocomplete-item")) {
+						skipAutocomplete = true;
+						regfilter.value = target.textContent || "";
+						autocompleteDiv.classList.add("hidden");
+						regfilter.dispatchEvent(new Event("input"));
+					}
+				});
+
+				// Keyboard navigation
+				regfilter.addEventListener("keydown", (e) => {
+					// Reset skip flag when user starts typing
+					if (e.key.length === 1 || e.key === "Backspace" || e.key === "Delete") {
+						skipAutocomplete = false;
+					}
+
+					const items = autocompleteDiv.querySelectorAll(
+						".autocomplete-item",
+					) as NodeListOf<HTMLElement>;
+					if (items.length === 0) return;
+
+					if (e.key === "ArrowDown") {
+						e.preventDefault();
+						selectedIndex = Math.min(selectedIndex + 1, items.length - 1);
+						updateSelection(items, selectedIndex);
+					} else if (e.key === "ArrowUp") {
+						e.preventDefault();
+						selectedIndex = Math.max(selectedIndex - 1, -1);
+						updateSelection(items, selectedIndex);
+					} else if (e.key === "Enter" && selectedIndex >= 0) {
+						e.preventDefault();
+						skipAutocomplete = true;
+						regfilter.value = items[selectedIndex].textContent || "";
+						autocompleteDiv.classList.add("hidden");
+						regfilter.dispatchEvent(new Event("input"));
+					} else if (e.key === "Escape") {
+						autocompleteDiv.classList.add("hidden");
+						selectedIndex = -1;
+					}
+				});
+
+				function updateSelection(items: NodeListOf<HTMLElement>, index: number) {
+					items.forEach((item, idx) => {
+						if (idx === index) {
+							item.classList.add("bg-gray-200");
+						} else {
+							item.classList.remove("bg-gray-200");
+						}
+					});
+				}
 				return;
 			}
 
@@ -586,7 +675,7 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 				// Add reset button and show the wordslist div
 				wordslistHtml.classList.remove("hidden");
 				wordslistHtml.classList.add("active");
-				wordslistHtml.innerHTML = `<input id="rg-filter" type="text" placeholder="Filter..." class="w-full rounded border border-gray-300 p-2" /><span id="rg-reset" class="cursor-pointer text-gray-500">zurücksetzen</span>`;
+				wordslistHtml.innerHTML = `<div class="relative"><input id="rg-filter" type="text" placeholder="Filter..." class="w-full rounded border border-gray-300 p-2" autocomplete="off" /><div id="rg-autocomplete" class="hidden absolute z-50 w-full bg-white border border-gray-300 mt-1 max-h-60 overflow-y-auto shadow-lg"></div></div><span id="rg-reset" class="cursor-pointer text-gray-500">zurücksetzen</span>`;
 
 				// Add event listener for reset button in case placeName was clicked
 				const reset = document.getElementById("rg-reset") as HTMLElement;
@@ -602,61 +691,150 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 					rgPlaceUls.forEach((ul) => ul.classList.add("hidden"));
 				});
 
-				// Add event listener for filter
+				// Add event listener for filter with autocomplete
 				const regfilter = document.getElementById("rg-filter") as HTMLInputElement;
-				regfilter.addEventListener("input", () => {
-					const filterValue = regfilter.value.toLowerCase();
-					const regex = filterValue ? new RegExp(filterValue, "i") : null;
+				const autocompleteDiv = document.getElementById("rg-autocomplete") as HTMLElement;
+				let debounceTimer: number;
+				let selectedIndex = -1;
+				let skipAutocomplete = false;
 
-					// For placeName, only search in rg-place
-					const allContainers = Array.from(
-						document.querySelectorAll("#rg-place") as NodeListOf<HTMLElement>,
-					);
-
-					allContainers.forEach((container) => {
-						// Find all h5 elements (section headers) in this container
-						const h5Elements = container.querySelectorAll("h5") as NodeListOf<HTMLElement>;
-
-						h5Elements.forEach((h5Element) => {
-							const nextUl = h5Element.nextElementSibling as HTMLElement;
-							if (nextUl && nextUl.tagName === "UL") {
-								const listItems = nextUl.querySelectorAll("li") as NodeListOf<HTMLElement>;
-								let hasVisibleItems = false;
-
-								// Filter li elements in this specific ul
-								listItems.forEach((li) => {
-									if (!regex) {
-										// When filter is empty, reset li visibility but don't set hasVisibleItems
-										li.style.display = "";
-									} else {
-										const text = li.textContent?.toLowerCase() || "";
-										if (regex.test(text)) {
-											li.style.display = "";
-											hasVisibleItems = true;
-										} else {
-											li.style.display = "none";
-										}
-									}
-								});
-
-								// Show/hide h5 and ul based on whether any li items are visible
-								if (!regex) {
-									// When filter is empty, hide all ULs
-									h5Element.style.display = "";
-									nextUl.style.display = "none";
-									nextUl.classList.add("hidden");
-								} else if (hasVisibleItems) {
-									h5Element.style.display = "";
-									nextUl.style.display = "";
-									nextUl.classList.remove("hidden");
-								} else {
-									h5Element.style.display = "none";
-									nextUl.style.display = "none";
-								}
-							}
-						});
+				// Collect all place names for autocomplete
+				const allPlaceNames: string[] = [];
+				const allContainers = Array.from(
+					document.querySelectorAll("#rg-place") as NodeListOf<HTMLElement>,
+				);
+				allContainers.forEach((container) => {
+					const listItems = container.querySelectorAll("li") as NodeListOf<HTMLElement>;
+					listItems.forEach((li) => {
+						const text = li.textContent?.trim() || "";
+						if (text) allPlaceNames.push(text);
 					});
 				});
+
+				regfilter.addEventListener("input", () => {
+					clearTimeout(debounceTimer);
+					debounceTimer = window.setTimeout(() => {
+						const filterValue = regfilter.value.toLowerCase();
+						const regex = filterValue ? new RegExp(filterValue, "i") : null;
+						selectedIndex = -1;
+
+						// Show autocomplete suggestions only if not skipping
+						if (!skipAutocomplete && filterValue && filterValue.length >= 2) {
+							const matches = allPlaceNames.filter((name) => regex?.test(name)).slice(0, 10);
+							if (matches.length > 0) {
+								autocompleteDiv.innerHTML = matches
+									.map(
+										(name, idx) =>
+											`<div class="p-2 hover:bg-gray-100 cursor-pointer autocomplete-item" data-index="${idx}">${name}</div>`,
+									)
+									.join("");
+								autocompleteDiv.classList.remove("hidden");
+							} else {
+								autocompleteDiv.classList.add("hidden");
+							}
+						} else {
+							autocompleteDiv.classList.add("hidden");
+						}
+
+						// Reset skip flag after processing
+						if (skipAutocomplete) {
+							skipAutocomplete = false;
+						}
+
+						// Filter display
+						allContainers.forEach((container) => {
+							const h5Elements = container.querySelectorAll("h5") as NodeListOf<HTMLElement>;
+
+							h5Elements.forEach((h5Element) => {
+								const nextUl = h5Element.nextElementSibling as HTMLElement;
+								if (nextUl && nextUl.tagName === "UL") {
+									const listItems = nextUl.querySelectorAll("li") as NodeListOf<HTMLElement>;
+									let hasVisibleItems = false;
+
+									listItems.forEach((li) => {
+										if (!regex) {
+											li.style.display = "";
+										} else {
+											const text = li.textContent?.toLowerCase() || "";
+											if (regex.test(text)) {
+												li.style.display = "";
+												hasVisibleItems = true;
+											} else {
+												li.style.display = "none";
+											}
+										}
+									});
+
+									if (!regex) {
+										h5Element.style.display = "";
+										nextUl.style.display = "none";
+										nextUl.classList.add("hidden");
+									} else if (hasVisibleItems) {
+										h5Element.style.display = "";
+										nextUl.style.display = "";
+										nextUl.classList.remove("hidden");
+									} else {
+										h5Element.style.display = "none";
+										nextUl.style.display = "none";
+									}
+								}
+							});
+						});
+					}, 150);
+				});
+
+				// Autocomplete item click handler
+				autocompleteDiv.addEventListener("click", (e) => {
+					const target = e.target as HTMLElement;
+					if (target.classList.contains("autocomplete-item")) {
+						skipAutocomplete = true;
+						regfilter.value = target.textContent || "";
+						autocompleteDiv.classList.add("hidden");
+						regfilter.dispatchEvent(new Event("input"));
+					}
+				});
+
+				// Keyboard navigation
+				regfilter.addEventListener("keydown", (e) => {
+					// Reset skip flag when user starts typing
+					if (e.key.length === 1 || e.key === "Backspace" || e.key === "Delete") {
+						skipAutocomplete = false;
+					}
+
+					const items = autocompleteDiv.querySelectorAll(
+						".autocomplete-item",
+					) as NodeListOf<HTMLElement>;
+					if (items.length === 0) return;
+
+					if (e.key === "ArrowDown") {
+						e.preventDefault();
+						selectedIndex = Math.min(selectedIndex + 1, items.length - 1);
+						updateSelection(items, selectedIndex);
+					} else if (e.key === "ArrowUp") {
+						e.preventDefault();
+						selectedIndex = Math.max(selectedIndex - 1, -1);
+						updateSelection(items, selectedIndex);
+					} else if (e.key === "Enter" && selectedIndex >= 0) {
+						e.preventDefault();
+						skipAutocomplete = true;
+						regfilter.value = items[selectedIndex].textContent || "";
+						autocompleteDiv.classList.add("hidden");
+						regfilter.dispatchEvent(new Event("input"));
+					} else if (e.key === "Escape") {
+						autocompleteDiv.classList.add("hidden");
+						selectedIndex = -1;
+					}
+				});
+
+				function updateSelection(items: NodeListOf<HTMLElement>, index: number) {
+					items.forEach((item, idx) => {
+						if (idx === index) {
+							item.classList.add("bg-gray-200");
+						} else {
+							item.classList.remove("bg-gray-200");
+						}
+					});
+				}
 				return;
 			}
 
@@ -698,7 +876,7 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 				return normalized.toUpperCase();
 			};
 
-			wordslistHtml.innerHTML = `<input id="rg-filter" type="text" placeholder="Filter..." class="w-full rounded border border-gray-300 p-2" /><span id="rg-reset" class="cursor-pointer text-gray-500">zurücksetzen</span>`;
+			wordslistHtml.innerHTML = `<div class="relative"><input id="rg-filter" type="text" placeholder="Filter..." class="w-full rounded border border-gray-300 p-2" autocomplete="off" /><div id="rg-autocomplete" class="hidden absolute z-50 w-full bg-white border border-gray-300 mt-1 max-h-60 overflow-y-auto shadow-lg"></div></div><span id="rg-reset" class="cursor-pointer text-gray-500">zurücksetzen</span>`;
 
 			if (id !== "pos") {
 				let abc: {
@@ -774,61 +952,154 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 				registerPlace.classList.add("hidden");
 			});
 
-			// Add event listener for filter (for regular wordlist)
+			// Add event listener for filter with autocomplete (for regular wordlist)
 			const regfilter = document.getElementById("rg-filter") as HTMLInputElement;
-			regfilter.addEventListener("input", () => {
-				const filterValue = regfilter.value.toLowerCase();
-				const regex = filterValue ? new RegExp(filterValue, "i") : null;
+			const autocompleteDiv = document.getElementById("rg-autocomplete") as HTMLElement;
+			let debounceTimer: number;
+			let selectedIndex = -1;
+			let skipAutocomplete = false;
 
-				// Get all rg-abc containers only (for regular wordlist)
-				const allContainers = Array.from(
-					document.querySelectorAll("#rg-abc") as NodeListOf<HTMLElement>,
-				);
-
-				allContainers.forEach((container) => {
-					// Find all h4 elements (section headers) in this container
-					const h4Elements = container.querySelectorAll("h4") as NodeListOf<HTMLElement>;
-
-					h4Elements.forEach((h4Element) => {
-						const nextUl = h4Element.nextElementSibling as HTMLElement;
-						if (nextUl && nextUl.tagName === "UL") {
-							const listItems = nextUl.querySelectorAll("li") as NodeListOf<HTMLElement>;
-							let hasVisibleItems = false;
-
-							// Filter li elements in this specific ul
-							listItems.forEach((li) => {
-								if (!regex) {
-									// When filter is empty, reset li visibility but don't set hasVisibleItems
-									li.style.display = "";
-								} else {
-									const text = li.textContent?.toLowerCase() || "";
-									if (regex.test(text)) {
-										li.style.display = "";
-										hasVisibleItems = true;
-									} else {
-										li.style.display = "none";
-									}
-								}
-							});
-
-							// Show/hide h4 and ul based on whether any li items are visible
-							if (!regex) {
-								// When filter is empty, hide all ULs
-								h4Element.style.display = "";
-								nextUl.style.display = "none";
-								nextUl.classList.add("hidden");
-							} else if (hasVisibleItems) {
-								h4Element.style.display = "";
-								nextUl.style.display = "";
-								nextUl.classList.remove("hidden");
-							} else {
-								h4Element.style.display = "none";
-								nextUl.style.display = "none";
-							}
-						}
-					});
-				});
+			// Collect all words for autocomplete
+			const allWords: Array<{ str: string; frq: string }> = [];
+			wordlist.forEach((item: any) => {
+				allWords.push({ str: item.str, frq: item.frq });
 			});
+
+			regfilter.addEventListener("input", () => {
+				clearTimeout(debounceTimer);
+				debounceTimer = window.setTimeout(() => {
+					const filterValue = regfilter.value.toLowerCase();
+					const regex = filterValue ? new RegExp(filterValue, "i") : null;
+					selectedIndex = -1;
+
+					// Show autocomplete suggestions only if not skipping
+					if (!skipAutocomplete && filterValue && filterValue.length >= 2) {
+						const matches = allWords.filter((word) => regex?.test(word.str)).slice(0, 10);
+						if (matches.length > 0) {
+							autocompleteDiv.innerHTML = matches
+								.map(
+									(word, idx) =>
+										`<div class="p-2 hover:bg-gray-100 cursor-pointer autocomplete-item text-red-600" data-index="${idx}" data-str="${word.str}">${word.str} (${word.frq})</div>`,
+								)
+								.join("");
+							autocompleteDiv.classList.remove("hidden");
+						} else {
+							autocompleteDiv.classList.add("hidden");
+						}
+					} else {
+						autocompleteDiv.classList.add("hidden");
+					}
+
+					// Reset skip flag after processing
+					if (skipAutocomplete) {
+						skipAutocomplete = false;
+					}
+
+					// Get all rg-abc containers only (for regular wordlist)
+					const allContainers = Array.from(
+						document.querySelectorAll("#rg-abc") as NodeListOf<HTMLElement>,
+					);
+
+					allContainers.forEach((container) => {
+						// Find all h4 elements (section headers) in this container
+						const h4Elements = container.querySelectorAll("h4") as NodeListOf<HTMLElement>;
+
+						h4Elements.forEach((h4Element) => {
+							const nextUl = h4Element.nextElementSibling as HTMLElement;
+							if (nextUl && nextUl.tagName === "UL") {
+								const listItems = nextUl.querySelectorAll("li") as NodeListOf<HTMLElement>;
+								let hasVisibleItems = false;
+
+								// Filter li elements in this specific ul
+								listItems.forEach((li) => {
+									if (!regex) {
+										// When filter is empty, reset li visibility but don't set hasVisibleItems
+										li.style.display = "";
+									} else {
+										const text = li.textContent?.toLowerCase() || "";
+										if (regex.test(text)) {
+											li.style.display = "";
+											hasVisibleItems = true;
+										} else {
+											li.style.display = "none";
+										}
+									}
+								});
+
+								// Show/hide h4 and ul based on whether any li items are visible
+								if (!regex) {
+									// When filter is empty, hide all ULs
+									h4Element.style.display = "";
+									nextUl.style.display = "none";
+									nextUl.classList.add("hidden");
+								} else if (hasVisibleItems) {
+									h4Element.style.display = "";
+									nextUl.style.display = "";
+									nextUl.classList.remove("hidden");
+								} else {
+									h4Element.style.display = "none";
+									nextUl.style.display = "none";
+								}
+							}
+						});
+					});
+				}, 150);
+			});
+
+			// Autocomplete item click handler
+			autocompleteDiv.addEventListener("click", (e) => {
+				const target = e.target as HTMLElement;
+				if (target.classList.contains("autocomplete-item")) {
+					skipAutocomplete = true;
+					const dataStr = target.dataset.str || "";
+					regfilter.value = dataStr;
+					autocompleteDiv.classList.add("hidden");
+					regfilter.dispatchEvent(new Event("input"));
+				}
+			});
+
+			// Keyboard navigation
+			regfilter.addEventListener("keydown", (e) => {
+				// Reset skip flag when user starts typing
+				if (e.key.length === 1 || e.key === "Backspace" || e.key === "Delete") {
+					skipAutocomplete = false;
+				}
+
+				const items = autocompleteDiv.querySelectorAll(
+					".autocomplete-item",
+				) as NodeListOf<HTMLElement>;
+				if (items.length === 0) return;
+
+				if (e.key === "ArrowDown") {
+					e.preventDefault();
+					selectedIndex = Math.min(selectedIndex + 1, items.length - 1);
+					updateSelection(items, selectedIndex);
+				} else if (e.key === "ArrowUp") {
+					e.preventDefault();
+					selectedIndex = Math.max(selectedIndex - 1, -1);
+					updateSelection(items, selectedIndex);
+				} else if (e.key === "Enter" && selectedIndex >= 0) {
+					e.preventDefault();
+					skipAutocomplete = true;
+					const dataStr = items[selectedIndex].dataset.str || "";
+					regfilter.value = dataStr;
+					autocompleteDiv.classList.add("hidden");
+					regfilter.dispatchEvent(new Event("input"));
+				} else if (e.key === "Escape") {
+					autocompleteDiv.classList.add("hidden");
+					selectedIndex = -1;
+				}
+			});
+
+			function updateSelection(items: NodeListOf<HTMLElement>, index: number) {
+				items.forEach((item, idx) => {
+					if (idx === index) {
+						item.classList.add("bg-gray-200");
+					} else {
+						item.classList.remove("bg-gray-200");
+					}
+				});
+			}
 
 			const wordlistResult = document.querySelectorAll(
 				"#abacus-wordslist div ul li",
