@@ -56,8 +56,16 @@ const html = await readFile("edition/register.html", "utf-8");
 
 			// Check if clicked element is an h5
 			if (target.tagName === "H5") {
-				const nextElement = target.nextElementSibling;
-				nextElement?.classList.toggle("hidden");
+				const nextElement = target.nextElementSibling as HTMLElement;
+				if (nextElement) {
+					if (nextElement.classList.contains("hidden")) {
+						nextElement.classList.remove("hidden");
+						nextElement.style.display = "";
+					} else {
+						nextElement.classList.add("hidden");
+						nextElement.style.display = "none";
+					}
+				}
 				return;
 			}
 		});

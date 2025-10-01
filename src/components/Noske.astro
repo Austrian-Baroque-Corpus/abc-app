@@ -563,10 +563,8 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 							autocompleteDiv.classList.add("hidden");
 						}
 
-						// Reset skip flag after processing
-						if (skipAutocomplete) {
-							skipAutocomplete = false;
-						}
+						// Always reset skip flag after processing one input event
+						skipAutocomplete = false;
 
 						// Filter display
 						allContainers.forEach((container) => {
@@ -736,10 +734,8 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 							autocompleteDiv.classList.add("hidden");
 						}
 
-						// Reset skip flag after processing
-						if (skipAutocomplete) {
-							skipAutocomplete = false;
-						}
+						// Always reset skip flag after processing one input event
+						skipAutocomplete = false;
 
 						// Filter display
 						allContainers.forEach((container) => {
@@ -990,10 +986,8 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 						autocompleteDiv.classList.add("hidden");
 					}
 
-					// Reset skip flag after processing
-					if (skipAutocomplete) {
-						skipAutocomplete = false;
-					}
+					// Always reset skip flag after processing one input event
+					skipAutocomplete = false;
 
 					// Get all rg-abc containers only (for regular wordlist)
 					const allContainers = Array.from(
@@ -1060,7 +1054,7 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 
 			// Keyboard navigation
 			regfilter.addEventListener("keydown", (e) => {
-				// Reset skip flag when user starts typing
+				// Reset skip flag when user starts typing or clearing
 				if (e.key.length === 1 || e.key === "Backspace" || e.key === "Delete") {
 					skipAutocomplete = false;
 				}
@@ -1127,7 +1121,13 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 				item.addEventListener("click", (e) => {
 					// @ts-ignore
 					const ul = e.target!.nextElementSibling as HTMLElement;
-					ul.classList.toggle("hidden");
+					if (ul.classList.contains("hidden")) {
+						ul.classList.remove("hidden");
+						ul.style.display = "";
+					} else {
+						ul.classList.add("hidden");
+						ul.style.display = "none";
+					}
 				});
 			});
 		});

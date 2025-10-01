@@ -14,7 +14,7 @@
 				<xsl:for-each-group select=".//tei:person" group-by="@role">
 						<h5 class="cursor-pointer">
 							<xsl:choose>
-								<xsl:when test="current-grouping-key()='bibl'">bibliografisch</xsl:when>
+								<xsl:when test="current-grouping-key()='bibl'">biblisch</xsl:when>
 								<xsl:when test="current-grouping-key()='hist'">historisch</xsl:when>
 								<xsl:when test="current-grouping-key()='myth'">mythologisch</xsl:when>
 								<xsl:otherwise><xsl:value-of select="current-grouping-key()"/></xsl:otherwise>
