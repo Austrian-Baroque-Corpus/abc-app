@@ -61,14 +61,22 @@ const html = await readFile("edition/register.html", "utf-8");
 
 			// Check if clicked element is an h5
 			if (target.tagName === "H5") {
-				const nextElement = target.nextElementSibling as HTMLElement;
+				// Find the next UL sibling (skip any span/br elements)
+				let nextElement = target.nextElementSibling;
+				while (nextElement && nextElement.tagName !== "UL") {
+					nextElement = nextElement.nextElementSibling;
+				}
+
 				if (nextElement) {
-					if (nextElement.classList.contains("hidden")) {
-						nextElement.classList.remove("hidden");
-						nextElement.style.display = "";
+					const ulElement = nextElement as HTMLElement;
+					if (ulElement.classList.contains("hidden")) {
+						ulElement.classList.remove("hidden");
+						ulElement.style.display = "";
+						target.style.fontWeight = "bold";
 					} else {
-						nextElement.classList.add("hidden");
-						nextElement.style.display = "none";
+						ulElement.classList.add("hidden");
+						ulElement.style.display = "none";
+						target.style.fontWeight = "normal";
 					}
 				}
 				return;
@@ -81,8 +89,8 @@ const html = await readFile("edition/register.html", "utf-8");
 	button?.addEventListener("click", () => {
 		button.parentElement!.classList.toggle("rotate-90");
 		button.parentElement!.classList.toggle("-left-2");
-		button.parentElement!.classList.toggle("top-10");
-		//button.parentElement!.classList.toggle("top-4");
+		//button.parentElement!.classList.toggle("top-45");
+		button.parentElement!.classList.toggle("top-4");
 		let register = document.getElementById("abacus-register") as HTMLElement;
 		register.classList.toggle("hidden");
 		register.parentElement?.classList.toggle("w-20");

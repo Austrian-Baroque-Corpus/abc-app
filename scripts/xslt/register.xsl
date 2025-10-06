@@ -12,14 +12,14 @@
 		<xsl:for-each select="document('../../data/register/abc_register_persons.xml')//tei:TEI">
 			<div id="rg-pers" class="hidden">
 				<xsl:for-each-group select=".//tei:person" group-by="@role">
-						<h5 class="cursor-pointer">
+						<h5 class="cursor-pointer inline" title="Personenkategorie ausklappen/einklappen">
 							<xsl:choose>
 								<xsl:when test="current-grouping-key()='bibl'">biblisch</xsl:when>
 								<xsl:when test="current-grouping-key()='hist'">historisch</xsl:when>
 								<xsl:when test="current-grouping-key()='myth'">mythologisch</xsl:when>
 								<xsl:otherwise><xsl:value-of select="current-grouping-key()"/></xsl:otherwise>
 							</xsl:choose>
-						</h5>
+						</h5>&#160;&#160;<span id="persType" data-str="{current-grouping-key()}" class="cursor-pointer inline-block text-red-600" title="Nach Personenkategorie '{current-grouping-key()}' suchen">»»</span><br/>
 							<ul class="hidden">
 								<xsl:for-each select="current-group()">
 									<xsl:sort select=".//tei:persName[@type='main']" data-type="text" order="ascending"/>
@@ -49,7 +49,7 @@
 						else if (current-grouping-key()='vill') then 'Dorf'
 						else current-grouping-key()"
 						data-type="text" order="ascending"/>
-					<h5 class="cursor-pointer">
+					<h5 class="cursor-pointer inline" title="Ortskategorie ausklappen/einklappen">
 						<xsl:choose>
 							<xsl:when test="current-grouping-key()='city'">Stadt</xsl:when>
 							<xsl:when test="current-grouping-key()='cont'">Kontinent</xsl:when>
@@ -66,7 +66,7 @@
 							<xsl:otherwise><xsl:value-of select="current-grouping-key()"/></xsl:otherwise>
 						</xsl:choose>
 						(<xsl:value-of select="current-grouping-key()"/>)
-					</h5>
+					</h5>&#160;&#160;<span id="placeType" data-str="{current-grouping-key()}" class="cursor-pointer inline-block text-red-600" title="Nach Ortskategorie '{current-grouping-key()}' suchen">»»</span><br/>
 						<ul class="hidden">
 							<xsl:for-each select="current-group()">
 								<xsl:sort select=".//tei:placeName[@type='main']" data-type="text" order="ascending"/>
@@ -78,7 +78,8 @@
 				</xsl:for-each-group>
 			</div>
 	</xsl:for-each>
-	<div id="abacus-overview">
+	<div id="abacus-overview" class="py-4">
+		<img src="/Buecher.jpg" alt="Buecher" title="Buecher" />
 		<xsl:for-each select="collection('../../data/editions')//tei:TEI">
 			<h4 class="mt-4"><xsl:value-of select="replace(.//tei:titleStmt/tei:title[1], ', digitale Ausgabe', '')"/></h4>
 			<hr class="border-b border-b-gray-300"/>

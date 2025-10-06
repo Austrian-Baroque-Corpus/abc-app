@@ -18,9 +18,18 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 						<img class="inline" src="/Suche.jpg" alt="Suchet" title="Suchet" />
 					</h4>
 					<VirtualKeyboard />
-					<div id="noske-search" class="text-center"></div>
-					<div class="py-4">
-						<strong><h5>Beispiele:</h5></strong>
+					<div id="noske-search" class="text-left"></div>
+					<div id="example" class="cursor-pointer py-4">
+						<strong
+							><span class="arrow inline-block rotate-90 text-red-600">&raquo;</span>&nbsp;<h5
+								class="inline"
+							>
+								Beispiele
+							</h5>&nbsp;<span class="arrow inline-block rotate-90 text-red-600">&raquo;</span
+							></strong
+						>
+					</div>
+					<div id="examplelist" class="hidden text-left">
 						<h6>Einfache Suche</h6>
 						<ul>
 							<li class="cursor-pointer px-2">
@@ -454,6 +463,14 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 
 	Array.from(registerpeopleplaces).forEach((item) => {
 		item.addEventListener("click", (e) => {
+			// Reset all other LI elements to normal weight
+			registerpeopleplaces.forEach((li) => {
+				li.style.fontWeight = "normal";
+			});
+
+			// Make clicked item bold
+			item.style.fontWeight = "bold";
+
 			const noskeInput = document.getElementById("noske-input-input") as HTMLInputElement;
 			const noskeSelect = document.getElementById("noske-input-select") as HTMLSelectElement;
 			noskeSelect.value = "cql";
@@ -463,6 +480,27 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 			const attribute = parentId.includes("place") ? "placeName" : "persName";
 
 			// Use the item (li element) instead of e.target to get the data-str
+			noskeInput.value = `[${attribute}="${item.dataset.str}"]`;
+			const searchButton = document.getElementById("noske-search-button") as HTMLButtonElement;
+			searchButton.click();
+		});
+	});
+
+	// Register click handlers for person and place categories
+	const registerPersType = document.querySelectorAll(
+		"#persType, #placeType",
+	) as NodeListOf<HTMLElement>;
+
+	Array.from(registerPersType).forEach((item) => {
+		item.addEventListener("click", (e) => {
+			const noskeInput = document.getElementById("noske-input-input") as HTMLInputElement;
+			const noskeSelect = document.getElementById("noske-input-select") as HTMLSelectElement;
+			noskeSelect.value = "cql";
+
+			// Set attribute to persType
+			const attribute = item.id === "persType" ? "persType" : "placeType";
+
+			// Use the item to get the data-str
 			noskeInput.value = `[${attribute}="${item.dataset.str}"]`;
 			const searchButton = document.getElementById("noske-search-button") as HTMLButtonElement;
 			searchButton.click();
@@ -516,6 +554,28 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 					// Hide all UL elements in rg-pers
 					const rgPersUls = registerPers!.querySelectorAll("ul") as NodeListOf<HTMLElement>;
 					rgPersUls.forEach((ul) => ul.classList.add("hidden"));
+
+					// Reset font weights and display styles for all h5 and li elements
+					const allH5 = document.querySelectorAll(
+						"#rg-pers h5, #rg-place h5",
+					) as NodeListOf<HTMLElement>;
+					allH5.forEach((h5) => {
+						h5.style.fontWeight = "normal";
+						h5.style.display = "";
+					});
+					const allLi = document.querySelectorAll(
+						"#rg-pers ul li, #rg-place ul li",
+					) as NodeListOf<HTMLElement>;
+					allLi.forEach((li) => {
+						li.style.fontWeight = "normal";
+						li.style.display = "";
+					});
+					const allUl = document.querySelectorAll(
+						"#rg-pers ul, #rg-place ul",
+					) as NodeListOf<HTMLElement>;
+					allUl.forEach((ul) => {
+						ul.style.display = "";
+					});
 				});
 
 				// Add event listener for filter with autocomplete
@@ -687,6 +747,28 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 					// Hide all UL elements in rg-place
 					const rgPlaceUls = registerPlace!.querySelectorAll("ul") as NodeListOf<HTMLElement>;
 					rgPlaceUls.forEach((ul) => ul.classList.add("hidden"));
+
+					// Reset font weights and display styles for all h5 and li elements
+					const allH5 = document.querySelectorAll(
+						"#rg-pers h5, #rg-place h5",
+					) as NodeListOf<HTMLElement>;
+					allH5.forEach((h5) => {
+						h5.style.fontWeight = "normal";
+						h5.style.display = "";
+					});
+					const allLi = document.querySelectorAll(
+						"#rg-pers ul li, #rg-place ul li",
+					) as NodeListOf<HTMLElement>;
+					allLi.forEach((li) => {
+						li.style.fontWeight = "normal";
+						li.style.display = "";
+					});
+					const allUl = document.querySelectorAll(
+						"#rg-pers ul, #rg-place ul",
+					) as NodeListOf<HTMLElement>;
+					allUl.forEach((ul) => {
+						ul.style.display = "";
+					});
 				});
 
 				// Add event listener for filter with autocomplete
@@ -946,6 +1028,33 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 				registerPers!.classList.add("hidden");
 				const registerPlace = document.getElementById("rg-place");
 				registerPlace!.classList.add("hidden");
+
+				// Reset font weights and display styles for all h4, h5 and li elements
+				const allH4 = document.querySelectorAll("#rg-abc h4") as NodeListOf<HTMLElement>;
+				allH4.forEach((h4) => {
+					h4.style.fontWeight = "normal";
+					h4.style.display = "";
+				});
+				const allH5 = document.querySelectorAll(
+					"#rg-pers h5, #rg-place h5",
+				) as NodeListOf<HTMLElement>;
+				allH5.forEach((h5) => {
+					h5.style.fontWeight = "normal";
+					h5.style.display = "";
+				});
+				const allLi = document.querySelectorAll(
+					"#abacus-wordslist div ul li, #rg-pers ul li, #rg-place ul li",
+				) as NodeListOf<HTMLElement>;
+				allLi.forEach((li) => {
+					li.style.fontWeight = "normal";
+					li.style.display = "";
+				});
+				const allUl = document.querySelectorAll(
+					"#rg-pers ul, #rg-place ul, #rg-abc ul",
+				) as NodeListOf<HTMLElement>;
+				allUl.forEach((ul) => {
+					ul.style.display = "";
+				});
 			});
 
 			// Add event listener for filter with autocomplete (for regular wordlist)
@@ -1101,6 +1210,14 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 
 			Array.from(wordlistResult).forEach((item) => {
 				item.addEventListener("click", (e) => {
+					// Reset all other LI elements to normal weight
+					wordlistResult.forEach((li) => {
+						li.style.fontWeight = "normal";
+					});
+
+					// Make clicked item bold
+					item.style.fontWeight = "bold";
+
 					const noskeInput = document.getElementById("noske-input-input") as HTMLInputElement;
 
 					const noskeSelect = document.getElementById("noske-input-select") as HTMLSelectElement;
@@ -1120,13 +1237,16 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 			Array.from(rgAbc).forEach((item) => {
 				item.addEventListener("click", (e) => {
 					// @ts-ignore
-					const ul = e.target!.nextElementSibling as HTMLElement;
+					const target = e.target as HTMLElement;
+					const ul = target.nextElementSibling as HTMLElement;
 					if (ul.classList.contains("hidden")) {
 						ul.classList.remove("hidden");
 						ul.style.display = "";
+						target.style.fontWeight = "bold";
 					} else {
 						ul.classList.add("hidden");
 						ul.style.display = "none";
+						target.style.fontWeight = "normal";
 					}
 				});
 			});
@@ -1146,4 +1266,24 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 	const createListItem = (item: { str: string; frq: string }) => {
 		return `<li class="cursor-pointer text-red-600" data-str="${item.str}">${item.str} (${item.frq})</li>`;
 	};
+
+	// Toggle examplelist visibility when clicking on example div
+	const exampleDiv = document.getElementById("example") as HTMLElement;
+	const exampleList = document.getElementById("examplelist") as HTMLElement;
+
+	exampleDiv?.addEventListener("click", () => {
+		exampleList?.classList.toggle("hidden");
+
+		// Toggle arrow rotation
+		const arrows = exampleDiv.querySelectorAll(".arrow") as NodeListOf<HTMLElement>;
+		arrows.forEach((arrow) => {
+			if (arrow.classList.contains("rotate-90")) {
+				arrow.classList.remove("rotate-90");
+				arrow.classList.add("-rotate-90");
+			} else {
+				arrow.classList.remove("-rotate-90");
+				arrow.classList.add("rotate-90");
+			}
+		});
+	});
 </script>
