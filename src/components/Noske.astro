@@ -631,9 +631,14 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 							const h5Elements = container.querySelectorAll("h5") as NodeListOf<HTMLElement>;
 
 							h5Elements.forEach((h5Element) => {
-								const nextUl = h5Element.nextElementSibling as HTMLElement;
-								if (nextUl && nextUl.tagName === "UL") {
-									const listItems = nextUl.querySelectorAll("li") as NodeListOf<HTMLElement>;
+								// Find the next UL sibling (skip any span/br elements)
+								let nextUl = h5Element.nextElementSibling;
+								while (nextUl && nextUl.tagName !== "UL") {
+									nextUl = nextUl.nextElementSibling;
+								}
+								if (nextUl) {
+									const ulElement = nextUl as HTMLElement;
+									const listItems = ulElement.querySelectorAll("li") as NodeListOf<HTMLElement>;
 									let hasVisibleItems = false;
 
 									listItems.forEach((li) => {
@@ -652,15 +657,15 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 
 									if (!regex) {
 										h5Element.style.display = "";
-										nextUl.style.display = "none";
-										nextUl.classList.add("hidden");
+										ulElement.style.display = "none";
+										ulElement.classList.add("hidden");
 									} else if (hasVisibleItems) {
 										h5Element.style.display = "";
-										nextUl.style.display = "";
-										nextUl.classList.remove("hidden");
+										ulElement.style.display = "";
+										ulElement.classList.remove("hidden");
 									} else {
 										h5Element.style.display = "none";
-										nextUl.style.display = "none";
+										ulElement.style.display = "none";
 									}
 								}
 							});
@@ -824,9 +829,14 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 							const h5Elements = container.querySelectorAll("h5") as NodeListOf<HTMLElement>;
 
 							h5Elements.forEach((h5Element) => {
-								const nextUl = h5Element.nextElementSibling as HTMLElement;
-								if (nextUl && nextUl.tagName === "UL") {
-									const listItems = nextUl.querySelectorAll("li") as NodeListOf<HTMLElement>;
+								// Find the next UL sibling (skip any span/br elements)
+								let nextUl = h5Element.nextElementSibling;
+								while (nextUl && nextUl.tagName !== "UL") {
+									nextUl = nextUl.nextElementSibling;
+								}
+								if (nextUl) {
+									const ulElement = nextUl as HTMLElement;
+									const listItems = ulElement.querySelectorAll("li") as NodeListOf<HTMLElement>;
 									let hasVisibleItems = false;
 
 									listItems.forEach((li) => {
@@ -845,15 +855,15 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 
 									if (!regex) {
 										h5Element.style.display = "";
-										nextUl.style.display = "none";
-										nextUl.classList.add("hidden");
+										ulElement.style.display = "none";
+										ulElement.classList.add("hidden");
 									} else if (hasVisibleItems) {
 										h5Element.style.display = "";
-										nextUl.style.display = "";
-										nextUl.classList.remove("hidden");
+										ulElement.style.display = "";
+										ulElement.classList.remove("hidden");
 									} else {
 										h5Element.style.display = "none";
-										nextUl.style.display = "none";
+										ulElement.style.display = "none";
 									}
 								}
 							});
