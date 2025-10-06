@@ -1,6 +1,8 @@
 ---
 import { readFile } from "fs/promises";
 
+import { createBaseurl } from "../lib/baseurl.ts";
+
 const html = await readFile("edition/register.html", "utf-8");
 ---
 
@@ -17,9 +19,12 @@ const html = await readFile("edition/register.html", "utf-8");
 		</ul>
 		<div class="mt-4 hidden"></div>
 	</div>
+
 	<div id="abacus-register" set:html={html} class="relative my-4" />
 	<div class="absolute top-4">
-		<a role="button" id="rg-button" class="uppercase tracking-widest text-black"> Register </a>
+		<a role="button" id="rg-button"
+			><img src={createBaseurl("Register.jpg")} alt="Register" title="Register" /></a
+		>
 	</div>
 </div>
 <script>
@@ -75,12 +80,12 @@ const html = await readFile("edition/register.html", "utf-8");
 
 	button?.addEventListener("click", () => {
 		button.parentElement!.classList.toggle("rotate-90");
-		button.parentElement!.classList.toggle("-left-8");
-		button.parentElement!.classList.toggle("top-14");
-		button.parentElement!.classList.toggle("top-4");
+		button.parentElement!.classList.toggle("-left-2");
+		button.parentElement!.classList.toggle("top-10");
+		//button.parentElement!.classList.toggle("top-4");
 		let register = document.getElementById("abacus-register") as HTMLElement;
 		register.classList.toggle("hidden");
-		register.parentElement?.classList.toggle("w-10");
+		register.parentElement?.classList.toggle("w-20");
 		register.parentElement?.classList.toggle("w-[50%]");
 		let wordslist = document.getElementById("abacus-wordslist") as HTMLElement;
 		wordslist.classList.toggle("hidden");
