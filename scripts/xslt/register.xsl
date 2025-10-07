@@ -12,6 +12,7 @@
 <xsl:variable name="termlabels" select="document('../../data/register/termlabels-persnames.xml')"/>
 <xsl:variable name="termlabelsPlaces" select="document('../../data/register/termlabels-placenames.xml')"/>
 <xsl:variable name="termlabels1" select="document('../../data/register/termlabels1.xml')"/>
+<xsl:variable name="heute" select="current-date()"/>
 
 <xsl:template match="/">
 		<xsl:for-each select="document('../../data/register/abacus-index_persnames.xml')//tei:TEI">
@@ -97,6 +98,14 @@
 	<div id="abacus-overview" class="py-4">
 		<img src="/Buecher.jpg" alt="Buecher" title="Buecher" />
 		<xsl:for-each select="collection('../../data/editions')//tei:TEI">
+			<xsl:sort select="
+				if (contains(.//tei:titleStmt/tei:title[1], 'Augustini Feuriges Hertz')) then 4
+				else if (contains(.//tei:titleStmt/tei:title[1], 'Lösch Wienn')) then 2
+				else if (contains(.//tei:titleStmt/tei:title[1], 'Mercks Wienn')) then 1
+				else if (contains(.//tei:titleStmt/tei:title[1], 'Grosse Todten Bruderschaft')) then 3
+				else if (contains(.//tei:titleStmt/tei:title[1], 'Todten-Capelle')) then 5
+				else 999"
+				data-type="number" order="ascending"/>
 			<h4 class="mt-4"><xsl:value-of select="replace(.//tei:titleStmt/tei:title[1], ', digitale Ausgabe', '')"/></h4>
 			<hr class="border-b border-b-gray-300"/>
 			<ul class="register-menu">
@@ -104,8 +113,42 @@
 					Werk
 				</li>
 				<li data-link="rg-{position()}" class="text-red-500 p-2 cursor-pointer inline">Inhalt</li>
-				<!--<li data-link="md-{position()}" class="text-gray-500 p-2 cursor-pointer inline">Metadaten</li>-->
+				<!--<li data-link="md-{position()}" class="text-red-500 p-2 cursor-pointer inline">Metadaten</li>-->
 			</ul>
+			<div id="info-{position()}" class="hidden text-xs py-4">
+				<xsl:variable name="filename" select="replace(tokenize(document-uri(/), '/')[last()], '\.xml$', '.jpg')"/>
+				<img src="/{$filename}" alt="{.//tei:titleStmt/tei:title[1]}" title="{.//tei:titleStmt/tei:title[1]}" class="float-left mr-4 mb-2" />
+				<xsl:choose>
+					<xsl:when test="contains(.//tei:titleStmt/tei:title[1], 'Augustini Feuriges Hertz')">
+						<p class="py-1">Abraham â Sancta Clara: AUGUSTINI Feuriges Hertz Tragt Ein Hertzliches Mitleyden mit den armen im Feeg=Feuer Leydenden Seelen [...] Gedruckt zu Saltzburg bey Melchior Haan [...] Anno 1693.</p>
+						<p class="py-1">Österreichische Nationalbibliothek, Sammlung von Handschriften und alten Drucken (Signatur 484.862-A Alt)</p>
+						<p class="py-1">Zitation: Abraham â Sancta Clara: Augustini Feuriges Hertz. Salzburg, 1693. (Digitale Ausgabe) . In: ABaC:us – Austrian Baroque Corpus. Hrsg. von Claudia Resch und Ulrike Czeitschner. &lt;<a href="https://abacus.acdh.oeaw.ac.at/edition/AFH_n0003" class="text-red-500">hhttps://abacus.acdh.oeaw.ac.at/edition/AFH_n0003</a>&gt; abgerufen am <xsl:value-of select="format-date($heute,'[D01].[M01].[Y0001]')"/></p>
+					</xsl:when>
+					<xsl:when test="contains(.//tei:titleStmt/tei:title[1], 'Lösch Wienn')">
+						<p class="py-1">Abraham â Sancta Clara: Lösch Wienn / Das ist Ein Bewögliche Anmahnung zu der Kays. Residentz=Statt Wienn in Oesterreich [...] Gedruckt zu Wien / bey Peter Paul Vivian / 1680.</p>
+						<p class="py-1">Universitätsbibliothek Graz, Rara Sammlung (Signatur I 25.896 Rara II)</p>
+						<p class="py-1">Zitation: Abraham â Sancta Clara: Lösch Wienn. Wien, 1680. (Digitale Ausgabe) . In: ABaC:us – Austrian Baroque Corpus. Hrsg. von Claudia Resch und Ulrike Czeitschner. &lt;<a href="https://abacus.acdh.oeaw.ac.at/edition/LW_a0007" class="text-red-500">https://abacus.acdh.oeaw.ac.at/edition/LW_a0007</a>&gt; abgerufen am <xsl:value-of select="format-date($heute,'[D01].[M01].[Y0001]')"/></p>
+					</xsl:when>
+					<xsl:when test="contains(.//tei:titleStmt/tei:title[1], 'Mercks Wienn')">
+						<p class="py-1">Abraham â Sancta Clara: Mercks Wienn / Das ist Deß wütenden Todts ein vmbständige Beschreibung Jn Der berühmten Haubt vnd Kayserl. Residentz Statt in Oesterreich [...] . Gedruckt zu Wienn / bey Peter Paul Vivian / der löbl: Universitet Buchdrucker 1680.</p>
+						<p class="py-1">Stiftsbibliothek Melk (Signatur 48.022)</p>
+						<p class="py-1">Zitation: Abraham â Sancta Clara: Mercks Wienn. Wien, 1680. (Digitale Ausgabe) . In: ABaC:us – Austrian Baroque Corpus. Hrsg. von Claudia Resch und Ulrike Czeitschner. &lt;<a href="https://abacus.acdh.oeaw.ac.at/edition/MW_a0005" class="text-red-500">https://abacus.acdh.oeaw.ac.at/edition/MW_a0005</a>&gt; abgerufen am <xsl:value-of select="format-date($heute,'[D01].[M01].[Y0001]')"/></p>
+					</xsl:when>
+					<xsl:when test="contains(.//tei:titleStmt/tei:title[1], 'Grosse Todten Bruderschaft')">
+						<p class="py-1">[Abraham â Sancta Clara]: Grosse Todten Bruderschaft / Das ist Ein kurtzer Entwurff Deß Sterblichen Lebens [...] Gedruckt im Jahr 1681.</p>
+						<p class="py-1">Österreichische Nationalbibliothek, Sammlung von Handschriften und alten Drucken (Signatur 298.002-A)</p>
+						<p class="py-1">Zitation: Abraham â Sancta Clara: Grosse Todten Bruderschaft. Wien, 1681. (Digitale Ausgabe) . In: ABaC:us – Austrian Baroque Corpus. Hrsg. von Claudia Resch und Ulrike Czeitschner. &lt;<a href="https://abacus.acdh.oeaw.ac.at/edition/TB_i0009" class="text-red-500">https://abacus.acdh.oeaw.ac.at/edition/TB_i0009</a>&gt; abgerufen am <xsl:value-of select="format-date($heute,'[D01].[M01].[Y0001]')"/></p>
+					</xsl:when>
+					<xsl:when test="contains(.//tei:titleStmt/tei:title[1], 'Todten-Capelle')">
+						<p class="py-1">[Abraham â Sancta Clara]: Besonders meublirt- und gezierte Todten=Capelle / Oder Allgemeiner Todten=Spiegel / [...] Nürnberg / Bey Christoph Weigel [...] Würtzburg / Druckts Marrtin Frantz Hertz. An. 1710.</p>
+						<p class="py-1">University Library Illinois, Emblem Collection of the University of Illinois, Urbana-Champaign (Signatur 832Ab8)</p>
+						<p class="py-1">Zitation: Abraham â Sancta Clara: Todten-Capelle. Würzburg, 1710. (Digitale Ausgabe) . In: ABaC:us – Austrian Baroque Corpus. Hrsg. von Claudia Resch und Ulrike Czeitschner. &lt;<a href="https://abacus.acdh.oeaw.ac.at/edition/TC_i0008" class="text-red-500">https://abacus.acdh.oeaw.ac.at/edition/TC_i0008</a>&gt; abgerufen am <xsl:value-of select="format-date($heute,'[D01].[M01].[Y0001]')"/></p>
+					</xsl:when>
+					<xsl:otherwise>
+						<p></p>
+					</xsl:otherwise>
+				</xsl:choose>
+			</div>
 			<div id="rg-{position()}" class="hidden">
 				<xsl:apply-templates select=".//tei:front|.//tei:body|.//tei:back"/>
 			</div>
