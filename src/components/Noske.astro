@@ -576,6 +576,19 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 					allUl.forEach((ul) => {
 						ul.style.display = "";
 					});
+					// Reset span and br elements
+					const allSpan = document.querySelectorAll(
+						"#rg-pers span, #rg-place span",
+					) as NodeListOf<HTMLElement>;
+					allSpan.forEach((span) => {
+						span.style.display = "";
+					});
+					const allBr = document.querySelectorAll(
+						"#rg-pers br, #rg-place br",
+					) as NodeListOf<HTMLElement>;
+					allBr.forEach((br) => {
+						br.style.display = "";
+					});
 				});
 
 				// Add event listener for filter with autocomplete
@@ -631,9 +644,13 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 							const h5Elements = container.querySelectorAll("h5") as NodeListOf<HTMLElement>;
 
 							h5Elements.forEach((h5Element) => {
-								// Find the next UL sibling (skip any span/br elements)
+								// Find the next UL sibling and collect span/br elements after h5
 								let nextUl = h5Element.nextElementSibling;
+								const elementsToToggle: HTMLElement[] = [];
 								while (nextUl && nextUl.tagName !== "UL") {
+									if (nextUl.tagName === "SPAN" || nextUl.tagName === "BR") {
+										elementsToToggle.push(nextUl as HTMLElement);
+									}
 									nextUl = nextUl.nextElementSibling;
 								}
 								if (nextUl) {
@@ -657,14 +674,17 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 
 									if (!regex) {
 										h5Element.style.display = "";
+										elementsToToggle.forEach((el) => (el.style.display = ""));
 										ulElement.style.display = "none";
 										ulElement.classList.add("hidden");
 									} else if (hasVisibleItems) {
 										h5Element.style.display = "";
+										elementsToToggle.forEach((el) => (el.style.display = ""));
 										ulElement.style.display = "";
 										ulElement.classList.remove("hidden");
 									} else {
 										h5Element.style.display = "none";
+										elementsToToggle.forEach((el) => (el.style.display = "none"));
 										ulElement.style.display = "none";
 									}
 								}
@@ -774,6 +794,19 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 					allUl.forEach((ul) => {
 						ul.style.display = "";
 					});
+					// Reset span and br elements
+					const allSpan = document.querySelectorAll(
+						"#rg-pers span, #rg-place span",
+					) as NodeListOf<HTMLElement>;
+					allSpan.forEach((span) => {
+						span.style.display = "";
+					});
+					const allBr = document.querySelectorAll(
+						"#rg-pers br, #rg-place br",
+					) as NodeListOf<HTMLElement>;
+					allBr.forEach((br) => {
+						br.style.display = "";
+					});
 				});
 
 				// Add event listener for filter with autocomplete
@@ -829,9 +862,13 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 							const h5Elements = container.querySelectorAll("h5") as NodeListOf<HTMLElement>;
 
 							h5Elements.forEach((h5Element) => {
-								// Find the next UL sibling (skip any span/br elements)
+								// Find the next UL sibling and collect span/br elements after h5
 								let nextUl = h5Element.nextElementSibling;
+								const elementsToToggle: HTMLElement[] = [];
 								while (nextUl && nextUl.tagName !== "UL") {
+									if (nextUl.tagName === "SPAN" || nextUl.tagName === "BR") {
+										elementsToToggle.push(nextUl as HTMLElement);
+									}
 									nextUl = nextUl.nextElementSibling;
 								}
 								if (nextUl) {
@@ -855,14 +892,17 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 
 									if (!regex) {
 										h5Element.style.display = "";
+										elementsToToggle.forEach((el) => (el.style.display = ""));
 										ulElement.style.display = "none";
 										ulElement.classList.add("hidden");
 									} else if (hasVisibleItems) {
 										h5Element.style.display = "";
+										elementsToToggle.forEach((el) => (el.style.display = ""));
 										ulElement.style.display = "";
 										ulElement.classList.remove("hidden");
 									} else {
 										h5Element.style.display = "none";
+										elementsToToggle.forEach((el) => (el.style.display = "none"));
 										ulElement.style.display = "none";
 									}
 								}
@@ -1064,6 +1104,19 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 				) as NodeListOf<HTMLElement>;
 				allUl.forEach((ul) => {
 					ul.style.display = "";
+				});
+				// Reset span and br elements
+				const allSpan = document.querySelectorAll(
+					"#rg-pers span, #rg-place span",
+				) as NodeListOf<HTMLElement>;
+				allSpan.forEach((span) => {
+					span.style.display = "";
+				});
+				const allBr = document.querySelectorAll(
+					"#rg-pers br, #rg-place br",
+				) as NodeListOf<HTMLElement>;
+				allBr.forEach((br) => {
+					br.style.display = "";
 				});
 			});
 
