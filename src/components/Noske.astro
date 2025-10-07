@@ -7,9 +7,7 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 <div>
 	<div class="flex flex-row">
 		<Register />
-		<div
-			class="xs:flex-col sticky top-24 flex w-[100%] flex-row sm:flex-col md:flex-col lg:flex-col"
-		>
+		<div class="sticky top-24 flex w-[100%] flex-col">
 			<div class="w-[100%] p-4 text-center">
 				<div
 					class="xs:max-w-[200px] mx-auto max-w-[1000px] sm:max-w-[300px] md:max-w-[600px] lg:max-w-[800px]"
@@ -146,7 +144,7 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 		hits: {
 			id: "hitsbox",
 			css: {
-				div: "grid grid-cols-1 gap-2 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 xl:grid-cols-1 xs:grid-cols-1",
+				div: "p-5 grid grid-cols-1 gap-2 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 xl:grid-cols-1 xs:grid-cols-1",
 				table: "table-auto",
 				kwic: "text-red-500 text-lg",
 				trHead: "bg-gray-200",
