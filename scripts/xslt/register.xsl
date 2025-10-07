@@ -8,8 +8,12 @@
     version="2.0" exclude-result-prefixes="#all">
 
 <xsl:output encoding="UTF-8" media-type="text/html" method="xhtml" indent="yes" omit-xml-declaration="yes"/>
+
+<xsl:variable name="termlabels" select="document('../../data/register/termlabels-persnames.xml')"/>
+<xsl:variable name="termlabelsPlaces" select="document('../../data/register/termlabels-placenames.xml')"/>
+
 <xsl:template match="/">
-		<xsl:for-each select="document('../../data/register/abc_register_persons.xml')//tei:TEI">
+		<xsl:for-each select="document('../../data/register/abacus-index_persnames.xml')//tei:TEI">
 			<div id="rg-pers" class="hidden">
 				<xsl:for-each-group select=".//tei:person" group-by="@role">
 						<h5 class="cursor-pointer inline" title="Personenkategorie ausklappen/einklappen">
@@ -22,16 +26,25 @@
 						</h5>&#160;&#160;<span id="persType" data-str="{current-grouping-key()}" class="cursor-pointer inline-block text-red-600" title="Nach Personenkategorie '{current-grouping-key()}' suchen">»»</span><br/>
 							<ul class="hidden">
 								<xsl:for-each select="current-group()">
-									<xsl:sort select=".//tei:persName[@type='main']" data-type="text" order="ascending"/>
+									<xsl:sort select="if ($termlabels//term[@key=current()/.//tei:persName[@type='main']/@key]) then $termlabels//term[@key=current()/.//tei:persName[@type='main']/@key] else current()/.//tei:persName[@type='main']" data-type="text" order="ascending"/>
+									<xsl:variable name="personKey" select=".//tei:persName[@type='main']/@key"/>
+									<xsl:variable name="termLabel" select="$termlabels//term[@key=$personKey]"/>
 									<li data-link="wk-{position()}" data-str="{.//tei:persName/@key}" class="text-red-500 cursor-pointer whitespace-pre">
-										<xsl:value-of select=".//tei:persName[@type='main']"/>
+										<xsl:choose>
+											<xsl:when test="$termLabel != ''">
+												<xsl:value-of select="$termLabel"/>
+											</xsl:when>
+											<xsl:otherwise>
+												<xsl:value-of select=".//tei:persName[@type='main']"/>
+											</xsl:otherwise>
+										</xsl:choose>
 									</li>
 								</xsl:for-each>
 							</ul>
 				</xsl:for-each-group>
 			</div>
 		</xsl:for-each>
-		<xsl:for-each select="document('../../data/register/abc_register_places.xml')//tei:TEI">
+		<xsl:for-each select="document('../../data/register/abacus-index_placenames.xml')//tei:TEI">
 			<div id="rg-place" class="hidden">
 				<xsl:for-each-group select=".//tei:place" group-by="@type">
 					<xsl:sort select="
@@ -65,13 +78,22 @@
 							<xsl:when test="current-grouping-key()='vill'">Dorf</xsl:when>
 							<xsl:otherwise><xsl:value-of select="current-grouping-key()"/></xsl:otherwise>
 						</xsl:choose>
-						(<xsl:value-of select="current-grouping-key()"/>)
+						<!--(<xsl:value-of select="current-grouping-key()"/>)-->
 					</h5>&#160;&#160;<span id="placeType" data-str="{current-grouping-key()}" class="cursor-pointer inline-block text-red-600" title="Nach Ortskategorie '{current-grouping-key()}' suchen">»»</span><br/>
 						<ul class="hidden">
 							<xsl:for-each select="current-group()">
-								<xsl:sort select=".//tei:placeName[@type='main']" data-type="text" order="ascending"/>
+								<xsl:sort select="if ($termlabelsPlaces//term[@key=current()/.//tei:placeName[@type='main']/@key]) then $termlabelsPlaces//term[@key=current()/.//tei:placeName[@type='main']/@key] else current()/.//tei:placeName[@type='main']" data-type="text" order="ascending"/>
+								<xsl:variable name="placeKey" select=".//tei:placeName[@type='main']/@key"/>
+								<xsl:variable name="termLabel" select="$termlabelsPlaces//term[@key=$placeKey]"/>
 								<li data-link="wk-{position()}" data-str="{.//tei:placeName/@key}" class="text-red-500 cursor-pointer whitespace-pre">
-									<xsl:value-of select=".//tei:placeName[@type='main']"/>
+									<xsl:choose>
+										<xsl:when test="$termLabel != ''">
+											<xsl:value-of select="$termLabel"/>
+										</xsl:when>
+										<xsl:otherwise>
+											<xsl:value-of select=".//tei:placeName[@type='main']"/>
+										</xsl:otherwise>
+									</xsl:choose>
 								</li>
 							</xsl:for-each>
 						</ul>
