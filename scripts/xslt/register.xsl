@@ -11,16 +11,18 @@
 
 <xsl:variable name="termlabels" select="document('../../data/register/termlabels-persnames.xml')"/>
 <xsl:variable name="termlabelsPlaces" select="document('../../data/register/termlabels-placenames.xml')"/>
+<xsl:variable name="termlabels1" select="document('../../data/register/termlabels1.xml')"/>
 
 <xsl:template match="/">
 		<xsl:for-each select="document('../../data/register/abacus-index_persnames.xml')//tei:TEI">
 			<div id="rg-pers" class="hidden">
 				<xsl:for-each-group select=".//tei:person" group-by="@role">
 						<h5 class="cursor-pointer inline" title="Personenkategorie ausklappen/einklappen">
+							<xsl:variable name="persTypeLabel" select="$termlabels1//terms[@key='persType']/term[@key=current-grouping-key()]"/>
 							<xsl:choose>
-								<xsl:when test="current-grouping-key()='bibl'">biblisch</xsl:when>
-								<xsl:when test="current-grouping-key()='hist'">historisch</xsl:when>
-								<xsl:when test="current-grouping-key()='myth'">mythologisch</xsl:when>
+								<xsl:when test="$persTypeLabel != ''">
+									<xsl:value-of select="$persTypeLabel"/>
+								</xsl:when>
 								<xsl:otherwise><xsl:value-of select="current-grouping-key()"/></xsl:otherwise>
 							</xsl:choose>
 						</h5>&#160;&#160;<span id="persType" data-str="{current-grouping-key()}" class="cursor-pointer inline-block text-red-600" title="Nach Personenkategorie '{current-grouping-key()}' suchen">»»</span><br/>
@@ -63,19 +65,11 @@
 						else current-grouping-key()"
 						data-type="text" order="ascending"/>
 					<h5 class="cursor-pointer inline" title="Ortskategorie ausklappen/einklappen">
+						<xsl:variable name="placeTypeLabel" select="$termlabels1//terms[@key='placeType']/term[@key=current-grouping-key()]"/>
 						<xsl:choose>
-							<xsl:when test="current-grouping-key()='city'">Stadt</xsl:when>
-							<xsl:when test="current-grouping-key()='cont'">Kontinent</xsl:when>
-							<xsl:when test="current-grouping-key()='coun'">Land</xsl:when>
-							<xsl:when test="current-grouping-key()='dist'">Bezirk</xsl:when>
-							<xsl:when test="current-grouping-key()='lake'">See</xsl:when>
-							<xsl:when test="current-grouping-key()='moun'">Berg</xsl:when>
-							<xsl:when test="current-grouping-key()='rive'">Fluss</xsl:when>
-							<xsl:when test="current-grouping-key()='sea'">Meer</xsl:when>
-							<xsl:when test="current-grouping-key()='sett'">Siedlung</xsl:when>
-							<xsl:when test="current-grouping-key()='stre'">Straße</xsl:when>
-							<xsl:when test="current-grouping-key()='subu'">Vorstadt</xsl:when>
-							<xsl:when test="current-grouping-key()='vill'">Dorf</xsl:when>
+							<xsl:when test="$placeTypeLabel != ''">
+								<xsl:value-of select="$placeTypeLabel"/>
+							</xsl:when>
 							<xsl:otherwise><xsl:value-of select="current-grouping-key()"/></xsl:otherwise>
 						</xsl:choose>
 						<!--(<xsl:value-of select="current-grouping-key()"/>)-->
