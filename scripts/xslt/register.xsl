@@ -116,7 +116,7 @@
 			</ul>
 			<div id="info-{position()}" class="hidden text-xs py-4">
 				<xsl:variable name="filename" select="replace(tokenize(document-uri(/), '/')[last()], '\.xml$', '.jpg')"/>
-				<img src="/{$filename}" alt="{.//tei:titleStmt/tei:title[1]}" title="{.//tei:titleStmt/tei:title[1]}" class="float-left mr-4 mb-2" />
+				<img src="/{$filename}" alt="{.//tei:titleStmt/tei:title[1]}" title="{.//tei:titleStmt/tei:title[1]}" class="float-left mr-4 mb-2 cursor-pointer" data-content="{.//tei:titlePage[1]/preceding-sibling::tei:pb[1]/@xml:id}" />
 				<xsl:choose>
 					<xsl:when test="contains(.//tei:titleStmt/tei:title[1], 'Augustini Feuriges Hertz')">
 						<p class="py-1">Abraham â Sancta Clara: AUGUSTINI Feuriges Hertz Tragt Ein Hertzliches Mitleyden mit den armen im Feeg=Feuer Leydenden Seelen [...] Gedruckt zu Saltzburg bey Melchior Haan [...] Anno 1693.</p>

@@ -54,6 +54,19 @@ const html = await readFile("edition/register.html", "utf-8");
 		});
 	});
 
+	// Click handler for the thumbnails in the Register
+	const registerThumbnails = document.querySelectorAll<HTMLElement>("#abacus-overview img");
+	Array.from(registerThumbnails).forEach((element) => {
+		element.addEventListener("click", (e) => {
+			const target = e.target as HTMLImageElement;
+			const id = target.dataset.content;
+
+			if (id) {
+				loadContent(id, "noske-synoptic-view", "", "");
+			}
+		});
+	});
+
 	// Click handler for Person and Place categories in the Register
 	const registerPers = document.querySelectorAll<HTMLElement>("#rg-pers h5, #rg-place h5");
 
