@@ -19,12 +19,9 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 					<div id="noske-search" class="text-left"></div>
 					<div id="example" class="cursor-pointer py-4">
 						<strong
-							><span class="arrow inline-block rotate-90 text-red-600">&raquo;</span>&nbsp;<h5
-								class="inline"
-							>
+							><span class="arrow inline-block text-red-600">&#8595;</span>&nbsp;<h5 class="inline">
 								Beispiele
-							</h5>&nbsp;<span class="arrow inline-block rotate-90 text-red-600">&raquo;</span
-							></strong
+							</h5>&nbsp;<span class="arrow inline-block text-red-600">&#8595;</span></strong
 						>
 					</div>
 					<div id="examplelist" class="hidden text-left">
@@ -672,6 +669,7 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 
 									if (!regex) {
 										h5Element.style.display = "";
+										h5Element.style.fontWeight = "normal";
 										elementsToToggle.forEach((el) => (el.style.display = ""));
 										ulElement.style.display = "none";
 										ulElement.classList.add("hidden");
@@ -890,6 +888,7 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 
 									if (!regex) {
 										h5Element.style.display = "";
+										h5Element.style.fontWeight = "normal";
 										elementsToToggle.forEach((el) => (el.style.display = ""));
 										ulElement.style.display = "none";
 										ulElement.classList.add("hidden");
@@ -1019,7 +1018,7 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 				const sortedSections = Object.entries(abc).sort((a, b) => diacriticSort(a[0], b[0]));
 				for (const [key, value] of sortedSections) {
 					const sortedWords = value.sort((a, b) => diacriticSort(a, b));
-					wordslistHtml.innerHTML += `<div id="rg-abc"><h4 class="cursor-pointer">${key}</h4><ul class="hidden pl-2">${sortedWords.join("")}</ul></div>`;
+					wordslistHtml.innerHTML += `<div id="rg-abc"><h4 class="cursor-pointer"><span class="text-red-600">&#8595; </span>${key}</h4><ul class="hidden pl-2">${sortedWords.join("")}</ul></div>`;
 				}
 			} else {
 				let wordTypes: {
@@ -1050,7 +1049,7 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 					}
 				});
 
-				wordslistHtml.innerHTML += `<div id="rg-abc"><h4 class="cursor-pointer">Kontrahierte Formen I</h4><ul class="hidden pl-2" id="rg-abc-types"></ul></div>`;
+				wordslistHtml.innerHTML += `<div id="rg-abc"><h4 class="cursor-pointer"><span class="text-red-600">&#8595; </span>Kontrahierte Formen I</h4><ul class="hidden pl-2" id="rg-abc-types"></ul></div>`;
 
 				// Sort word types using diacriticSort
 				const sortedWordTypes = Object.entries(wordTypes).sort((a, b) => diacriticSort(a[0], b[0]));
@@ -1058,12 +1057,12 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 					const sortedWords = value.sort((a, b) => diacriticSort(a, b));
 					if (key !== "Kontrahierte-Formen-II" && key !== "Stuttgart-Tübingen-TagSet") {
 						document.getElementById("rg-abc-types")!.innerHTML +=
-							`<h4 class="cursor-pointer">${key.replace("-", " ").replace("-", " ")}</h4><ul class="hidden pl-2">${sortedWords.join("")}</ul>`;
+							`<h4 class="cursor-pointer"><span class="text-red-600">&#8595; </span>${key.replace("-", " ").replace("-", " ")}</h4><ul class="hidden pl-2">${sortedWords.join("")}</ul>`;
 					} else {
 						if (key !== "Stuttgart-Tübingen-TagSet") {
 							key = key.replace("-", " ").replace("-", " ");
 						}
-						wordslistHtml.innerHTML += `<div id="rg-abc"><h4 class="cursor-pointer">${key}</h4><ul class="hidden pl-2">${sortedWords.join("")}</ul></div>`;
+						wordslistHtml.innerHTML += `<div id="rg-abc"><h4 class="cursor-pointer"><span class="text-red-600">&#8595; </span>${key}</h4><ul class="hidden pl-2">${sortedWords.join("")}</ul></div>`;
 					}
 				}
 			}
@@ -1194,6 +1193,7 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 								if (!regex) {
 									// When filter is empty, hide all ULs
 									h4Element.style.display = "";
+									h4Element.style.fontWeight = "normal";
 									nextUl.style.display = "none";
 									nextUl.classList.add("hidden");
 								} else if (hasVisibleItems) {
@@ -1297,17 +1297,21 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 
 			Array.from(rgAbc).forEach((item) => {
 				item.addEventListener("click", (e) => {
-					// @ts-ignore
 					const target = e.target as HTMLElement;
-					const ul = target.nextElementSibling as HTMLElement;
-					if (ul.classList.contains("hidden")) {
-						ul.classList.remove("hidden");
-						ul.style.display = "";
-						target.style.fontWeight = "bold";
-					} else {
-						ul.classList.add("hidden");
-						ul.style.display = "none";
-						target.style.fontWeight = "normal";
+					// Find the h4 element (whether clicked directly or on a child element)
+					const h4Element = target.closest("h4") as HTMLElement;
+
+					if (h4Element) {
+						const ul = h4Element.nextElementSibling as HTMLElement;
+						if (ul.classList.contains("hidden")) {
+							ul.classList.remove("hidden");
+							ul.style.display = "";
+							h4Element.style.fontWeight = "bold";
+						} else {
+							ul.classList.add("hidden");
+							ul.style.display = "none";
+							h4Element.style.fontWeight = "normal";
+						}
 					}
 				});
 			});
@@ -1338,12 +1342,12 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 		// Toggle arrow rotation
 		const arrows = exampleDiv.querySelectorAll(".arrow") as NodeListOf<HTMLElement>;
 		arrows.forEach((arrow) => {
-			if (arrow.classList.contains("rotate-90")) {
-				arrow.classList.remove("rotate-90");
-				arrow.classList.add("-rotate-90");
+			if (arrow.classList.contains("rotate-180")) {
+				arrow.classList.remove("rotate-180");
+				//arrow.classList.add("-rotate-90");
 			} else {
-				arrow.classList.remove("-rotate-90");
-				arrow.classList.add("rotate-90");
+				//arrow.classList.remove("-rotate-90");
+				arrow.classList.add("rotate-180");
 			}
 		});
 	});

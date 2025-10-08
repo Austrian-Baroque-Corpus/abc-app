@@ -12,13 +12,12 @@
 <xsl:variable name="termlabels" select="document('../../data/register/termlabels-persnames.xml')"/>
 <xsl:variable name="termlabelsPlaces" select="document('../../data/register/termlabels-placenames.xml')"/>
 <xsl:variable name="termlabels1" select="document('../../data/register/termlabels1.xml')"/>
-<xsl:variable name="heute" select="current-date()"/>
 
 <xsl:template match="/">
 		<xsl:for-each select="document('../../data/register/abacus-index_persnames.xml')//tei:TEI">
 			<div id="rg-pers" class="hidden">
 				<xsl:for-each-group select=".//tei:person" group-by="@role">
-						<h5 class="cursor-pointer inline" title="Personenkategorie ausklappen/einklappen">
+						<h5 class="cursor-pointer inline" title="Personenkategorie ausklappen/einklappen"><span class="text-red-600">&#8595; </span>
 							<xsl:variable name="persTypeLabel" select="$termlabels1//terms[@key='persType']/term[@key=current-grouping-key()]"/>
 							<xsl:choose>
 								<xsl:when test="$persTypeLabel != ''">
@@ -26,7 +25,7 @@
 								</xsl:when>
 								<xsl:otherwise><xsl:value-of select="current-grouping-key()"/></xsl:otherwise>
 							</xsl:choose>
-						</h5>&#160;&#160;<span id="persType" data-str="{current-grouping-key()}" class="cursor-pointer inline-block text-red-600" title="Nach Personenkategorie '{current-grouping-key()}' suchen">»»</span><br/>
+						</h5><span id="persType" data-str="{current-grouping-key()}" class="cursor-pointer inline-block text-red-600" title="Nach Personenkategorie '{current-grouping-key()}' suchen">&#160;&#10143;</span><br/>
 							<ul class="hidden">
 								<xsl:for-each select="current-group()">
 									<xsl:sort select="if ($termlabels//term[@key=current()/.//tei:persName[@type='main']/@key]) then $termlabels//term[@key=current()/.//tei:persName[@type='main']/@key] else current()/.//tei:persName[@type='main']" data-type="text" order="ascending"/>
@@ -51,21 +50,21 @@
 			<div id="rg-place" class="hidden">
 				<xsl:for-each-group select=".//tei:place" group-by="@type">
 					<xsl:sort select="
-						if (current-grouping-key()='city') then 'Stadt'
-						else if (current-grouping-key()='cont') then 'Kontinent'
-						else if (current-grouping-key()='coun') then 'Land'
-						else if (current-grouping-key()='dist') then 'Bezirk'
-						else if (current-grouping-key()='lake') then 'See'
-						else if (current-grouping-key()='moun') then 'Berg'
-						else if (current-grouping-key()='rive') then 'Fluss'
-						else if (current-grouping-key()='sea') then 'Meer'
-						else if (current-grouping-key()='sett') then 'Siedlung'
-						else if (current-grouping-key()='stre') then 'Straße'
-						else if (current-grouping-key()='subu') then 'Vorstadt'
-						else if (current-grouping-key()='vill') then 'Dorf'
+						if (current-grouping-key()='city') then 'Städte'
+						else if (current-grouping-key()='cont') then 'Kontinente'
+						else if (current-grouping-key()='coun') then 'Länder'
+						else if (current-grouping-key()='dist') then 'Regionen'
+						else if (current-grouping-key()='lake') then 'Seen'
+						else if (current-grouping-key()='moun') then 'Berge'
+						else if (current-grouping-key()='rive') then 'Flüsse'
+						else if (current-grouping-key()='sea') then 'Meere'
+						else if (current-grouping-key()='sett') then 'Siedlungen'
+						else if (current-grouping-key()='stre') then 'Straßen und Plätze in Wien'
+						else if (current-grouping-key()='subu') then 'Stadtteile'
+						else if (current-grouping-key()='vill') then 'Dörfer'
 						else current-grouping-key()"
 						data-type="text" order="ascending"/>
-					<h5 class="cursor-pointer inline" title="Ortskategorie ausklappen/einklappen">
+					<h5 class="cursor-pointer inline" title="Ortskategorie ausklappen/einklappen"><span class="text-red-600">&#8595; </span>
 						<xsl:variable name="placeTypeLabel" select="$termlabels1//terms[@key='placeType']/term[@key=current-grouping-key()]"/>
 						<xsl:choose>
 							<xsl:when test="$placeTypeLabel != ''">
@@ -74,7 +73,7 @@
 							<xsl:otherwise><xsl:value-of select="current-grouping-key()"/></xsl:otherwise>
 						</xsl:choose>
 						<!--(<xsl:value-of select="current-grouping-key()"/>)-->
-					</h5>&#160;&#160;<span id="placeType" data-str="{current-grouping-key()}" class="cursor-pointer inline-block text-red-600" title="Nach Ortskategorie '{current-grouping-key()}' suchen">»»</span><br/>
+					</h5><span id="placeType" data-str="{current-grouping-key()}" class="cursor-pointer inline-block text-red-600" title="Nach Ortskategorie '{current-grouping-key()}' suchen">&#160;&#10143;</span><br/>
 						<ul class="hidden">
 							<xsl:for-each select="current-group()">
 								<xsl:sort select="if ($termlabelsPlaces//term[@key=current()/.//tei:placeName[@type='main']/@key]) then $termlabelsPlaces//term[@key=current()/.//tei:placeName[@type='main']/@key] else current()/.//tei:placeName[@type='main']" data-type="text" order="ascending"/>
@@ -96,7 +95,7 @@
 			</div>
 	</xsl:for-each>
 	<div id="abacus-overview" class="py-4">
-		<img src="/Buecher.jpg" alt="Buecher" title="Buecher" />
+		<img src="/Buecher.jpg" alt="Bücher" title="Bücher" />
 		<xsl:for-each select="collection('../../data/editions')//tei:TEI">
 			<xsl:sort select="
 				if (contains(.//tei:titleStmt/tei:title[1], 'Augustini Feuriges Hertz')) then 4
@@ -122,27 +121,27 @@
 					<xsl:when test="contains(.//tei:titleStmt/tei:title[1], 'Augustini Feuriges Hertz')">
 						<p class="py-1">Abraham â Sancta Clara: AUGUSTINI Feuriges Hertz Tragt Ein Hertzliches Mitleyden mit den armen im Feeg=Feuer Leydenden Seelen [...] Gedruckt zu Saltzburg bey Melchior Haan [...] Anno 1693.</p>
 						<p class="py-1">Österreichische Nationalbibliothek, Sammlung von Handschriften und alten Drucken (Signatur 484.862-A Alt)</p>
-						<p class="py-1">Zitation: Abraham â Sancta Clara: Augustini Feuriges Hertz. Salzburg, 1693. (Digitale Ausgabe) . In: ABaC:us – Austrian Baroque Corpus. Hrsg. von Claudia Resch und Ulrike Czeitschner. &lt;<a href="https://abacus.acdh.oeaw.ac.at/edition/AFH_n0003" class="text-red-500">hhttps://abacus.acdh.oeaw.ac.at/edition/AFH_n0003</a>&gt; abgerufen am <xsl:value-of select="format-date($heute,'[D01].[M01].[Y0001]')"/></p>
+						<p class="py-1">Zitation: Abraham â Sancta Clara: Augustini Feuriges Hertz. Salzburg, 1693. (Digitale Ausgabe) . In: ABaC:us – Austrian Baroque Corpus. Hrsg. von Claudia Resch und Ulrike Czeitschner. &lt;<a href="https://abacus.acdh-ch-dev.oeaw.ac.at/edition/AFH_n0003" class="text-red-500">hhttps://abacus.acdh.oeaw.ac.at/edition/AFH_n0003</a>&gt; abgerufen am <span class="today"></span>.</p>
 					</xsl:when>
 					<xsl:when test="contains(.//tei:titleStmt/tei:title[1], 'Lösch Wienn')">
 						<p class="py-1">Abraham â Sancta Clara: Lösch Wienn / Das ist Ein Bewögliche Anmahnung zu der Kays. Residentz=Statt Wienn in Oesterreich [...] Gedruckt zu Wien / bey Peter Paul Vivian / 1680.</p>
 						<p class="py-1">Universitätsbibliothek Graz, Rara Sammlung (Signatur I 25.896 Rara II)</p>
-						<p class="py-1">Zitation: Abraham â Sancta Clara: Lösch Wienn. Wien, 1680. (Digitale Ausgabe) . In: ABaC:us – Austrian Baroque Corpus. Hrsg. von Claudia Resch und Ulrike Czeitschner. &lt;<a href="https://abacus.acdh.oeaw.ac.at/edition/LW_a0007" class="text-red-500">https://abacus.acdh.oeaw.ac.at/edition/LW_a0007</a>&gt; abgerufen am <xsl:value-of select="format-date($heute,'[D01].[M01].[Y0001]')"/></p>
+						<p class="py-1">Zitation: Abraham â Sancta Clara: Lösch Wienn. Wien, 1680. (Digitale Ausgabe) . In: ABaC:us – Austrian Baroque Corpus. Hrsg. von Claudia Resch und Ulrike Czeitschner. &lt;<a href="https://abacus.acdh-ch-dev.oeaw.ac.at/edition/LW_a0007" class="text-red-500">https://abacus.acdh.oeaw.ac.at/edition/LW_a0007</a>&gt; abgerufen am <span class="today"></span>.</p>
 					</xsl:when>
 					<xsl:when test="contains(.//tei:titleStmt/tei:title[1], 'Mercks Wienn')">
 						<p class="py-1">Abraham â Sancta Clara: Mercks Wienn / Das ist Deß wütenden Todts ein vmbständige Beschreibung Jn Der berühmten Haubt vnd Kayserl. Residentz Statt in Oesterreich [...] . Gedruckt zu Wienn / bey Peter Paul Vivian / der löbl: Universitet Buchdrucker 1680.</p>
 						<p class="py-1">Stiftsbibliothek Melk (Signatur 48.022)</p>
-						<p class="py-1">Zitation: Abraham â Sancta Clara: Mercks Wienn. Wien, 1680. (Digitale Ausgabe) . In: ABaC:us – Austrian Baroque Corpus. Hrsg. von Claudia Resch und Ulrike Czeitschner. &lt;<a href="https://abacus.acdh.oeaw.ac.at/edition/MW_a0005" class="text-red-500">https://abacus.acdh.oeaw.ac.at/edition/MW_a0005</a>&gt; abgerufen am <xsl:value-of select="format-date($heute,'[D01].[M01].[Y0001]')"/></p>
+						<p class="py-1">Zitation: Abraham â Sancta Clara: Mercks Wienn. Wien, 1680. (Digitale Ausgabe) . In: ABaC:us – Austrian Baroque Corpus. Hrsg. von Claudia Resch und Ulrike Czeitschner. &lt;<a href="https://abacus.acdh-ch-dev.oeaw.ac.at/edition/MW_a0005" class="text-red-500">https://abacus.acdh.oeaw.ac.at/edition/MW_a0005</a>&gt; abgerufen am <span class="today"></span>.</p>
 					</xsl:when>
 					<xsl:when test="contains(.//tei:titleStmt/tei:title[1], 'Grosse Todten Bruderschaft')">
 						<p class="py-1">[Abraham â Sancta Clara]: Grosse Todten Bruderschaft / Das ist Ein kurtzer Entwurff Deß Sterblichen Lebens [...] Gedruckt im Jahr 1681.</p>
 						<p class="py-1">Österreichische Nationalbibliothek, Sammlung von Handschriften und alten Drucken (Signatur 298.002-A)</p>
-						<p class="py-1">Zitation: Abraham â Sancta Clara: Grosse Todten Bruderschaft. Wien, 1681. (Digitale Ausgabe) . In: ABaC:us – Austrian Baroque Corpus. Hrsg. von Claudia Resch und Ulrike Czeitschner. &lt;<a href="https://abacus.acdh.oeaw.ac.at/edition/TB_i0009" class="text-red-500">https://abacus.acdh.oeaw.ac.at/edition/TB_i0009</a>&gt; abgerufen am <xsl:value-of select="format-date($heute,'[D01].[M01].[Y0001]')"/></p>
+						<p class="py-1">Zitation: Abraham â Sancta Clara: Grosse Todten Bruderschaft. Wien, 1681. (Digitale Ausgabe) . In: ABaC:us – Austrian Baroque Corpus. Hrsg. von Claudia Resch und Ulrike Czeitschner. &lt;<a href="https://abacus.acdh-ch-dev.oeaw.ac.at/edition/TB_i0009" class="text-red-500">https://abacus.acdh.oeaw.ac.at/edition/TB_i0009</a>&gt; abgerufen am <span class="today"></span>.</p>
 					</xsl:when>
 					<xsl:when test="contains(.//tei:titleStmt/tei:title[1], 'Todten-Capelle')">
 						<p class="py-1">[Abraham â Sancta Clara]: Besonders meublirt- und gezierte Todten=Capelle / Oder Allgemeiner Todten=Spiegel / [...] Nürnberg / Bey Christoph Weigel [...] Würtzburg / Druckts Marrtin Frantz Hertz. An. 1710.</p>
 						<p class="py-1">University Library Illinois, Emblem Collection of the University of Illinois, Urbana-Champaign (Signatur 832Ab8)</p>
-						<p class="py-1">Zitation: Abraham â Sancta Clara: Todten-Capelle. Würzburg, 1710. (Digitale Ausgabe) . In: ABaC:us – Austrian Baroque Corpus. Hrsg. von Claudia Resch und Ulrike Czeitschner. &lt;<a href="https://abacus.acdh.oeaw.ac.at/edition/TC_i0008" class="text-red-500">https://abacus.acdh.oeaw.ac.at/edition/TC_i0008</a>&gt; abgerufen am <xsl:value-of select="format-date($heute,'[D01].[M01].[Y0001]')"/></p>
+						<p class="py-1">Zitation: Abraham â Sancta Clara: Todten-Capelle. Würzburg, 1710. (Digitale Ausgabe) . In: ABaC:us – Austrian Baroque Corpus. Hrsg. von Claudia Resch und Ulrike Czeitschner. &lt;<a href="https://abacus.acdh-ch-dev.oeaw.ac.at/edition/TC_i0008" class="text-red-500">https://abacus.acdh.oeaw.ac.at/edition/TC_i0008</a>&gt; abgerufen am <span class="today"></span>.</p>
 					</xsl:when>
 					<xsl:otherwise>
 						<p></p>
