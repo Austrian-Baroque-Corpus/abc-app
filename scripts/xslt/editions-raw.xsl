@@ -27,6 +27,9 @@
 <xsl:variable name="doc_title">
 		<xsl:value-of select=".//tei:titleStmt/tei:title[1]/text()"/>
 </xsl:variable>
+<xsl:variable name="book_title">
+		<xsl:value-of select=".//tei:sourceDesc/tei:bibl[@type='short']"/>
+</xsl:variable>
 
 <xsl:template match="/">
 <div class="p-2 text-left border-b border-b-gray-300" id="edition-content" data-prev="{$prev}" data-next="{$next}">
@@ -51,6 +54,11 @@
 			</div>
 		</div>
 	</div>
+</div>
+<div id="citation-info" class="border-x-gray-500 p-2 text-sm">
+	<xsl:text>Zitation: </xsl:text><xsl:value-of select="$book_title"/><xsl:text> (Digitale Ausgabe) </xsl:text>
+	<xsl:value-of select="//tei:pb[1]/@n"/><xsl:text>. In: ABaC:us – Austrian Baroque Corpus. Hrsg. von Claudia Resch und
+	Ulrike Czeitschner. &lt;</xsl:text><a href="edition/{$link}" id="citurl"><xsl:text>edition/</xsl:text><xsl:value-of select="$link"/></a><xsl:text>&gt; abgerufen am </xsl:text><span id="cittoday"></span><xsl:text>.</xsl:text>
 </div>
 </xsl:template>
 

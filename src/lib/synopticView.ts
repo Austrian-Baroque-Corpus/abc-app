@@ -44,6 +44,8 @@ async function transform(options: {
 			}
 
 			container.innerHTML = html;
+			// complete citation after HTML is inserted into DOM
+			completeCitation(options.fileName);
 			container.classList.add("h-auto");
 			scroll_synoptic();
 		}
@@ -65,6 +67,25 @@ function removeColumnContent(id: string) {
 	const result = document.getElementById(id);
 	if (result) {
 		result.innerHTML = "";
+	}
+}
+
+//	complete citation for current document and page
+function completeCitation(id: string) {
+	const cittoday = document.getElementById("cittoday");
+	const citurl = document.getElementById("citurl");
+	if (citurl) {
+		const currentsrv = window.location.origin;
+		//const currentsrv = "https://abacus.acdh.oeaw.ac.at";
+		citurl.innerText = currentsrv + "/edition/" + id;
+	}
+	if (cittoday) {
+		const now = new Date();
+		const day = String(now.getDate()).padStart(2, "0");
+		const month = String(now.getMonth() + 1).padStart(2, "0");
+		const year = now.getFullYear();
+		const formattedDate = `${day}.${month}.${year}`;
+		cittoday.textContent = formattedDate;
 	}
 }
 
