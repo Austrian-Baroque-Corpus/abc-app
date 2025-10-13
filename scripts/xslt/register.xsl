@@ -157,24 +157,26 @@
 
 <xsl:template match="tei:front">
 	<div>
-		<h5>Titelei</h5>
+		<h5 class="text-sm">Titelei</h5>
 		<ul>
 		<xsl:for-each select=".//tei:pb">
-			<li data-link="{@xml:id}" class="p-2 text-red-500 inline cursor-pointer whitespace-pre">
+			<li data-link="{@xml:id}" class="text-sm text-red-500 inline cursor-pointer">
 				<xsl:value-of select="@n"/>
 			</li>
+			<xsl:if test="position() != last()"><li class="inline text-sm">/</li></xsl:if>
 		</xsl:for-each>
 		</ul>
 	</div>
 </xsl:template>
 <xsl:template match="tei:back">
 	<div>
-		<h5>Anhang</h5>
+		<h5 class="text-sm">Anhang</h5>
 		<ul>
 		<xsl:for-each select=".//tei:pb">
-			<li data-link="{@xml:id}" class="p-2 text-red-500 inline cursor-pointer whitespace-pre">
+			<li data-link="{@xml:id}" class="text-sm text-red-500 inline cursor-pointer">
 				<xsl:value-of select="@n"/>
 			</li>
+			<xsl:if test="position() != last()"><li class="inline text-sm">/</li></xsl:if>
 		</xsl:for-each>
 		</ul>
 	</div>
@@ -182,17 +184,19 @@
 <xsl:template match="tei:body">
 	<div>
 		<xsl:for-each select=".//tei:div[@type='chapter']">
-			<h5>
+			<h5 class="text-sm">
 				<xsl:value-of select="@n"/>
 			</h5>
 			<ul>
-				<li data-link="{preceding-sibling::tei:pb[1]/@xml:id}" class="whitespace-pre p-2 text-red-500 inline cursor-pointer">
-					<xsl:value-of select="preceding-sibling::tei:pb[1]/@n"/>
+				<li data-link="{preceding-sibling::tei:pb[1]/@xml:id}" class="text-sm text-red-500 inline cursor-pointer">
+					<xsl:value-of select="replace(preceding-sibling::tei:pb[1]/@n, 'S. ', '')"/>
 				</li>
+				<li class="inline text-sm">/</li>
 				<xsl:for-each select=".//tei:pb">
-					<li data-link="{@xml:id}" class="p-2 text-red-500 inline cursor-pointer whitespace-pre">
-						<xsl:value-of select="@n"/>
+					<li data-link="{@xml:id}" class="text-sm text-red-500 inline cursor-pointer">
+						<xsl:value-of select="replace(@n, 'S. ', '')"/>
 					</li>
+					<xsl:if test="position() != last()"><li class="inline text-sm">/</li></xsl:if>
 				</xsl:for-each>
 			</ul>
 		</xsl:for-each>
