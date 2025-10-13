@@ -30,8 +30,8 @@ const html = await readFile("edition/register.html", "utf-8");
 <script>
 	import { loadContent } from "../lib/synopticView";
 
+	// Click handler for the main Register menu items
 	const register = document.querySelectorAll<HTMLElement>(".register-menu li");
-
 	Array.from(register).forEach((element) => {
 		element.addEventListener("click", (e) => {
 			// @ts-ignore
@@ -39,11 +39,20 @@ const html = await readFile("edition/register.html", "utf-8");
 
 			if (id.startsWith("rg-")) {
 				let content = document.getElementById(id!);
-
 				content?.classList.toggle("hidden");
+				let werkElement = document.getElementById("info-" + id.split("-")[1]);
+				if (!werkElement) return;
+				if (!werkElement.classList.contains("hidden")) {
+					werkElement?.classList.toggle("hidden");
+				}
 			} else if (id.startsWith("wk-")) {
 				let contentElement = document.getElementById("info-" + id.split("-")[1]);
 				contentElement?.classList.toggle("hidden");
+				let inhaltElement = document.getElementById("rg-" + id.split("-")[1]);
+				if (!inhaltElement) return;
+				if (!inhaltElement.classList.contains("hidden")) {
+					inhaltElement?.classList.toggle("hidden");
+				}
 
 				// @ts-ignore
 				let content = e.target!.dataset.content;
