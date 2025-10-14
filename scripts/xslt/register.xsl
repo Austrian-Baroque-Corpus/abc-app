@@ -156,38 +156,110 @@
 </xsl:template>
 
 <xsl:template match="tei:front">
-	<div>
-		<h5 class="text-sm">Titelei</h5>
-		<ul>
-		<xsl:for-each select=".//tei:pb">
-			<li data-link="{@xml:id}" class="text-sm text-red-500 inline cursor-pointer">
+	<div class="py-2">
+		<h5 class="text-md">Titelei</h5>
+		<!-- Pages before first div -->
+			<xsl:variable name="pagesBeforeFirstDiv" select=".//tei:pb[not(preceding-sibling::tei:div) and not(ancestor::tei:div)]"/>
+			<xsl:if test="$pagesBeforeFirstDiv">
+			<ul class="px-2">
+				<li data-link="{preceding-sibling::tei:pb[1]/@xml:id}" class="text-sm text-red-500 inline cursor-pointer">
+					<xsl:value-of select="preceding-sibling::tei:pb[1]/@n"/>
+				</li>
+				<xsl:for-each select="$pagesBeforeFirstDiv">
+					<xsl:if test="position() > 1 and position() != last()"><li class="inline text-sm">/</li></xsl:if>
+					<li data-link="{@xml:id}" class="text-sm text-red-500 inline cursor-pointer">
+						<xsl:if test="position() != last()"><xsl:value-of select="@n"/></xsl:if>
+					</li>
+				</xsl:for-each>
+			</ul>
+		</xsl:if>
+		<!-- Each div with its pages -->
+		<xsl:for-each select=".//tei:div">
+			<h6 class="px-2 text-sm">
 				<xsl:value-of select="@n"/>
-			</li>
-			<xsl:if test="position() != last()"><li class="inline text-sm">/</li></xsl:if>
+			</h6>
+			<ul class="px-4">
+				<li data-link="{preceding-sibling::tei:pb[1]/@xml:id}" class="text-sm text-red-500 inline cursor-pointer">
+					<xsl:value-of select="preceding-sibling::tei:pb[1]/@n"/>
+				</li>
+				<xsl:for-each select=".//tei:pb">
+					<li class="inline text-sm">/</li>
+					<li data-link="{@xml:id}" class="text-sm text-red-500 inline cursor-pointer">
+						<xsl:value-of select="@n"/>
+					</li>
+				</xsl:for-each>
+			</ul>
 		</xsl:for-each>
-		</ul>
+		<!-- Pages after last div -->
+		<xsl:variable name="pagesAfterLastDiv" select=".//tei:pb[not(ancestor::tei:div) and not(following-sibling::tei:div)]"/>
+		<xsl:if test="$pagesAfterLastDiv">
+			<ul class="px-2">
+				<xsl:for-each select="$pagesAfterLastDiv">
+					<xsl:if test="position() > 1"><li class="inline text-sm">/</li></xsl:if>
+					<li data-link="{@xml:id}" class="text-sm text-red-500 inline cursor-pointer">
+						<xsl:value-of select="@n"/>
+					</li>
+				</xsl:for-each>
+			</ul>
+		</xsl:if>
 	</div>
 </xsl:template>
 <xsl:template match="tei:back">
 	<div>
-		<h5 class="text-sm">Anhang</h5>
-		<ul>
-		<xsl:for-each select=".//tei:pb">
-			<li data-link="{@xml:id}" class="text-sm text-red-500 inline cursor-pointer">
+		<h5 class="text-md">Anhang</h5>
+		<!-- Pages before first div -->
+		<xsl:variable name="pagesBeforeFirstDiv" select=".//tei:pb[not(preceding-sibling::tei:div) and not(ancestor::tei:div)]"/>
+		<xsl:if test="$pagesBeforeFirstDiv">
+			<ul class="px-2">
+				<li data-link="{preceding-sibling::tei:pb[1]/@xml:id}" class="text-sm text-red-500 inline cursor-pointer">
+					<xsl:value-of select="preceding-sibling::tei:pb[1]/@n"/>
+				</li>
+				<xsl:for-each select="$pagesBeforeFirstDiv">
+					<xsl:if test="position() > 1 and position() != last()"><li class="inline text-sm">/</li></xsl:if>
+					<li data-link="{@xml:id}" class="text-sm text-red-500 inline cursor-pointer">
+						<xsl:if test="position() != last()"><xsl:value-of select="@n"/></xsl:if>
+					</li>
+				</xsl:for-each>
+			</ul>
+		</xsl:if>
+		<!-- Each div with its pages -->
+		<xsl:for-each select=".//tei:div[@*]">
+			<h6 class="px-2 text-sm">
 				<xsl:value-of select="@n"/>
-			</li>
-			<xsl:if test="position() != last()"><li class="inline text-sm">/</li></xsl:if>
+			</h6>
+			<ul class="px-4">
+				<li data-link="{preceding::tei:pb[1]/@xml:id}" class="text-sm text-red-500 inline cursor-pointer">
+					<xsl:value-of select="preceding::tei:pb[1]/@n"/>
+				</li>
+				<xsl:for-each select=".//tei:pb">
+					<li class="inline text-sm">/</li>
+					<li data-link="{@xml:id}" class="text-sm text-red-500 inline cursor-pointer">
+						<xsl:value-of select="@n"/>
+					</li>
+				</xsl:for-each>
+			</ul>
 		</xsl:for-each>
-		</ul>
+		<!-- Pages after last div -->
+		<xsl:variable name="pagesAfterLastDiv" select=".//tei:pb[not(ancestor::tei:div) and not(following-sibling::tei:div)]"/>
+		<xsl:if test="$pagesAfterLastDiv">
+			<ul class="px-2">
+				<xsl:for-each select="$pagesAfterLastDiv">
+					<xsl:if test="position() > 1"><li class="inline text-sm">/</li></xsl:if>
+					<li data-link="{@xml:id}" class="text-sm text-red-500 inline cursor-pointer">
+						<xsl:value-of select="@n"/>
+					</li>
+				</xsl:for-each>
+			</ul>
+		</xsl:if>
 	</div>
 </xsl:template>
 <xsl:template match="tei:body">
 	<div>
-		<xsl:for-each select=".//tei:div[@type='chapter']">
-			<h5 class="text-sm">
+		<xsl:for-each select=".//tei:div[@*]">
+			<h5 class="text-md">
 				<xsl:value-of select="@n"/>
 			</h5>
-			<ul>
+			<ul class="px-2">
 				<li data-link="{preceding-sibling::tei:pb[1]/@xml:id}" class="text-sm text-red-500 inline cursor-pointer">
 					<xsl:value-of select="replace(preceding-sibling::tei:pb[1]/@n, 'S. ', '')"/>
 				</li>
