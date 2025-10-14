@@ -116,7 +116,12 @@
 </xsl:template>
 
 <xsl:template match="tei:lb[@break]">
-	<span class="linebreak"><xsl:text>=</xsl:text><br /></span>
+	<span class="linebreak">
+		<xsl:if test="not(substring(preceding-sibling::text()[1], string-length(preceding-sibling::text()[1])) = '=')">
+			<xsl:text>=</xsl:text>
+		</xsl:if>
+		<br />
+	</span>
 </xsl:template>
 
 <xsl:template match="tei:div">
