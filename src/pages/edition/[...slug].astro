@@ -36,6 +36,9 @@ export async function getStaticPaths() {
 }
 
 const { html, issue, name, source } = Astro.props;
+//replace all &amp; with & (because of double escaping in XSLT transformation)
+let htmlContent = await html;
+htmlContent = htmlContent.replaceAll("&amp;", "&");
 ---
 
 <style is:global>
@@ -46,6 +49,6 @@ const { html, issue, name, source } = Astro.props;
 </style>
 <Edition title={issue} baseurl={baseurl} issue={issue} name={name} source={source}>
 	<div class="flex flex-col">
-		<div set:html={html} />
+		<div set:html={htmlContent} />
 	</div>
 </Edition>

@@ -164,6 +164,29 @@
 	</xsl:choose>
 </xsl:template> -->
 
+<xsl:template match="tei:w[parent::tei:rs]">
+	<span data-lemma="{@lemma}" data-type="{@type}" data-pb="{preceding::tei:pb[1]/@xml:id}" id="{@xml:id}" class="word"><xsl:apply-templates/></span>
+	<xsl:variable name="outermost-rs" select="ancestor::tei:rs[not(parent::tei:rs)][1]"/>
+	<xsl:if test="not(following-sibling::tei:w) and not(following-sibling::tei:rs) and $outermost-rs/following-sibling::*[1]/name() = 'pc'">
+		<xsl:value-of select="$outermost-rs/following-sibling::*[1]"/>
+	</xsl:if>
+</xsl:template>
+
+<xsl:template match="tei:w[parent::tei:foreign]">
+	<span data-lemma="{@lemma}" data-type="{@type}" data-pb="{preceding::tei:pb[1]/@xml:id}" id="{@xml:id}" class="word"><xsl:apply-templates/></span>
+	<xsl:if test="not(following-sibling::tei:w) and parent::tei:foreign/following-sibling::*[1]/name() = 'pc'">
+		<xsl:value-of select="parent::tei:foreign/following-sibling::*[1]"/>
+	</xsl:if>
+</xsl:template>
+
+<xsl:template match="tei:w[ancestor::tei:docDate]">
+	<span data-lemma="{@lemma}" data-type="{@type}" data-pb="{preceding::tei:pb[1]/@xml:id}" id="{@xml:id}" class="word"><xsl:apply-templates/></span>
+	<xsl:variable name="docDate" select="ancestor::tei:docDate[1]"/>
+	<xsl:if test="not(following-sibling::tei:w) and $docDate/following-sibling::*[1]/name() = 'pc'">
+		<xsl:value-of select="$docDate/following-sibling::*[1]"/>
+	</xsl:if>
+</xsl:template>
+
 <xsl:template match="tei:w[parent::tei:item]">
 	<span data-lemma="{@lemma}" data-type="{@type}" data-pb="{preceding::tei:pb[1]/@xml:id}" id="{@xml:id}" class="word"><xsl:apply-templates/></span>
 	<xsl:if test="following-sibling::*[1]/name() = 'pc'">
@@ -171,7 +194,7 @@
 	</xsl:if>
 </xsl:template>
 
-<xsl:template match="tei:w[not(parent::tei:item)]">
+<xsl:template match="tei:w[not(parent::tei:item or parent::tei:rs or parent::tei:foreign or ancestor::tei:docDate)]">
 	<span data-lemma="{@lemma}" data-type="{@type}" data-pb="{preceding::tei:pb[1]/@xml:id}" id="{@xml:id}" class="word"><xsl:apply-templates/></span>
 	<xsl:if test="following-sibling::*[1]/name() = 'pc'">
 		<xsl:value-of select="following-sibling::*[1]"/>
@@ -221,7 +244,8 @@
 	</xsl:if>
 </xsl:template>
 
-<xsl:template match="tei:pc"/>
+<xsl:template match="tei:pc">
+</xsl:template>
 
 <!-- <xsl:template match="tei:fw[@type='footer']">
 	<span class="block mt-[200px]">
