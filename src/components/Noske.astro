@@ -179,7 +179,7 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 				issuesBox.innerHTML += `<ul class="pl-4">`;
 				for (const [key, value] of Object.entries(issues)) {
 					let title = key.replaceAll("_", " ").replace("Abraham-", "").replace("oe", "ö");
-					issuesBox.innerHTML += `<li class="text-red-600 cursor-pointer list-none" data-key="${key == "Alle" ? ".*" : key}">${value} – ${title}</li>`;
+					issuesBox.innerHTML += `<li class="text-red-600 cursor-pointer list-none" data-key="${key == "Korpus" ? ".*" : key}">${value} – ${title}</li>`;
 				}
 				const hitsBox =
 					document.getElementById(containerId!) || document.getElementById("hitsbox-init");
