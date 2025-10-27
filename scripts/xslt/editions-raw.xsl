@@ -103,10 +103,18 @@
 </xsl:template>
 
 <xsl:template match="tei:lb[not(@break)]">
-	<br class="linebreak"/>
-	<xsl:if test="parent::tei:titlePage and @rend">
-		<hr class="border-black" />
-	</xsl:if>
+	<xsl:choose>
+		<!-- Don't render lb[@rend='line'] that follows a header - it's handled by the header template -->
+		<xsl:when test="@rend='line' and preceding-sibling::*[1][self::tei:fw[@type='header']]">
+			<!-- Suppress this lb element -->
+		</xsl:when>
+		<xsl:otherwise>
+			<br class="linebreak"/>
+			<xsl:if test="parent::tei:titlePage and @rend">
+				<hr class="border-black" />
+			</xsl:if>
+		</xsl:otherwise>
+	</xsl:choose>
 </xsl:template>
 
 <xsl:template match="tei:figure">
@@ -117,9 +125,20 @@
 
 <xsl:template match="tei:lb[@break]">
 	<span class="linebreak">
-		<xsl:if test="not(substring(preceding-sibling::text()[1], string-length(preceding-sibling::text()[1])) = '=')">
-			<xsl:text>=</xsl:text>
-		</xsl:if>
+		<xsl:choose>
+			<!-- Check if inside antiqua segment - use en-dash instead of equals -->
+			<xsl:when test="ancestor::tei:seg[@rend='antiqua']">
+				<xsl:if test="not(substring(preceding-sibling::text()[1], string-length(preceding-sibling::text()[1])) = '–')">
+					<xsl:text>–</xsl:text>
+				</xsl:if>
+			</xsl:when>
+			<!-- Default behavior - use equals sign -->
+			<xsl:otherwise>
+				<xsl:if test="not(substring(preceding-sibling::text()[1], string-length(preceding-sibling::text()[1])) = '=')">
+					<xsl:text>=</xsl:text>
+				</xsl:if>
+			</xsl:otherwise>
+		</xsl:choose>
 		<br />
 	</span>
 </xsl:template>
@@ -334,13 +353,24 @@
 </xsl:template>
 
 <xsl:template match="tei:w[not(parent::tei:item or parent::tei:rs or parent::tei:foreign or parent::tei:seg[not(@type='whitespace')] or ancestor::tei:docDate or ancestor::tei:date or ancestor::tei:choice or ancestor::tei:persName or ancestor::tei:placeName or ancestor::tei:name)]">
-	<span data-lemma="{@lemma}" data-type="{@type}" data-pb="{preceding::tei:pb[1]/@xml:id}" id="{@xml:id}" class="word"><xsl:apply-templates/></span>
-	<xsl:if test="following-sibling::*[1]/name() = 'pc'">
-		<xsl:value-of select="following-sibling::*[1]"/>
+	<!-- Skip if preceded by internal PC and word (already rendered by previous word) -->
+	<xsl:if test="not(preceding-sibling::*[1][self::tei:pc[@type='internal']] and preceding-sibling::*[2][self::tei:w])">
+		<span data-lemma="{@lemma}" data-type="{@type}" data-pb="{preceding::tei:pb[1]/@xml:id}" id="{@xml:id}" class="word">
+			<xsl:apply-templates/>
+			<!-- If followed by internal PC and then another word, include PC and next word in same span -->
+			<xsl:if test="following-sibling::*[1][self::tei:pc[@type='internal']] and following-sibling::*[2][self::tei:w]">
+				<xsl:value-of select="following-sibling::*[1]"/>
+				<xsl:apply-templates select="following-sibling::*[2]/node()"/>
+			</xsl:if>
+		</span>
+		<!-- Output PC only if not internal or not followed by word -->
+		<xsl:if test="following-sibling::*[1]/name() = 'pc' and not(following-sibling::*[1][self::tei:pc[@type='internal']] and following-sibling::*[2][self::tei:w])">
+			<xsl:value-of select="following-sibling::*[1]"/>
+		</xsl:if>
 	</xsl:if>
 </xsl:template>
 
-<xsl:template match="tei:seg[not(@type='whitespace')]">
+<xsl:template match="tei:seg[not(@type='whitespace' or @type='ornament')]">
 	<xsl:variable name="rend" select="if(@rend = 'bold') then('font-bold')
 																		else if(@rend = 'antiqua') then('font-antiqua')
 																		else if(@rend = 'spaced') then('tracking-[.3em]')
@@ -388,29 +418,71 @@
 	</xsl:if>
 </xsl:template>
 
+<xsl:template match="tei:seg[@type='ornament']">
+	<span class="ornament">
+		<xsl:apply-templates/>
+	</span>
+</xsl:template>
+
 <xsl:template match="tei:pc">
 </xsl:template>
 
-<!-- <xsl:template match="tei:fw[@type='footer']">
-	<span class="block mt-[200px]">
+<xsl:template match="tei:fw[@type='footer']">
+	<div class="grid grid-cols-3 items-center yes-index">
 		<xsl:apply-templates/>
-	</span>
-</xsl:template> -->
+		<!-- Check if there's a catch word immediately following this footer -->
+		<xsl:if test="following-sibling::*[1][self::tei:fw[@type='catch']]">
+			<xsl:variable name="catch" select="following-sibling::*[1][self::tei:fw[@type='catch']]"/>
+			<span>
+				<xsl:choose>
+					<xsl:when test="$catch/@place='bot_left'">
+						<xsl:attribute name="class">yes-index text-left px-2 col-start-1</xsl:attribute>
+					</xsl:when>
+					<xsl:when test="$catch/@place='bot_center'">
+						<xsl:attribute name="class">yes-index text-center px-2 col-start-2</xsl:attribute>
+					</xsl:when>
+					<xsl:when test="$catch/@place='bot_right'">
+						<xsl:attribute name="class">yes-index text-right px-2 col-start-3</xsl:attribute>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:attribute name="class">yes-index text-right px-2 col-start-3</xsl:attribute>
+					</xsl:otherwise>
+				</xsl:choose>
+				<xsl:apply-templates select="$catch/node()"/>
+			</span>
+		</xsl:if>
+	</div>
+</xsl:template>
 
-<!-- <xsl:template match="tei:fw[@type='header']">
-	<span class="block mt-[200px]">
-		<xsl:apply-templates/>
-	</span>
-</xsl:template> -->
-
-<xsl:template match="tei:fw[@type='pageNum']">
-	<span>
+<xsl:template match="tei:fw[@type='header']">
+	<div>
 		<xsl:choose>
-			<xsl:when test="parent::tei:fw[@type='header']/following-sibling::tei:lb[@rend='line']">
-				<xsl:attribute name="class">font-antiqua block yes-index text-center px-2 border-b border-black</xsl:attribute>
+			<!-- If followed by lb[@rend='line'], add border-bottom to this header div -->
+			<xsl:when test="following-sibling::*[1][self::tei:lb[@rend='line']]">
+				<xsl:attribute name="class">grid grid-cols-3 items-center yes-index border-b border-black pb-1</xsl:attribute>
 			</xsl:when>
 			<xsl:otherwise>
-				<xsl:attribute name="class">font-antiqua block yes-index text-center px-2</xsl:attribute>
+				<xsl:attribute name="class">grid grid-cols-3 items-center yes-index</xsl:attribute>
+			</xsl:otherwise>
+		</xsl:choose>
+		<xsl:apply-templates/>
+	</div>
+</xsl:template>
+
+<xsl:template match="tei:fw[@type='pageNum']">
+	<span class="font-antiqua yes-index px-2">
+		<xsl:choose>
+			<xsl:when test="@place='top_left' or @place='bot_left'">
+				<xsl:attribute name="class">font-antiqua yes-index px-2 text-left col-start-1</xsl:attribute>
+			</xsl:when>
+			<xsl:when test="@place='top_center' or @place='bot_center'">
+				<xsl:attribute name="class">font-antiqua yes-index px-2 text-center col-start-2</xsl:attribute>
+			</xsl:when>
+			<xsl:when test="@place='top_right' or @place='bot_right'">
+				<xsl:attribute name="class">font-antiqua yes-index px-2 text-right col-start-3</xsl:attribute>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:attribute name="class">font-antiqua yes-index px-2 text-center col-start-2</xsl:attribute>
 			</xsl:otherwise>
 		</xsl:choose>
 		<xsl:apply-templates/>
@@ -418,7 +490,30 @@
 </xsl:template>
 
 <xsl:template match="tei:fw[@type='catch']">
-	<span class="block yes-index text-right px-2">
+	<!-- Suppress if immediately after footer (it's already rendered by the footer template) -->
+	<xsl:if test="not(preceding-sibling::*[1][self::tei:fw[@type='footer']])">
+		<div class="block yes-index text-right px-2">
+			<xsl:apply-templates/>
+		</div>
+	</xsl:if>
+</xsl:template>
+
+<xsl:template match="tei:fw[@place and not(@type='pageNum' or @type='catch')]">
+	<span>
+		<xsl:choose>
+			<xsl:when test="@place='top_center' or @place='bot_center'">
+				<xsl:attribute name="class">yes-index text-center col-start-2</xsl:attribute>
+			</xsl:when>
+			<xsl:when test="@place='top_left' or @place='bot_left'">
+				<xsl:attribute name="class">yes-index text-left col-start-1</xsl:attribute>
+			</xsl:when>
+			<xsl:when test="@place='top_right' or @place='bot_right'">
+				<xsl:attribute name="class">yes-index text-right col-start-3</xsl:attribute>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:attribute name="class">yes-index col-start-2</xsl:attribute>
+			</xsl:otherwise>
+		</xsl:choose>
 		<xsl:apply-templates/>
 	</span>
 </xsl:template>
