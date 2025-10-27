@@ -411,6 +411,11 @@ import Register from "./Register.astro";
 					const hitItem = document.createElement("div");
 					hitItem!.classList.add(...["mt-4", "kwic", "cursor-pointer", "text-left", "border-b"]);
 
+					// Set first item as active since its data is already loaded
+					if (count === 0 && screeWidth) {
+						hitItem.classList.add("active");
+					}
+
 					let hitId = line.kwic_attr.split("/")[8];
 					// let docTitle = line.refs[1].split("doc.id=")[1];
 					// hitId = `line-${count}__${docTitle}__${hitId}`;
