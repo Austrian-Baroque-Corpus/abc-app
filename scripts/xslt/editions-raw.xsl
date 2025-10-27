@@ -36,9 +36,9 @@
 	<h1 class="text-lg text-red-500">
 		<xsl:value-of select="$doc_title"/><xsl:text> </xsl:text><xsl:value-of select="//tei:pb[1]/@n"/>
 	</h1>
-	<a href="edition/{$link}">
+	<!-- <a href="edition/{$link}">
 		<span class="text-gray-300 text-md">Detailansicht öffnen</span>
-	</a>
+	</a> -->
 </div>
 <div class="flex flex-row transcript active p-2 lg:flex-col md:flex-col sm:flex-col">
 	<div class="basis-7/12 text px-4 yes-index sm:px-2 min-h-[800px]">
