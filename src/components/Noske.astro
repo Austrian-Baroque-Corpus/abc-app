@@ -1,21 +1,21 @@
 ---
 import EditionFragment from "./EditionFragment.astro";
 import Register from "./Register.astro";
-import VirtualKeyboard from "./VirtualKeyboard.astro";
+// import VirtualKeyboard from "./VirtualKeyboard.astro";
 ---
 
 <div>
 	<div class="flex flex-row">
 		<Register />
 		<div class="sticky top-24 flex w-[100%] flex-col">
-			<div class="w-[100%] p-4 text-center">
+			<div class="w-[100%] p-4 text-left">
 				<div
 					class="xs:max-w-[200px] mx-auto max-w-[1000px] sm:max-w-[300px] md:max-w-[600px] lg:max-w-[800px]"
 				>
-					<h4 class="pt-2 font-segoe text-xl">
+					<h4 class="pl-2 pt-2 text-left font-segoe text-xl">
 						<img class="inline" src="/Suche.jpg" alt="Suchet" title="Suchet" />
 					</h4>
-					<VirtualKeyboard />
+					<!-- <VirtualKeyboard /> -->
 					<div id="noske-search" class="text-left"></div>
 					<div id="example" class="cursor-pointer py-4">
 						<strong
@@ -41,7 +41,7 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 							</li>
 						</ul>
 						<br />
-						<h6>Erweiterte Suche</h6>
+						<h6>Erweiterte Suche (CQL)</h6>
 
 						<ul>
 							<li class="cursor-pointer px-2">
@@ -77,8 +77,8 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 					</div>
 				</div>
 			</div>
-
 			<div id="hitsbox"></div>
+
 			<div class="mx-auto grid grid-cols-2">
 				<div id="noske-pagination" class="text-right"></div>
 				<div id="statsbox" class="text-left"></div>
@@ -90,8 +90,8 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 
 <style is:global>
 	.bg-abacus-search {
-		min-width: 130px;
-		background-image: url("/ihr_findet_padded.jpg");
+		max-width: 44px;
+		background-image: url("/suchlupe.jpg");
 		background-position: center;
 		background-size: cover;
 		background-repeat: no-repeat;
@@ -128,6 +128,123 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 
 	search.minQueryLength = 2;
 
+	// Add virtual keyboard to noske-input after it's created
+	window.addEventListener("load", () => {
+		const noskeInputDiv = document.getElementById("noske-input");
+		if (noskeInputDiv) {
+			const virtualKeyboardHtml = `
+				<div class="font-segoe text-gray-600">
+					<form class="flex items-center">
+						<span
+							class="pl-2 relative w-[90%] overflow-visible rounded-sm bg-white font-antiqua flex items-center"
+							id="input-query"
+							><input
+								type="checkbox"
+								value="unused"
+								class="absolute opacity-0 pointer-events-none"
+								id="vkbtquery"
+							/><label
+								for="vkbtquery"
+								class="cursor-pointer flex items-center flex-shrink-0"
+								><img src="/virtualkeyboard.jpg" alt="Sonderzeichen einfügen" title="Sonderzeichen einfügen" class="shadow-lg h-[42px] w-[42px] flex-shrink-0"/></label
+							><ul
+								id="vkbtquerymenu"
+								role="menu"
+								class="absolute bottom-0 left-14 z-50 m-0 mt-[8px] hidden list-none whitespace-nowrap border border-gray-300 bg-white p-0.5"
+								data-context="abacus"
+							>
+								<li
+									role="menuitem"
+									class="m-1 inline-block w-8 cursor-default bg-gray-300 pl-0 text-center shadow-md"
+								>
+									ä
+								</li><li
+									role="menuitem"
+									class="m-1 inline-block w-8 cursor-default bg-gray-300 pl-0 text-center shadow-md"
+								>
+									ā
+								</li><li
+									role="menuitem"
+									class="m-1 inline-block w-8 cursor-default bg-gray-300 pl-0 text-center shadow-md"
+								>
+									â
+								</li><li
+									role="menuitem"
+									class="m-1 inline-block w-8 cursor-default bg-gray-300 pl-0 text-center shadow-md"
+								>
+									æ
+								</li><li
+									role="menuitem"
+									class="m-1 inline-block w-8 cursor-default bg-gray-300 pl-0 text-center shadow-md"
+								>
+									ë
+								</li><li
+									role="menuitem"
+									class="m-1 inline-block w-8 cursor-default bg-gray-300 pl-0 text-center shadow-md"
+								>
+									e̅
+								</li><li
+									role="menuitem"
+									class="m-1 inline-block w-8 cursor-default bg-gray-300 pl-0 text-center shadow-md"
+								>
+									m̅
+								</li><li
+									role="menuitem"
+									class="m-1 inline-block w-8 cursor-default bg-gray-300 pl-0 text-center shadow-md"
+								>
+									n̅
+								</li><li
+									role="menuitem"
+									class="m-1 inline-block w-8 cursor-default bg-gray-300 pl-0 text-center shadow-md"
+								>
+									œ
+								</li><li
+									role="menuitem"
+									class="m-1 inline-block w-8 cursor-default bg-gray-300 pl-0 text-center shadow-md"
+								>
+									ö
+								</li><li
+									role="menuitem"
+									class="m-1 inline-block w-8 cursor-default bg-gray-300 pl-0 text-center shadow-md"
+								>
+									ü
+								</li><li
+									role="menuitem"
+									class="m-1 inline-block w-8 cursor-default bg-gray-300 pl-0 text-center shadow-md"
+								>
+									ß
+								</li><li
+									role="menuitem"
+									class="m-1 inline-block w-8 cursor-default bg-gray-300 pl-0 text-center shadow-md"
+								>
+									'
+								</li>
+							</ul></span
+						>
+					</form>
+				</div>
+			`;
+
+			noskeInputDiv.insertAdjacentHTML("beforeend", virtualKeyboardHtml);
+
+			// Add event listeners for the virtual keyboard
+			const vkbtlabel = document.getElementById("vkbtquery");
+			const vkbtmenu = document.getElementById("vkbtquerymenu");
+			vkbtlabel?.addEventListener("click", () => {
+				vkbtmenu?.classList.toggle("hidden");
+			});
+			const vkbtmenuitems = document.querySelectorAll("#vkbtquerymenu li");
+			vkbtmenuitems.forEach((item) => {
+				item.addEventListener("click", (e) => {
+					const noskeInput = document.getElementById("noske-input-input") as HTMLInputElement;
+					// @ts-ignore
+					noskeInput.value += e.target!.textContent?.trim() || "";
+					noskeInput.dispatchEvent(new Event("input", { bubbles: true }));
+				});
+			});
+		}
+	});
+
 	search.search({
 		debug: false,
 		client: {
@@ -152,7 +269,7 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 			placeholder: "Tippe zumindest zwei Zeichen um Wortvorschläge zu erhalten...",
 			button: "Suchen",
 			css: {
-				button: "text-xl bg-abacus-search text-transparent shadow-lg border border-gray-300 ",
+				button: "text-xl bg-abacus-search text-transparent shadow-lg border-gray-300 ",
 			},
 		},
 		pagination: {
@@ -287,7 +404,7 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 					var facs = line.refs[0].replace("doc.title=", "");
 					var issueId = line.refs[1].split("doc.id=")[1];
 
-					issues["Alle"] ? issues["Alle"]++ : (issues["Alle"] = 1);
+					issues["Corpus"] ? issues["Corpus"]++ : (issues["Corpus"] = 1);
 					issues[issueId] ? issues[issueId]++ : (issues[issueId] = 1);
 
 					try {
@@ -354,11 +471,11 @@ import VirtualKeyboard from "./VirtualKeyboard.astro";
 
 				const issuesBox = document.createElement("div");
 				issuesBox.classList.add("mt-4", "text-gray-600", "text-left");
-				issuesBox.innerHTML = `<h4 class="text-lg">Anzahl der Treffer pro Ausgabe:</h4>`;
+				issuesBox.innerHTML = `<img class="inline" src="/ihr_findet_padded.jpg" alt="Ihr findet" title="Ihr findet" /><h4 class="text-lg">Anzahl der Treffer:</h4>`;
 				issuesBox.innerHTML += `<ul class="pl-4">`;
 				for (const [key, value] of Object.entries(issues)) {
 					let title = key.replaceAll("_", " ").replace("Abraham-", "").replace("oe", "ö");
-					issuesBox.innerHTML += `<li class="text-red-600 cursor-pointer list-none" data-key="${key == "Alle" ? ".*" : key}">${value} – ${title}</li>`;
+					issuesBox.innerHTML += `<li class="text-red-600 cursor-pointer list-none" data-key="${key == "Corpus" ? ".*" : key}">${value} – ${title}</li>`;
 				}
 
 				hitsBox!.prepend(issuesBox);
