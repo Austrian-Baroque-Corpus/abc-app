@@ -292,7 +292,7 @@ import Register from "./Register.astro";
 				}
 				const issuesBox = document.createElement("div");
 				issuesBox.classList.add("mt-4", "text-gray-600", "text-left");
-				issuesBox.innerHTML = `<h4 class="text-lg">Anzahl der Treffer:</h4>`;
+				issuesBox.innerHTML = `<img class="inline" src="/ihr_findet_padded.jpg" alt="Ihr findet" title="Ihr findet"/><h4 class="text-lg">Anzahl der Treffer:</h4>`;
 				issuesBox.innerHTML += `<ul class="pl-4">`;
 				for (const [key, value] of Object.entries(issues)) {
 					let title = key.replaceAll("_", " ").replace("Abraham-", "").replace("oe", "ö");
