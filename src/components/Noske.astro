@@ -280,6 +280,70 @@ import Register from "./Register.astro";
 		},
 		stats: {
 			id: "statsbox",
+			customQueryStats: async (query, lines, pagesize, containerId) => {
+				// function timeout
+				// const timeout = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+				// await timeout(250); // wait for hits to be rendered
+				let issues = {};
+				for (const line of lines) {
+					var issueId = line.refs[1].split("doc.id=")[1];
+					issues["Korpus"] ? issues["Korpus"]++ : (issues["Korpus"] = 1);
+					issues[issueId] ? issues[issueId]++ : (issues[issueId] = 1);
+				}
+				const issuesBox = document.createElement("div");
+				issuesBox.classList.add("mt-4", "text-gray-600", "text-left");
+				issuesBox.innerHTML = `<h4 class="text-lg">Anzahl der Treffer:</h4>`;
+				issuesBox.innerHTML += `<ul class="pl-4">`;
+				for (const [key, value] of Object.entries(issues)) {
+					let title = key.replaceAll("_", " ").replace("Abraham-", "").replace("oe", "ö");
+					issuesBox.innerHTML += `<li class="text-red-600 cursor-pointer list-none" data-key="${key == "Korpus" ? ".*" : key}">${value} – ${title}</li>`;
+				}
+				const hitsBox =
+					document.getElementById(containerId!) || document.getElementById("hitsbox-init");
+				hitsBox!.prepend(issuesBox);
+
+				issuesBox.addEventListener("click", (e) => {
+					// @ts-ignore
+					const key = e.target!.dataset.key;
+					if (key) {
+						let searchInput = document.getElementById("noske-input-input") as HTMLInputElement;
+						let searchSelect = document.getElementById("noske-input-select") as HTMLSelectElement;
+						if (searchInput.value.includes("within")) {
+							if (searchSelect.value !== "cql") {
+								searchSelect.value = "cql";
+								let searchInputValue = searchInput.value.replace(
+									/(.+) within .+/g,
+									`"$1" within <doc id="${key}"/>`,
+								);
+								searchInput.value = searchInputValue;
+							} else {
+								searchInput.value = searchInput.value.replace(
+									/(.+) within .+/g,
+									`$1 within <doc id="${key}"/>`,
+								);
+							}
+						} else {
+							if (searchSelect.value !== "cql") {
+								searchSelect.value = "cql";
+								let searchInputValue = searchInput.value.replace(
+									/(.+)/g,
+									`"$1" within <doc id="${key}"/>`,
+								);
+								searchInput.value = searchInputValue;
+							} else {
+								searchInput.value = searchInput.value.replace(
+									/(.+)/g,
+									`$1 within <doc id="${key}"/>`,
+								);
+							}
+						}
+						const searchButton = document.getElementById(
+							"noske-search-button",
+						) as HTMLButtonElement;
+						searchButton.click();
+					}
+				});
+			},
 			label: "Ergebnisse:",
 			css: {
 				label: "text-lg text-gray-600 pt-2",
@@ -287,6 +351,7 @@ import Register from "./Register.astro";
 		},
 		autocompleteOptions: {
 			id: "noske-autocomplete",
+			regexType: "startsWith",
 			css: {
 				div: "bg-white border border-gray-300 absolute ml-[145px] mt-10 text-left overflow-y-scroll overflow-x-hidden max-h-[400px]",
 				ul: "p-0",
@@ -444,7 +509,7 @@ import Register from "./Register.astro";
 								element.classList.remove("active");
 							});
 							hitItem.classList.toggle("active");
-							console.log(line);
+							// console.log(line);
 							let attr = line.kwic_attr?.split("/");
 							attr!.shift();
 							let attr_length = attr!.length / 11;
@@ -468,59 +533,6 @@ import Register from "./Register.astro";
 						});
 					}
 				}
-
-				const issuesBox = document.createElement("div");
-				issuesBox.classList.add("mt-4", "text-gray-600", "text-left");
-				issuesBox.innerHTML = `<img class="inline" src="/ihr_findet_padded.jpg" alt="Ihr findet" title="Ihr findet" /><h4 class="text-lg">Anzahl der Treffer:</h4>`;
-				issuesBox.innerHTML += `<ul class="pl-4">`;
-				for (const [key, value] of Object.entries(issues)) {
-					let title = key.replaceAll("_", " ").replace("Abraham-", "").replace("oe", "ö");
-					issuesBox.innerHTML += `<li class="text-red-600 cursor-pointer list-none" data-key="${key == "Corpus" ? ".*" : key}">${value} – ${title}</li>`;
-				}
-
-				hitsBox!.prepend(issuesBox);
-
-				issuesBox.addEventListener("click", (e) => {
-					// @ts-ignore
-					const key = e.target!.dataset.key;
-					if (key) {
-						let searchInput = document.getElementById("noske-input-input") as HTMLInputElement;
-						let searchSelect = document.getElementById("noske-input-select") as HTMLSelectElement;
-						if (searchInput.value.includes("within")) {
-							if (searchSelect.value !== "cql") {
-								searchSelect.value = "cql";
-								let searchInputValue = searchInput.value.replace(
-									/(.+) within .+/g,
-									`"$1" within <doc id="${key}"/>`,
-								);
-								searchInput.value = searchInputValue;
-							} else {
-								searchInput.value = searchInput.value.replace(
-									/(.+) within .+/g,
-									`$1 within <doc id="${key}"/>`,
-								);
-							}
-						} else {
-							if (searchSelect.value !== "cql") {
-								searchSelect.value = "cql";
-								let searchInputValue = searchInput.value.replace(
-									/(.+)/g,
-									`"$1" within <doc id="${key}"/>`,
-								);
-								searchInput.value = searchInputValue;
-							} else {
-								searchInput.value = searchInput.value.replace(
-									/(.+)/g,
-									`$1 within <doc id="${key}"/>`,
-								);
-							}
-						}
-						const searchButton = document.getElementById(
-							"noske-search-button",
-						) as HTMLButtonElement;
-						searchButton.click();
-					}
-				});
 			},
 			// customSynopticView: screeWidth
 			// 	? (resultLineId: any) => {

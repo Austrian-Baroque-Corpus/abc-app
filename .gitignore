@@ -25,6 +25,7 @@ node_modules/
 dist/
 .astro/
 /edition
+dist_search/
 
 # python
 /env

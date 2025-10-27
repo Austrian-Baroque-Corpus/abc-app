@@ -31,7 +31,7 @@ async function transform(options: {
 }): Promise<void> {
 	try {
 		const url = options.fileDir + options.fileName + ".html";
-		console.log("Loading synoptic view from: " + url);
+		console.log("Loading synoptic view from: " + options.fileName);
 		const html = (await request(url, { responseType: "text" })) as string;
 
 		const container = document.getElementById(options.htmlID);
