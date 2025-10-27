@@ -107,6 +107,11 @@ import Register from "./Register.astro";
 
 	const screeWidth = window.innerWidth >= 1024 ? true : false;
 
+	// Helper function to escape special regex characters
+	const escapeRegex = (str: string): string => {
+		return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+	};
+
 	const search = new NoskeSearch({
 		container: "noske-search",
 		autocomplete: true,
@@ -739,7 +744,8 @@ import Register from "./Register.astro";
 					clearTimeout(debounceTimer);
 					debounceTimer = window.setTimeout(() => {
 						const filterValue = regfilter.value.toLowerCase();
-						const regex = filterValue ? new RegExp(filterValue, "i") : null;
+						const escapedFilterValue = escapeRegex(filterValue);
+						const regex = filterValue ? new RegExp(escapedFilterValue, "i") : null;
 						selectedIndex = -1;
 
 						// Show autocomplete suggestions only if not skipping
@@ -958,7 +964,8 @@ import Register from "./Register.astro";
 					clearTimeout(debounceTimer);
 					debounceTimer = window.setTimeout(() => {
 						const filterValue = regfilter.value.toLowerCase();
-						const regex = filterValue ? new RegExp(filterValue, "i") : null;
+						const escapedFilterValue = escapeRegex(filterValue);
+						const regex = filterValue ? new RegExp(escapedFilterValue, "i") : null;
 						selectedIndex = -1;
 
 						// Show autocomplete suggestions only if not skipping
@@ -1263,7 +1270,8 @@ import Register from "./Register.astro";
 				clearTimeout(debounceTimer);
 				debounceTimer = window.setTimeout(() => {
 					const filterValue = regfilter.value.toLowerCase();
-					const regex = filterValue ? new RegExp(filterValue, "i") : null;
+					const escapedFilterValue = escapeRegex(filterValue);
+					const regex = filterValue ? new RegExp(escapedFilterValue, "i") : null;
 					selectedIndex = -1;
 
 					// Show autocomplete suggestions only if not skipping

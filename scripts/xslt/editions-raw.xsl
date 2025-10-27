@@ -58,7 +58,7 @@
 <div id="citation-info" class="border-x-gray-500 p-2 text-sm">
 	<xsl:text>Zitation: </xsl:text><xsl:value-of select="$book_title"/><xsl:text> (Digitale Ausgabe) </xsl:text>
 	<xsl:value-of select="//tei:pb[1]/@n"/><xsl:text>. In: ABaC:us – Austrian Baroque Corpus. Hrsg. von Claudia Resch und
-	Ulrike Czeitschner. &lt;</xsl:text><a href="edition/{$link}" id="citurl"><xsl:text>edition/</xsl:text><xsl:value-of select="$link"/></a><xsl:text>&gt; abgerufen am </xsl:text><span id="cittoday"></span><xsl:text>.</xsl:text>
+	Ulrike Czeitschner. &lt;</xsl:text><a href="edition/{$link}" class="text-red-600 cursor-pointer" id="citurl"><xsl:text>edition/</xsl:text><xsl:value-of select="$link"/></a><xsl:text>&gt; abgerufen am </xsl:text><span id="cittoday"></span><xsl:text>.</xsl:text>
 </div>
 </xsl:template>
 

@@ -112,7 +112,26 @@
 					Werk
 				</li>
 				<li data-link="rg-{position()}" class="text-red-500 p-2 cursor-pointer inline">Inhalt</li>
-				<!--<li data-link="md-{position()}" class="text-red-500 p-2 cursor-pointer inline">Metadaten</li>-->
+				<xsl:choose>
+					<xsl:when test="contains(.//tei:titleStmt/tei:title[1], 'Augustini Feuriges Hertz')">
+						<li class="text-red-500 p-2 cursor-pointer inline"><a href="#" title="Metadaten zu Augustini Feuriges Hertz">Metadaten</a></li>
+					</xsl:when>
+					<xsl:when test="contains(.//tei:titleStmt/tei:title[1], 'Lösch Wienn')">
+						<li class="text-red-500 p-2 cursor-pointer inline"><a href="#" title="Metadaten zu Lösch Wienn">Metadaten</a></li>
+					</xsl:when>
+					<xsl:when test="contains(.//tei:titleStmt/tei:title[1], 'Mercks Wienn')">
+						<li class="text-red-500 p-2 cursor-pointer inline"><a href="#" title="Metadaten zu Mercks Wienn">Metadaten</a></li>
+					</xsl:when>
+					<xsl:when test="contains(.//tei:titleStmt/tei:title[1], 'Grosse Todten Bruderschaft')">
+						<li class="text-red-500 p-2 cursor-pointer inline"><a href="#" title="Metadaten zu Grosse Todten Bruderschaft">Metadaten</a></li>
+					</xsl:when>
+					<xsl:when test="contains(.//tei:titleStmt/tei:title[1], 'Todten-Capelle')">
+						<li class="text-red-500 p-2 cursor-pointer inline"><a href="#" title="Metadaten zu Todten-Capelle">Metadaten</a></li>
+					</xsl:when>
+					<xsl:otherwise>
+						<li class="text-red-500 p-2 cursor-pointer inline"><a href="#">Metadaten</a></li>
+					</xsl:otherwise>
+				</xsl:choose>
 			</ul>
 			<div id="info-{position()}" class="hidden text-xs py-4">
 				<xsl:variable name="filename" select="replace(tokenize(document-uri(/), '/')[last()], '\.xml$', '.jpg')"/>
