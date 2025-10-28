@@ -135,6 +135,17 @@ import Register from "./Register.astro";
 
 	// Add virtual keyboard to noske-input after it's created
 	window.addEventListener("load", () => {
+		// Check URL parameters for "seite" parameter
+		const urlParams = new URLSearchParams(window.location.search);
+		const seiteValue = urlParams.get("seite");
+
+		if (seiteValue) {
+			// Use the seite value here
+			console.log("Seite parameter found:", seiteValue);
+			// You can add your logic here to use the seiteValue
+			loadContent(seiteValue, "noske-synoptic-view", "", "");
+		}
+
 		const noskeInputDiv = document.getElementById("noske-input");
 		if (noskeInputDiv) {
 			const virtualKeyboardHtml = `

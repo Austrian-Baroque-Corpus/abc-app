@@ -77,7 +77,7 @@ function completeCitation(id: string) {
 	if (citurl) {
 		const currentsrv = window.location.origin;
 		//const currentsrv = "https://abacus.acdh.oeaw.ac.at";
-		citurl.innerText = currentsrv + "/edition/" + id;
+		citurl.innerText = currentsrv + "/suche?seite=" + id;
 	}
 	if (cittoday) {
 		const now = new Date();
