@@ -663,8 +663,16 @@ import Register from "./Register.astro";
 			if (key) {
 				let searchInput = document.getElementById("noske-input-input") as HTMLInputElement;
 				let searchSelect = document.getElementById("noske-input-select") as HTMLSelectElement;
-				searchSelect.value = "cql";
-				searchInput.value = key;
+
+				// Set search mode based on whether the query contains CQL syntax
+				if (key.includes("[")) {
+					searchInput.value = key;
+					searchSelect.value = "cql";
+				} else {
+					searchInput.value = key.replace(/"/g, "");
+					searchSelect.value = "simple";
+				}
+
 				const searchButton = document.getElementById("noske-search-button") as HTMLButtonElement;
 				searchButton.click();
 			}
