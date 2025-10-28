@@ -150,7 +150,7 @@
 					<xsl:when test="contains(.//tei:titleStmt/tei:title[1], 'Mercks Wienn')">
 						<p class="py-1">Abraham â Sancta Clara: Mercks Wienn / Das ist Deß wütenden Todts ein vmbständige Beschreibung Jn Der berühmten Haubt vnd Kayserl. Residentz Statt in Oesterreich [...] . Gedruckt zu Wienn / bey Peter Paul Vivian / der löbl: Universitet Buchdrucker 1680.</p>
 						<p class="py-1">Stiftsbibliothek Melk (Signatur 48.022)</p>
-						<p class="py-1">Zitation: Abraham â Sancta Clara: Mercks Wienn. Wien, 1680. (Digitale Ausgabe) . In: ABaC:us – Austrian Baroque Corpus. Hrsg. von Claudia Resch und Ulrike Czeitschner. &lt;<a href="suche?seite=MW_a0005" class="text-red-500">https://abacus.acdh.oeaw.ac.at/suche?seite=MW_a0005</a>&gt; abgerufen am <span class="today"></span>.</p>
+						<p class="py-1">Zitation: Abraham â Sancta Clara: Mercks Wienn. Wien, 1680. (Digitale Ausgabe) . In: ABaC:us – Austrian Baroque Corpus. Hrsg. von Claudia Resch und Ulrike Czeitschner. &lt;<a href="suche?seite=MW_i0001" class="text-red-500">https://abacus.acdh.oeaw.ac.at/suche?seite=MW_i0001</a>&gt; abgerufen am <span class="today"></span>.</p>
 					</xsl:when>
 					<xsl:when test="contains(.//tei:titleStmt/tei:title[1], 'Grosse Todten Bruderschaft')">
 						<p class="py-1">[Abraham â Sancta Clara]: Grosse Todten Bruderschaft / Das ist Ein kurtzer Entwurff Deß Sterblichen Lebens [...] Gedruckt im Jahr 1681.</p>
