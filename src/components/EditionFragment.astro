@@ -104,6 +104,10 @@
 		scroll-margin-top: 20rem;
 	}
 
+	.word:hover {
+		font-weight: 700;
+	}
+
 	.word:hover::after {
 		content: "Lemma: " attr(data-lemma) "\APos: " attr(data-type);
 		position: absolute;
@@ -118,7 +122,10 @@
 		background-color: rgb(232 232 232);
 		color: rgb(0 0 0);
 		box-shadow: 0 2px 8px rgb(0 0 0 / 15%);
+		font-weight: 100;
 		font-size: 14px;
+		font-family: Arial, Helvetica, sans-serif;
+		text-indent: 0%;
 		white-space: pre;
 	}
 
