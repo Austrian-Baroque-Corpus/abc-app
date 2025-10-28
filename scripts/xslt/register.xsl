@@ -95,7 +95,7 @@
 			</div>
 	</xsl:for-each>
 	<div id="abacus-overview" class="py-4">
-		<img src="/Buecher.jpg" alt="Bücher" title="Bücher" />
+		<img src="/Buecher.png" alt="Bücher" title="Bücher" />
 		<xsl:for-each select="collection('../../data/editions')//tei:TEI">
 			<xsl:sort select="
 				if (contains(.//tei:titleStmt/tei:title[1], 'Augustini Feuriges Hertz')) then 4
