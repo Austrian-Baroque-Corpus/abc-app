@@ -146,6 +146,12 @@ import Register from "./Register.astro";
 			loadContent(seiteValue, "noske-synoptic-view", "", "");
 		}
 
+		const noskeInputSelect = document.getElementById("noske-input-select") as HTMLSelectElement;
+		if (noskeInputSelect) {
+			noskeInputSelect.options[0].text = "Einfache Suche";
+			noskeInputSelect.options[1].text = "Erweiterte Suche (CQL)";
+		}
+
 		const noskeInputDiv = document.getElementById("noske-input");
 		if (noskeInputDiv) {
 			const virtualKeyboardHtml = `
