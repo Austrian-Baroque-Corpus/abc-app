@@ -29,10 +29,10 @@
 			<factory name="net.sf.saxon.TransformerFactoryImpl"/>
 			<classpath location="${basedir}/saxon/saxon9he.jar"/>
 	</xslt>
-	<xslt style="${basedir}/scripts/xslt/editions.xsl"  basedir="${basedir}/data/editions/tmp" destdir="${target}" includes="*.xml">
+	<!-- <xslt style="${basedir}/scripts/xslt/editions.xsl"  basedir="${basedir}/data/editions/tmp" destdir="${target}" includes="*.xml">
 			<factory name="net.sf.saxon.TransformerFactoryImpl"/>
 			<classpath location="${basedir}/saxon/saxon9he.jar"/>
-	</xslt>
+	</xslt> -->
 	<replace dir="${target}" value="">
 			<include name="*.html"/>
 			<replacetoken> xmlns=""</replacetoken>
