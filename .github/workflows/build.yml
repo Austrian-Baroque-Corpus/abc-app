@@ -49,7 +49,7 @@ jobs:
         env:
           cache-name: cache-site-build
         with:
-          path: ./edition/pages
+          path: ./edition
           key:
             build-${{ env.cache-name }}-${{ hashFiles('**/editions-raw.xsl') }}-${{
             hashFiles('**/build.xml') }}
@@ -74,7 +74,7 @@ jobs:
         env:
           cache-name: cache-site-build
         with:
-          path: ./edition/pages/
+          path: ./edition
           key:
             build-${{ env.cache-name }}-${{ hashFiles('**/editions-raw.xsl') }}-${{
             hashFiles('**/build.xml') }}
