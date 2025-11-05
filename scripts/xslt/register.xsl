@@ -194,9 +194,9 @@
 		</xsl:if>
 		<!-- Each div with its pages -->
 		<xsl:for-each select=".//tei:div">
-			<h6 class="px-2 text-sm">
+			<span class="fs-6 px-2 text-sm">
 				<xsl:value-of select="@n"/>
-			</h6>
+			</span>
 			<ul class="px-4">
 				<li data-link="{preceding-sibling::tei:pb[1]/@xml:id}" class="text-sm text-red-500 inline cursor-pointer">
 					<xsl:value-of select="preceding-sibling::tei:pb[1]/@n"/>
