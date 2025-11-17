@@ -32,7 +32,7 @@
 </xsl:variable>
 
 <xsl:template match="/">
-<div class="p-2 text-left border-b border-b-gray-300" id="edition-content" data-prev="{$prev}" data-next="{$next}">
+<div class="text-left border-b border-b-gray-300" id="edition-content" data-prev="{$prev}" data-next="{$next}">
 	<h1 class="text-lg text-red-500">
 		<xsl:value-of select="$doc_title"/><xsl:text> </xsl:text><xsl:value-of select="//tei:pb[1]/@n"/>
 	</h1>
@@ -40,8 +40,8 @@
 		<span class="text-gray-300 text-md">Detailansicht öffnen</span>
 	</a> -->
 </div>
-<div class="flex flex-row transcript active p-2 lg:flex-col md:flex-col sm:flex-col">
-	<div class="basis-7/12 text px-4 yes-index sm:px-2 min-h-[800px]">
+<div class="flex flex-row transcript active lg:flex-col md:flex-col sm:flex-col">
+	<div class="basis-7/12 text yes-index">
 		<div class="flex flex-col section font-cambria text-xl">
 			<xsl:for-each select=".//tei:front|.//tei:body|.//tei:back">
 				<xsl:apply-templates/>
