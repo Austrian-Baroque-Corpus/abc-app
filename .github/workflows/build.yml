@@ -20,7 +20,7 @@ jobs:
         uses: actions/checkout@v4
       - name: Install ant
         run: |
-          sudo apt-get update && sudo apt-get install openjdk-11-jre-headless ant -y --no-install-recommend
+          sudo apt-get update && sudo apt-get install openjdk-11-jre-headless ant -y --no-install-recommends
           # ./scripts/shellscripts/dl_saxon.sh
       - name: Fetch Edition Data
         run: |
