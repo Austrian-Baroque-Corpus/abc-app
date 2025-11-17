@@ -31,8 +31,9 @@ dist_search/
 /env
 
 # xslt
-/saxon
 /data
+/saxon/doc/
+/saxon/notices/
 
 pc_pattern_analysis_report.md
 pc_patterns_summary.txt

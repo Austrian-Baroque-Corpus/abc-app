@@ -18,10 +18,10 @@ jobs:
     steps:
       - name: Checkout your repository using git
         uses: actions/checkout@v4
-      - name: Install Saxon, ant
+      - name: Install ant
         run: |
           apt-get update && apt-get install openjdk-11-jre-headless ant -y --no-install-recommend
-          ./scripts/shellscripts/dl_saxon.sh
+      #   ./scripts/shellscripts/dl_saxon.sh
       - name: Fetch Edition Data
         run: |
           ./scripts/shellscripts/fetch_data.sh
