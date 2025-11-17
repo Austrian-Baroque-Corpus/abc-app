@@ -35,6 +35,5 @@ dist_search/
 /saxon/doc/
 /saxon/notices/
 
-pc_pattern_analysis_report.md
-pc_patterns_summary.txt
-textcomparison_dl-old.py
+# text analysis folder
+/textcomparison/

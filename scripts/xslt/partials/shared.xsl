@@ -58,6 +58,14 @@
 		<xsl:template match="tei:reg">
         <xsl:apply-templates/>
     </xsl:template>
+	<xsl:template match="tei:sic">
+        <xsl:apply-templates/>
+    </xsl:template>
+	<xsl:template match="tei:corr">
+		<xsl:text> [</xsl:text>
+        <xsl:apply-templates/>
+		<xsl:text>]</xsl:text>
+    </xsl:template>
 
     <xsl:template match="tei:note">
         <xsl:element name="a">
