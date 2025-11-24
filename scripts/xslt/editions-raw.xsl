@@ -205,10 +205,12 @@
 					<!-- Whitespace template will render the PC -->
 				</xsl:when>
 				<!-- Check if rs is inside foreign and PC follows the foreign -->
+				<!-- Only output PC if this rs is the last element with words in foreign -->
 				<xsl:when test="$parent-rs/parent::tei:foreign">
 					<xsl:variable name="foreign" select="$parent-rs/parent::tei:foreign"/>
 					<xsl:variable name="next-after-foreign" select="$foreign/following-sibling::*[not(self::tei:seg[@type='whitespace'])][1]"/>
-					<xsl:if test="$next-after-foreign/name() = 'pc'">
+					<!-- Only output if there are no more words after this rs within foreign -->
+					<xsl:if test="$next-after-foreign/name() = 'pc' and not($parent-rs/following-sibling::tei:w) and not($parent-rs/following-sibling::*//tei:w)">
 						<xsl:value-of select="$next-after-foreign"/>
 					</xsl:if>
 				</xsl:when>

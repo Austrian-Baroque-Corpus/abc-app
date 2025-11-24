@@ -132,4 +132,52 @@
 	#noske-synoptic-view.active {
 		animation: fadein 2s;
 	}
+
+	.choice-container {
+		position: relative;
+		display: inline;
+	}
+
+	.choice-container .date,
+	.choice-container .font-antiqua {
+		display: inline;
+	}
+
+	.correction-marker {
+		position: relative;
+	}
+
+	.correction-marker::before {
+		content: "[]";
+		position: absolute;
+		top: -10px;
+		right: 10px;
+		color: rgb(255 0 0);
+		font-size: 14px;
+	}
+
+	.correction-marker::after {
+		content: "Korrektur: " attr(data-corr);
+		position: absolute;
+		top: 10px;
+		left: -10px;
+		z-index: 1000;
+		display: none;
+		padding: 4px 8px;
+		border: 1px solid rgb(200 200 200);
+		border-radius: 4px;
+		background-color: rgb(255 255 255);
+		color: rgb(255 0 0);
+		box-shadow: 0 2px 8px rgb(0 0 0 / 15%);
+		font-size: 15px;
+		white-space: nowrap;
+	}
+
+	.choice-container:hover .correction-marker::before {
+		display: none;
+	}
+
+	.choice-container:hover .correction-marker::after {
+		display: block;
+	}
 </style>

@@ -6,6 +6,8 @@
     xmlns:local="http://dse-static.foo.bar"
     exclude-result-prefixes="#all"
     version="2.0">
+
+    <xsl:strip-space elements="tei:choice tei:sic tei:corr"/>
     <xsl:function name="local:makeId" as="xs:string">
         <xsl:param name="currentNode" as="node()"/>
         <xsl:variable name="nodeCurrNr">
@@ -50,7 +52,7 @@
         <span class="date"><xsl:apply-templates/></span>
     </xsl:template>
     <xsl:template match="tei:choice">
-        <xsl:apply-templates/>
+        <span class="choice-container"><xsl:apply-templates select="tei:sic | tei:orig | tei:reg"/><xsl:apply-templates select="tei:corr"/></span>
     </xsl:template>
 		<xsl:template match="tei:orig">
 			<!-- do not render -->
@@ -62,9 +64,7 @@
         <xsl:apply-templates/>
     </xsl:template>
 	<xsl:template match="tei:corr">
-		<xsl:text> [ </xsl:text>
-        <xsl:apply-templates/>
-		<xsl:text> ]</xsl:text>
+		<span class="correction-marker" data-corr="{normalize-space(.)}"></span>
     </xsl:template>
 
     <xsl:template match="tei:note">
