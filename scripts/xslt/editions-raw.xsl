@@ -200,6 +200,10 @@
 				<xsl:when test="$next-after-rs/self::tei:pc and not($parent-rs/following-sibling::*[1]/self::tei:seg[@type='whitespace'])">
 					<xsl:value-of select="$next-after-rs"/>
 				</xsl:when>
+				<!-- Check if PC is inside a seg that follows rs directly -->
+				<xsl:when test="$next-after-rs/self::tei:seg[not(@type='whitespace')]/tei:pc[1][not(preceding-sibling::*[not(self::tei:seg[@type='whitespace'])])]">
+					<xsl:value-of select="$next-after-rs/tei:pc[1]"/>
+				</xsl:when>
 				<!-- If there's whitespace before PC after parent rs, let whitespace template handle it -->
 				<xsl:when test="$next-after-rs/self::tei:pc and $parent-rs/following-sibling::*[1]/self::tei:seg[@type='whitespace']">
 					<!-- Whitespace template will render the PC -->
@@ -243,6 +247,32 @@
 </xsl:template>
 
 <xsl:template match="tei:w[parent::tei:foreign]">
+	<!-- Check for preceding PC (e.g., apostrophe before word) -->
+	<xsl:choose>
+		<!-- PC directly before word -->
+		<xsl:when test="preceding-sibling::*[1]/self::tei:pc">
+			<xsl:value-of select="preceding-sibling::*[1]"/>
+		</xsl:when>
+		<!-- PC before lb before word -->
+		<xsl:when test="preceding-sibling::*[1]/self::tei:lb and preceding-sibling::*[2]/self::tei:pc">
+			<xsl:value-of select="preceding-sibling::*[2]"/>
+		</xsl:when>
+		<!-- If first word, also check PC before container -->
+		<xsl:when test="not(preceding-sibling::tei:w) and not(preceding-sibling::*//tei:w)">
+			<xsl:variable name="foreign" select="parent::tei:foreign"/>
+			<xsl:variable name="container" select="if ($foreign/parent::tei:seg[not(@type='whitespace')]) then $foreign/parent::tei:seg else $foreign"/>
+			<xsl:choose>
+				<!-- PC before container (foreign or parent seg) -->
+				<xsl:when test="$container/preceding-sibling::*[1]/self::tei:pc">
+					<xsl:value-of select="$container/preceding-sibling::*[1]"/>
+				</xsl:when>
+				<!-- PC before lb before container -->
+				<xsl:when test="$container/preceding-sibling::*[1]/self::tei:lb and $container/preceding-sibling::*[2]/self::tei:pc">
+					<xsl:value-of select="$container/preceding-sibling::*[2]"/>
+				</xsl:when>
+			</xsl:choose>
+		</xsl:when>
+	</xsl:choose>
 	<span data-lemma="{@lemma}" data-type="{@type}" data-pb="{preceding::tei:pb[1]/@xml:id}" id="{@xml:id}" class="word"><xsl:apply-templates/></span>
 	<xsl:choose>
 		<!-- First check if there's a PC sibling directly after this word (inside foreign) -->
@@ -310,7 +340,8 @@
 				<xsl:when test="$foreign/parent::tei:seg[not(@type='whitespace')] and not($foreign/following-sibling::*[not(self::tei:seg[@type='whitespace'])])">
 					<xsl:variable name="parent-seg" select="$foreign/parent::tei:seg"/>
 					<xsl:variable name="next-after-seg" select="$parent-seg/following-sibling::*[not(self::tei:seg[@type='whitespace'])][1]"/>
-					<xsl:if test="$next-after-seg/name() = 'pc'">
+					<!-- Only output PC if no whitespace between seg and PC (whitespace template handles that case) -->
+					<xsl:if test="$next-after-seg/name() = 'pc' and not($parent-seg/following-sibling::*[1]/self::tei:seg[@type='whitespace'])">
 						<xsl:value-of select="$next-after-seg"/>
 					</xsl:if>
 				</xsl:when>
@@ -514,6 +545,19 @@
 </xsl:template>
 
 <xsl:template match="tei:w[ancestor::tei:persName and not(parent::tei:rs) and not(parent::tei:foreign) and not(parent::tei:item) and not(ancestor::tei:docDate) and not(ancestor::tei:date) and not(ancestor::tei:choice) and not(parent::tei:seg[not(@type='whitespace')])]">
+	<!-- Check for preceding PC before the container hierarchy -->
+	<xsl:variable name="persName" select="ancestor::tei:persName[1]"/>
+	<xsl:variable name="container" select="if ($persName/parent::tei:seg[not(@type='whitespace')]) then $persName/parent::tei:seg else $persName"/>
+	<xsl:if test="not(preceding-sibling::tei:w) and not(preceding-sibling::*//tei:w)">
+		<xsl:choose>
+			<xsl:when test="$container/preceding-sibling::*[1]/self::tei:pc">
+				<xsl:value-of select="$container/preceding-sibling::*[1]"/>
+			</xsl:when>
+			<xsl:when test="$container/preceding-sibling::*[1]/self::tei:lb and $container/preceding-sibling::*[2]/self::tei:pc">
+				<xsl:value-of select="$container/preceding-sibling::*[2]"/>
+			</xsl:when>
+		</xsl:choose>
+	</xsl:if>
 	<span data-lemma="{@lemma}" data-type="{@type}" data-pb="{preceding::tei:pb[1]/@xml:id}" id="{@xml:id}" class="word"><xsl:apply-templates/></span>
 	<xsl:choose>
 		<!-- First check if there's a PC sibling directly after this word -->
@@ -559,8 +603,9 @@
 			<xsl:value-of select="following-sibling::*[1]"/>
 		</xsl:when>
 		<!-- Otherwise, if this is the last word in placeName, check for PC after placeName -->
-		<xsl:when test="not(following-sibling::tei:w)">
-			<xsl:variable name="placeName" select="ancestor::tei:placeName[1]"/>
+		<xsl:when test="not(following-sibling::tei:w) and not(following-sibling::*//tei:w)">
+			<!-- Get outermost placeName (handles nested placeNames) -->
+			<xsl:variable name="placeName" select="ancestor::tei:placeName[not(ancestor::tei:placeName)][1]"/>
 			<xsl:variable name="next-after-container" select="$placeName/following-sibling::*[not(self::tei:seg[@type='whitespace'])][1]"/>
 			<!-- Only render PC if there's no whitespace before it (whitespace template handles that case) -->
 			<xsl:if test="$next-after-container/name() = 'pc' and not($placeName/following-sibling::*[1]/self::tei:seg[@type='whitespace'])">
@@ -599,6 +644,16 @@
 <xsl:template match="tei:w[not(parent::tei:item or parent::tei:rs or parent::tei:foreign or parent::tei:seg[not(@type='whitespace')] or ancestor::tei:docDate or ancestor::tei:date or ancestor::tei:choice or ancestor::tei:persName or ancestor::tei:placeName or ancestor::tei:name)]">
 	<!-- Skip if preceded by internal PC and word (already rendered by previous word) -->
 	<xsl:if test="not(preceding-sibling::*[1][self::tei:pc[@type='internal']] and preceding-sibling::*[2][self::tei:w])">
+		<!-- Check for preceding PC (e.g., apostrophe before word) -->
+		<!-- Only output if no whitespace before PC (whitespace template handles that case) -->
+		<xsl:choose>
+			<xsl:when test="preceding-sibling::*[1]/self::tei:pc and not(preceding-sibling::*[2]/self::tei:seg[@type='whitespace'])">
+				<xsl:value-of select="preceding-sibling::*[1]"/>
+			</xsl:when>
+			<xsl:when test="preceding-sibling::*[1]/self::tei:lb and preceding-sibling::*[2]/self::tei:pc and not(preceding-sibling::*[3]/self::tei:seg[@type='whitespace'])">
+				<xsl:value-of select="preceding-sibling::*[2]"/>
+			</xsl:when>
+		</xsl:choose>
 		<span data-lemma="{@lemma}" data-type="{@type}" data-pb="{preceding::tei:pb[1]/@xml:id}" id="{@xml:id}" class="word">
 			<xsl:apply-templates/>
 			<!-- If followed by internal PC and then another word, include PC and next word in same span -->
@@ -636,10 +691,14 @@
 						<xsl:value-of select="substring(./tei:w/., 2)"/>
 					</xsl:when>
 					<xsl:otherwise>
+						<!-- Handle first character as large capital -->
 						<span class="text-3xl">
-							<xsl:value-of select="substring(., 1, 1)"/>
+							<xsl:value-of select="substring(text()[1], 1, 1)"/>
 						</span>
-						<xsl:value-of select="substring(., 2)"/>
+						<!-- Output rest of first text node -->
+						<xsl:value-of select="substring(text()[1], 2)"/>
+						<!-- Process remaining nodes (including lb elements) -->
+						<xsl:apply-templates select="node()[position() > 1]"/>
 					</xsl:otherwise>
 				</xsl:choose>
 				<!-- Check for PC elements inside the initialCapital seg -->
@@ -670,16 +729,20 @@
 
 <xsl:template match="tei:seg[@type='whitespace']">
 	<xsl:apply-templates/>
-	<!-- Render following PC (word templates will skip PC if whitespace precedes it) -->
-	<xsl:if test="following-sibling::*[1]/name() = 'pc'">
-		<xsl:value-of select="following-sibling::*[1]"/>
-	</xsl:if>
+	<!-- Render following PC elements (including consecutive PCs) -->
+	<xsl:for-each select="following-sibling::tei:pc[not(preceding-sibling::*[not(self::tei:pc)][1] >> current())]">
+		<xsl:value-of select="."/>
+	</xsl:for-each>
 </xsl:template>
 
 <xsl:template match="tei:seg[@type='ornament']">
 	<span class="ornament">
 		<xsl:apply-templates/>
 	</span>
+	<!-- Check for following PC -->
+	<xsl:if test="following-sibling::*[1]/self::tei:pc">
+		<xsl:value-of select="following-sibling::*[1]"/>
+	</xsl:if>
 </xsl:template>
 
 <xsl:template match="tei:pc">
