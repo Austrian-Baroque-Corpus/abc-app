@@ -100,7 +100,6 @@ get container wrapper of osd viewer
 	// var container = document.getElementById("container_facs_2");
 	// container.style.display = "none";
 	const text = document.querySelector(".text");
-	const height = text?.clientHeight;
 	let width = text ? text.clientWidth : screen.width;
 	const facs = document.getElementById("container_facs_1");
 	let container = facs ? facs : document.createElement("div");
@@ -116,13 +115,17 @@ height is always the screen height minus some offset
 ##################################################################
 */
 
-	container.style.height = `${String(height)}px`;
 	// set osd wrapper container width
 	container = document.querySelector(".section") ?? document.createElement("div");
 	width = container.clientWidth;
 	container = document.getElementById("viewer-1") ?? document.createElement("div");
 	container.style.width = `${String(width / 1.16)}px`;
 	container.style.height = `${String(width / 1.16)}px`;
+
+	// set container_facs_1 height to match its parent viewer-1
+	if (facs) {
+		facs.style.height = container.style.height;
+	}
 
 	/*
 ##################################################################
