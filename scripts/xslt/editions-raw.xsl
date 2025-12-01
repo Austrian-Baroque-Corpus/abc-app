@@ -62,6 +62,9 @@
 </div>
 </xsl:template>
 
+<!-- Hide all <supplied> content -->
+<xsl:template match="tei:supplied"/>
+
 <xsl:template match="tei:titlePage">
 	<div class="title-page" id="#top_page">
 		<xsl:apply-templates/>
@@ -132,16 +135,20 @@
 			<xsl:when test="@break = 'no' and not(@type)">
 				<!-- No character added for break="no" without type -->
 			</xsl:when>
-			<!-- Check if inside antiqua segment OR immediately after antiqua segment (ignoring whitespace text) - use hyphen instead of equals -->
-			<xsl:when test="ancestor::tei:seg[@rend='antiqua'] or (preceding-sibling::*[1][self::tei:seg[@rend='antiqua']] and not(normalize-space(preceding-sibling::text()[1])))">
-				<!-- Only add hyphen if there's no hyphen already -->
+			<!-- Type "s" = single hyphen -->
+			<xsl:when test="@type = 's'">
 				<xsl:if test="not($last-char = '-')">
 					<xsl:text>-</xsl:text>
 				</xsl:if>
 			</xsl:when>
+			<!-- Type "d" = double hyphen (equals sign) -->
+			<xsl:when test="@type = 'd'">
+				<xsl:if test="not($last-char = '=' or $last-char = '-')">
+					<xsl:text>=</xsl:text>
+				</xsl:if>
+			</xsl:when>
 			<!-- Default behavior - use equals sign -->
 			<xsl:otherwise>
-				<!-- Check if there's already a hyphen or equals before the line break -->
 				<xsl:if test="not($last-char = '=' or $last-char = '-')">
 					<xsl:text>=</xsl:text>
 				</xsl:if>
@@ -218,6 +225,25 @@
 						<xsl:value-of select="$next-after-foreign"/>
 					</xsl:if>
 				</xsl:when>
+				<!-- Check if rs is inside a seg that is inside another rs -->
+				<xsl:when test="$parent-rs/parent::tei:seg and $parent-rs/parent::tei:seg/parent::tei:rs">
+					<xsl:variable name="container-seg" select="$parent-rs/parent::tei:seg"/>
+					<xsl:variable name="outer-rs" select="$container-seg/parent::tei:rs"/>
+					<!-- Check if this container seg is the last element with words in the outer rs -->
+					<xsl:if test="not($container-seg/following-sibling::tei:w) and not($container-seg/following-sibling::*//tei:w)">
+						<xsl:variable name="next-after-outer-rs" select="$outer-rs/following-sibling::*[not(self::tei:seg[@type='whitespace'])][1]"/>
+						<xsl:choose>
+							<!-- PC directly after outer rs -->
+							<xsl:when test="$next-after-outer-rs/self::tei:pc and not($outer-rs/following-sibling::*[1]/self::tei:seg[@type='whitespace'])">
+								<xsl:value-of select="$next-after-outer-rs"/>
+							</xsl:when>
+							<!-- PC inside a seg after outer rs -->
+							<xsl:when test="$next-after-outer-rs/self::tei:seg[not(@type='whitespace')]/tei:pc[1][not(preceding-sibling::*[not(self::tei:seg[@type='whitespace'])])]">
+								<xsl:value-of select="$next-after-outer-rs/tei:pc[1]"/>
+							</xsl:when>
+						</xsl:choose>
+					</xsl:if>
+				</xsl:when>
 				<!-- Otherwise, if parent rs has no following siblings, bubble up through rs hierarchy -->
 				<xsl:otherwise>
 					<!-- If parent rs is the last element in its container, check parent's following siblings -->
@@ -227,9 +253,16 @@
 							<xsl:when test="$parent-rs/parent::tei:rs">
 								<xsl:variable name="grandparent-rs" select="$parent-rs/parent::tei:rs"/>
 								<xsl:variable name="next-after-grandparent" select="$grandparent-rs/following-sibling::*[not(self::tei:seg[@type='whitespace'])][1]"/>
-								<xsl:if test="$next-after-grandparent/name() = 'pc' and not($grandparent-rs/following-sibling::*[1]/self::tei:seg[@type='whitespace'])">
-									<xsl:value-of select="$next-after-grandparent"/>
-								</xsl:if>
+								<xsl:choose>
+									<!-- PC directly after grandparent rs -->
+									<xsl:when test="$next-after-grandparent/name() = 'pc' and not($grandparent-rs/following-sibling::*[1]/self::tei:seg[@type='whitespace'])">
+										<xsl:value-of select="$next-after-grandparent"/>
+									</xsl:when>
+									<!-- PC inside a seg after grandparent rs -->
+									<xsl:when test="$next-after-grandparent/self::tei:seg[not(@type='whitespace')]/tei:pc[1][not(preceding-sibling::*[not(self::tei:seg[@type='whitespace'])])]">
+										<xsl:value-of select="$next-after-grandparent/tei:pc[1]"/>
+									</xsl:when>
+								</xsl:choose>
 							</xsl:when>
 							<!-- Otherwise check if PC follows outermost rs -->
 							<xsl:otherwise>
@@ -303,6 +336,72 @@
 								</xsl:when>
 								<!-- Otherwise, if rs is the last element in the seg, check after seg -->
 								<xsl:when test="not($rs/following-sibling::*[not(self::tei:seg[@type='whitespace'])])">
+									<xsl:variable name="next-after-seg" select="$parent-seg/following-sibling::*[not(self::tei:seg[@type='whitespace'])][1]"/>
+									<xsl:choose>
+										<!-- PC directly after seg -->
+										<xsl:when test="$next-after-seg/name() = 'pc'">
+											<xsl:value-of select="$next-after-seg"/>
+										</xsl:when>
+										<!-- If seg has no following siblings and is inside another rs, check after that rs -->
+										<xsl:when test="not($parent-seg/following-sibling::*[not(self::tei:seg[@type='whitespace'])]) and $parent-seg/parent::tei:rs">
+											<xsl:variable name="outer-rs" select="$parent-seg/parent::tei:rs"/>
+											<xsl:variable name="next-after-outer-rs" select="$outer-rs/following-sibling::*[not(self::tei:seg[@type='whitespace'])][1]"/>
+											<xsl:choose>
+												<!-- PC directly after outer rs -->
+												<xsl:when test="$next-after-outer-rs/self::tei:pc and not($outer-rs/following-sibling::*[1]/self::tei:seg[@type='whitespace'])">
+													<xsl:value-of select="$next-after-outer-rs"/>
+												</xsl:when>
+												<!-- PC inside a seg after outer rs -->
+												<xsl:when test="$next-after-outer-rs/self::tei:seg[not(@type='whitespace')]/tei:pc[1][not(preceding-sibling::*[not(self::tei:seg[@type='whitespace'])])]">
+													<xsl:value-of select="$next-after-outer-rs/tei:pc[1]"/>
+												</xsl:when>
+											</xsl:choose>
+										</xsl:when>
+									</xsl:choose>
+								</xsl:when>
+							</xsl:choose>
+						</xsl:when>
+					</xsl:choose>
+				</xsl:when>
+				<!-- If foreign is inside a persName, check for PC after persName or after parent containers -->
+				<xsl:when test="$foreign/parent::tei:persName">
+					<xsl:variable name="persName" select="$foreign/parent::tei:persName"/>
+					<xsl:choose>
+						<!-- Check if persName is inside an rs -->
+						<xsl:when test="$persName/parent::tei:rs">
+							<xsl:variable name="rs" select="$persName/parent::tei:rs"/>
+							<xsl:choose>
+								<!-- Check if rs is directly inside a seg -->
+								<xsl:when test="$rs/parent::tei:seg[not(@type='whitespace')]">
+									<xsl:variable name="parent-seg" select="$rs/parent::tei:seg"/>
+									<xsl:variable name="next-after-rs" select="$rs/following-sibling::*[not(self::tei:seg[@type='whitespace'])][1]"/>
+									<xsl:choose>
+										<!-- First check if PC follows rs directly (within the seg) -->
+										<xsl:when test="$next-after-rs/self::tei:pc">
+											<xsl:value-of select="$next-after-rs"/>
+										</xsl:when>
+										<!-- Otherwise, if rs is the last element in the seg, check after seg -->
+										<xsl:when test="not($rs/following-sibling::*[not(self::tei:seg[@type='whitespace'])])">
+											<xsl:variable name="next-after-seg" select="$parent-seg/following-sibling::*[not(self::tei:seg[@type='whitespace'])][1]"/>
+											<xsl:if test="$next-after-seg/name() = 'pc'">
+												<xsl:value-of select="$next-after-seg"/>
+											</xsl:if>
+										</xsl:when>
+									</xsl:choose>
+								</xsl:when>
+							</xsl:choose>
+						</xsl:when>
+						<!-- Check if persName is directly inside a seg -->
+						<xsl:when test="$persName/parent::tei:seg[not(@type='whitespace')]">
+							<xsl:variable name="parent-seg" select="$persName/parent::tei:seg"/>
+							<xsl:variable name="next-after-persName" select="$persName/following-sibling::*[not(self::tei:seg[@type='whitespace'])][1]"/>
+							<xsl:choose>
+								<!-- First check if PC follows persName directly (within the seg) -->
+								<xsl:when test="$next-after-persName/self::tei:pc">
+									<xsl:value-of select="$next-after-persName"/>
+								</xsl:when>
+								<!-- Otherwise, if persName is the last element in the seg, check after seg -->
+								<xsl:when test="not($persName/following-sibling::*[not(self::tei:seg[@type='whitespace'])])">
 									<xsl:variable name="next-after-seg" select="$parent-seg/following-sibling::*[not(self::tei:seg[@type='whitespace'])][1]"/>
 									<xsl:if test="$next-after-seg/name() = 'pc'">
 										<xsl:value-of select="$next-after-seg"/>
@@ -404,8 +503,8 @@
 			<xsl:value-of select="string(following-sibling::*[1])"/>
 		</xsl:when>
 		<!-- Check if this is the last word and seg is inside placeName/persName/date/foreign/docAuthor, check their following PC -->
-		<xsl:when test="not(following-sibling::tei:w) and not(following-sibling::*//tei:w) and parent::tei:seg[parent::tei:placeName or parent::tei:persName or parent::tei:date or parent::tei:foreign or parent::tei:docAuthor]">
-			<xsl:variable name="container" select="parent::tei:seg/parent::*[self::tei:placeName or self::tei:persName or self::tei:date or self::tei:foreign or self::tei:docAuthor]"/>
+		<xsl:when test="not(following-sibling::tei:w) and not(following-sibling::*//tei:w) and parent::tei:seg[ancestor::tei:placeName or ancestor::tei:persName or ancestor::tei:date or ancestor::tei:foreign or ancestor::tei:docAuthor]">
+			<xsl:variable name="container" select="parent::tei:seg/ancestor::*[self::tei:placeName or self::tei:persName or self::tei:date or self::tei:foreign or self::tei:docAuthor][1]"/>
 			<xsl:variable name="next-after-seg" select="parent::tei:seg/following-sibling::*[not(self::tei:seg[@type='whitespace'])][1]"/>
 			<xsl:variable name="next-after-container" select="$container/following-sibling::*[not(self::tei:seg[@type='whitespace'])][1]"/>
 			<!-- Check if this is truly the last word in the entire container, not just in this seg -->
@@ -414,6 +513,28 @@
 				<!-- First check if PC follows the seg (within the container) -->
 				<xsl:when test="$next-after-seg/name() = 'pc'">
 					<xsl:value-of select="$next-after-seg"/>
+				</xsl:when>
+				<!-- Check if parent seg has no following siblings, walk up seg hierarchy to find PC -->
+				<xsl:when test="not($next-after-seg) and parent::tei:seg/parent::tei:seg">
+					<xsl:variable name="parent-seg" select="parent::tei:seg/parent::tei:seg"/>
+					<xsl:variable name="next-after-parent-seg" select="$parent-seg/following-sibling::*[not(self::tei:seg[@type='whitespace'])][1]"/>
+					<xsl:choose>
+						<xsl:when test="$next-after-parent-seg/name() = 'pc'">
+							<xsl:value-of select="$next-after-parent-seg"/>
+						</xsl:when>
+						<!-- If parent seg also has no following, first check PC after container (within parent seg) -->
+						<xsl:when test="not($next-after-parent-seg) and $is-last-word-in-container and $next-after-container/name() = 'pc' and not($container/following-sibling::*[1]/self::tei:seg[@type='whitespace'])">
+							<xsl:value-of select="$next-after-container"/>
+						</xsl:when>
+						<!-- Otherwise check if container parent is a seg and has following PC -->
+						<xsl:when test="not($next-after-parent-seg) and $container/parent::tei:seg">
+							<xsl:variable name="container-parent-seg" select="$container/parent::tei:seg"/>
+							<xsl:variable name="next-after-container-seg" select="$container-parent-seg/following-sibling::*[not(self::tei:seg[@type='whitespace'])][1]"/>
+							<xsl:if test="$next-after-container-seg/name() = 'pc'">
+								<xsl:value-of select="$next-after-container-seg"/>
+							</xsl:if>
+						</xsl:when>
+					</xsl:choose>
 				</xsl:when>
 				<!-- Otherwise check if PC follows the container directly, but only if this is the last word in container and no whitespace before PC -->
 				<xsl:when test="$is-last-word-in-container and $next-after-container/name() = 'pc' and not($container/following-sibling::*[1]/self::tei:seg[@type='whitespace'])">
@@ -575,18 +696,41 @@
 				<xsl:when test="$is-last-word-in-persName and $next-after-container/name() = 'pc' and not($persName/following-sibling::*[1]/self::tei:seg[@type='whitespace'])">
 					<xsl:value-of select="$next-after-container"/>
 				</xsl:when>
-				<!-- If persName has no following siblings and is inside rs elements, bubble up through rs chain -->
-				<xsl:when test="not($persName/following-sibling::*) and $persName/ancestor::tei:rs">
-					<xsl:variable name="outermost-rs" select="$persName/ancestor::tei:rs[not(parent::tei:rs)][1]"/>
-					<xsl:variable name="next-after-rs" select="$outermost-rs/following-sibling::*[not(self::tei:seg[@type='whitespace'])][1]"/>
+				<!-- If persName has no following siblings, check parent containers -->
+				<xsl:when test="not($persName/following-sibling::*)">
 					<xsl:choose>
-						<!-- Check if PC follows rs directly -->
-						<xsl:when test="$next-after-rs/name() = 'pc' and not($outermost-rs/following-sibling::*[1]/self::tei:seg[@type='whitespace'])">
-							<xsl:value-of select="$next-after-rs"/>
+						<!-- First check if persName is inside foreign and PC follows foreign -->
+						<xsl:when test="$persName/parent::tei:foreign">
+							<xsl:variable name="foreign" select="$persName/parent::tei:foreign"/>
+							<xsl:variable name="next-after-foreign" select="$foreign/following-sibling::*[not(self::tei:seg[@type='whitespace'])][1]"/>
+							<xsl:choose>
+								<xsl:when test="$next-after-foreign/name() = 'pc'">
+									<xsl:value-of select="$next-after-foreign"/>
+								</xsl:when>
+								<!-- If foreign also has no following siblings, check if it's in a seg -->
+								<xsl:when test="not($foreign/following-sibling::*) and $foreign/parent::tei:seg">
+									<xsl:variable name="parent-seg" select="$foreign/parent::tei:seg"/>
+									<xsl:variable name="next-after-seg" select="$parent-seg/following-sibling::*[not(self::tei:seg[@type='whitespace'])][1]"/>
+									<xsl:if test="$next-after-seg/name() = 'pc'">
+										<xsl:value-of select="$next-after-seg"/>
+									</xsl:if>
+								</xsl:when>
+							</xsl:choose>
 						</xsl:when>
-						<!-- Check if PC is inside a seg after the rs -->
-						<xsl:when test="$next-after-rs/self::tei:seg[not(@type='whitespace')]/tei:pc[1][not(preceding-sibling::*[not(self::tei:seg[@type='whitespace'])])]">
-							<xsl:value-of select="$next-after-rs/tei:pc[1]"/>
+						<!-- Otherwise check if persName is inside rs elements, bubble up through rs chain -->
+						<xsl:when test="$persName/ancestor::tei:rs">
+							<xsl:variable name="outermost-rs" select="$persName/ancestor::tei:rs[not(parent::tei:rs)][1]"/>
+							<xsl:variable name="next-after-rs" select="$outermost-rs/following-sibling::*[not(self::tei:seg[@type='whitespace'])][1]"/>
+							<xsl:choose>
+								<!-- Check if PC follows rs directly -->
+								<xsl:when test="$next-after-rs/name() = 'pc' and not($outermost-rs/following-sibling::*[1]/self::tei:seg[@type='whitespace'])">
+									<xsl:value-of select="$next-after-rs"/>
+								</xsl:when>
+								<!-- Check if PC is inside a seg after the rs -->
+								<xsl:when test="$next-after-rs/self::tei:seg[not(@type='whitespace')]/tei:pc[1][not(preceding-sibling::*[not(self::tei:seg[@type='whitespace'])])]">
+									<xsl:value-of select="$next-after-rs/tei:pc[1]"/>
+								</xsl:when>
+							</xsl:choose>
 						</xsl:when>
 					</xsl:choose>
 				</xsl:when>
@@ -665,6 +809,10 @@
 		<!-- Output PC only if not internal or not followed by word -->
 		<xsl:if test="following-sibling::*[1]/name() = 'pc' and not(following-sibling::*[1][self::tei:pc[@type='internal']] and following-sibling::*[2][self::tei:w])">
 			<xsl:value-of select="following-sibling::*[1]"/>
+			<!-- If there are consecutive PCs (PC immediately after first PC), output them too -->
+			<xsl:if test="following-sibling::*[2][self::tei:pc]">
+				<xsl:value-of select="following-sibling::*[2]"/>
+			</xsl:if>
 		</xsl:if>
 		<!-- Check if PC is inside a following seg (like seg[@rend='antiqua']) -->
 		<xsl:if test="following-sibling::*[1]/self::tei:seg[not(@type='whitespace')]/tei:pc[1][not(preceding-sibling::*)]">
@@ -728,11 +876,11 @@
 </xsl:template>
 
 <xsl:template match="tei:seg[@type='whitespace']">
-	<xsl:apply-templates/>
-	<!-- Render following PC elements (including consecutive PCs) -->
-	<xsl:for-each select="following-sibling::tei:pc[not(preceding-sibling::*[not(self::tei:pc)][1] >> current())]">
-		<xsl:value-of select="."/>
-	</xsl:for-each>
+	<!-- Only output whitespace if no PC immediately follows -->
+	<xsl:if test="not(following-sibling::*[1]/self::tei:pc)">
+		<xsl:apply-templates/>
+	</xsl:if>
+	<!-- Render following PC elements (including consecutive PCs) --><xsl:for-each select="following-sibling::tei:pc[not(preceding-sibling::*[not(self::tei:pc)][1] >> current())]"><xsl:value-of select="."/></xsl:for-each>
 </xsl:template>
 
 <xsl:template match="tei:seg[@type='ornament']">
@@ -752,6 +900,9 @@
 	<xsl:choose>
 		<xsl:when test="@ref = '#bracketsMW'">
 			<xsl:text>):( . . .</xsl:text>
+		</xsl:when>
+		<xsl:when test="@ref = '#bracketsTC'">
+			<xsl:text>)(</xsl:text>
 		</xsl:when>
 		<xsl:otherwise>
 			<xsl:apply-templates/>
