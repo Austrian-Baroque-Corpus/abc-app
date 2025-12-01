@@ -32,7 +32,7 @@
 </xsl:variable>
 
 <xsl:template match="/">
-<div class="text-left border-b border-b-gray-300" id="edition-content" data-prev="{$prev}" data-next="{$next}">
+<div class="pl-4 text-left border-b border-b-gray-300" id="edition-content" data-prev="{$prev}" data-next="{$next}">
 	<h1 class="text-lg text-red-500">
 		<xsl:value-of select="$doc_title"/><xsl:text> </xsl:text><xsl:value-of select="//tei:pb[1]/@n"/>
 	</h1>
@@ -42,7 +42,7 @@
 </div>
 <div class="flex flex-row transcript active lg:flex-col md:flex-col sm:flex-col">
 	<div class="basis-7/12 text yes-index">
-		<div class="flex flex-col section font-cambria text-xl">
+		<div class="pl-4 flex flex-col section font-cambria text-lg">
 			<xsl:for-each select=".//tei:front|.//tei:body|.//tei:back">
 				<xsl:apply-templates/>
 			</xsl:for-each>
@@ -465,7 +465,7 @@
 			<xsl:value-of select="following-sibling::*[1]"/>
 		</xsl:when>
 		<!-- Otherwise, if this is the last word in date, check for PC after date -->
-		<xsl:when test="not(following-sibling::tei:w)">
+		<xsl:when test="not(following-sibling::tei:w) and not(following-sibling::*//tei:w)">
 			<xsl:variable name="date" select="ancestor::tei:date[1]"/>
 			<xsl:variable name="next-after-container" select="$date/following-sibling::*[not(self::tei:seg[@type='whitespace'])][1]"/>
 			<!-- Only render PC if there's no whitespace before it (whitespace template handles that case) -->
@@ -804,6 +804,10 @@
 			<xsl:if test="following-sibling::*[1][self::tei:pc[@type='internal']] and following-sibling::*[2][self::tei:w]">
 				<xsl:value-of select="following-sibling::*[1]"/>
 				<xsl:apply-templates select="following-sibling::*[2]/node()"/>
+				<!-- If that next word is followed by a PC, output it too -->
+				<xsl:if test="following-sibling::*[2][self::tei:w]/following-sibling::*[1][self::tei:pc]">
+					<xsl:value-of select="following-sibling::*[2]/following-sibling::*[1]"/>
+				</xsl:if>
 			</xsl:if>
 		</span>
 		<!-- Output PC only if not internal or not followed by word -->
@@ -880,7 +884,11 @@
 	<xsl:if test="not(following-sibling::*[1]/self::tei:pc)">
 		<xsl:apply-templates/>
 	</xsl:if>
-	<!-- Render following PC elements (including consecutive PCs) --><xsl:for-each select="following-sibling::tei:pc[not(preceding-sibling::*[not(self::tei:pc)][1] >> current())]"><xsl:value-of select="."/></xsl:for-each>
+	<!-- Render following PC elements (including consecutive PCs) -->
+	<!-- But only if not inside a seg with @rend or foreign element (to avoid outputting PCs from outside the parent) -->
+	<xsl:if test="not(parent::tei:seg[@rend]) and not(parent::tei:foreign)">
+		<xsl:for-each select="following-sibling::tei:pc[not(preceding-sibling::*[not(self::tei:pc)][1] >> current())]"><xsl:value-of select="."/></xsl:for-each>
+	</xsl:if>
 </xsl:template>
 
 <xsl:template match="tei:seg[@type='ornament']">
@@ -903,6 +911,9 @@
 		</xsl:when>
 		<xsl:when test="@ref = '#bracketsTC'">
 			<xsl:text>)(</xsl:text>
+		</xsl:when>
+		<xsl:when test="@ref = '#footerDots'">
+			<xsl:text>. . .</xsl:text>
 		</xsl:when>
 		<xsl:otherwise>
 			<xsl:apply-templates/>
