@@ -5,83 +5,87 @@ import Register from "./Register.astro";
 ---
 
 <div>
-	<div class="flex flex-row">
-		<Register />
-		<div class="sticky top-24 flex w-[100%] flex-col">
-			<div class="w-[100%] p-4 text-left">
-				<div
-					class="xs:max-w-[200px] mx-auto max-w-[1000px] sm:max-w-[300px] md:max-w-[600px] lg:max-w-[800px]"
-				>
-					<h4 class="pl-2 pt-2 text-left font-segoe text-xl">
-						<img class="inline" src="/Suche.jpg" alt="Suchet" title="Suchet" />
-					</h4>
-					<!-- <VirtualKeyboard /> -->
-					<div id="noske-search" class="text-left"></div>
-					<div id="example" class="cursor-pointer py-4">
-						<strong
-							><span class="arrow inline-block text-red-600">&#8595;</span>&nbsp;<h5 class="inline">
-								Beispiele
-							</h5>&nbsp;<span class="arrow inline-block text-red-600">&#8595;</span></strong
-						>
-					</div>
-					<div id="examplelist" class="hidden text-left">
-						<h6>Einfache Suche</h6>
-						<ul>
-							<li class="cursor-pointer px-2">
-								<a class="hit-examples text-red-600 underline">"Feeg=Feuer"</a>: Suche nach einem
-								Wort im Volltext
-							</li>
-							<li class="cursor-pointer px-2">
-								<a class="hit-examples text-red-600 underline">"arme Seelen"</a>: Suche nach zwei
-								aufeinanderfolgenden Wörtern
-							</li>
-							<li class="cursor-pointer px-2">
-								<a class="hit-examples text-red-600 underline">"in dem Feegfeuer"</a>: Suche nach
-								drei aufeinanderfolgenden Wörtern
-							</li>
-						</ul>
-						<br />
-						<h6>Erweiterte Suche (CQL)</h6>
+	<div class="flex flex-col md:flex-row lg:flex-row xl:flex-row 2xl:flex-row">
+		<div class="flex w-full flex-row md:w-1/2 lg:w-1/2 xl:w-1/2 2xl:w-1/2">
+			<Register />
+			<div class="sticky top-24 flex grow flex-col">
+				<div class="w-[100%] p-4 text-left md:p-4 lg:p-4 xl:p-4 2xl:p-4">
+					<div
+						class="xs:max-w-[200px] ml-0 mr-auto max-w-[1000px] sm:max-w-[300px] md:mx-auto md:max-w-[600px] lg:mx-auto lg:max-w-[800px] xl:mx-auto 2xl:mx-auto"
+					>
+						<h4 class="pl-2 pt-2 text-left font-segoe text-xl">
+							<img class="inline" src="/Suche.jpg" alt="Suchet" title="Suchet" />
+						</h4>
+						<!-- <VirtualKeyboard /> -->
+						<div id="noske-search" class="text-left"></div>
+						<div id="example" class="cursor-pointer py-4">
+							<strong
+								><span class="arrow inline-block text-red-600">&#8595;</span>&nbsp;<h5
+									class="inline"
+								>
+									Beispiele
+								</h5>&nbsp;<span class="arrow inline-block text-red-600">&#8595;</span></strong
+							>
+						</div>
+						<div id="examplelist" class="hidden text-left">
+							<h6>Einfache Suche</h6>
+							<ul>
+								<li class="cursor-pointer px-2">
+									<a class="hit-examples text-red-600 underline">"Feeg=Feuer"</a>: Suche nach einem
+									Wort im Volltext
+								</li>
+								<li class="cursor-pointer px-2">
+									<a class="hit-examples text-red-600 underline">"arme Seelen"</a>: Suche nach zwei
+									aufeinanderfolgenden Wörtern
+								</li>
+								<li class="cursor-pointer px-2">
+									<a class="hit-examples text-red-600 underline">"in dem Feegfeuer"</a>: Suche nach
+									drei aufeinanderfolgenden Wörtern
+								</li>
+							</ul>
+							<br />
+							<h6>Erweiterte Suche (CQL)</h6>
 
-						<ul>
-							<li class="cursor-pointer px-2">
-								<a class="hit-examples text-red-600 underline">[w="Feegfeuer"]</a>: Suche nach einer
-								Wortform, hier: "Feeg=Feuer"
-							</li>
-							<li class="cursor-pointer px-2">
-								<a class="hit-examples text-red-600 underline">[l="Fegefeuer"]</a>: Suche nach einem
-								Lemma, hier: "Fegefeuer"
-							</li>
-							<li class="cursor-pointer px-2">
-								<a class="hit-examples text-red-600 underline">[l="ja" &amp; pos="PTKANT"]</a>:
-								Suche nach einer Wortart mit den Tags des Stuttgart-Tübingen-TagSets, hier:
-								Antwortpartikel
-							</li>
-							<li class="cursor-pointer px-2">
-								<a class="hit-examples text-red-600 underline">[pos="NN" &amp; l=".*feuer"]</a>:
-								Suche nach einer Wortart kombiniert mit einem Lemma, das mit einem bestimmten
-								Wortteil endet, hier: Nomen mit "-feuer"
-							</li>
-							<li class="cursor-pointer px-2">
-								<a class="hit-examples text-red-600 underline">[pos="ADJA"] [l="Fegefeuer"]</a>:
-								Suche nach einer Sequenz bestehend aus einer Wortart und einem Lemma, hier: Adjektiv
-								und "Fegefeuer"
-							</li>
-							<li class="px-2">
-								Weitere Hinweise zur Abfragesyntax finden Sie <a
-									href="nutzung"
-									class="text-red-600 underline">hier</a
-								>.
-							</li>
-						</ul>
+							<ul>
+								<li class="cursor-pointer px-2">
+									<a class="hit-examples text-red-600 underline">[w="Feegfeuer"]</a>: Suche nach
+									einer Wortform, hier: "Feeg=Feuer"
+								</li>
+								<li class="cursor-pointer px-2">
+									<a class="hit-examples text-red-600 underline">[l="Fegefeuer"]</a>: Suche nach
+									einem Lemma, hier: "Fegefeuer"
+								</li>
+								<li class="cursor-pointer px-2">
+									<a class="hit-examples text-red-600 underline">[l="ja" &amp; pos="PTKANT"]</a>:
+									Suche nach einer Wortart mit den Tags des Stuttgart-Tübingen-TagSets, hier:
+									Antwortpartikel
+								</li>
+								<li class="cursor-pointer px-2">
+									<a class="hit-examples text-red-600 underline">[pos="NN" &amp; l=".*feuer"]</a>:
+									Suche nach einer Wortart kombiniert mit einem Lemma, das mit einem bestimmten
+									Wortteil endet, hier: Nomen mit "-feuer"
+								</li>
+								<li class="cursor-pointer px-2">
+									<a class="hit-examples text-red-600 underline">[pos="ADJA"] [l="Fegefeuer"]</a>:
+									Suche nach einer Sequenz bestehend aus einer Wortart und einem Lemma, hier:
+									Adjektiv und "Fegefeuer"
+								</li>
+								<li class="px-2">
+									Weitere Hinweise zur Abfragesyntax finden Sie <a
+										href="nutzung"
+										class="text-red-600 underline">hier</a
+									>.
+								</li>
+							</ul>
+						</div>
 					</div>
 				</div>
-			</div>
-			<div id="hitsbox"></div>
+				<div id="hitsbox"></div>
 
-			<div class="mx-auto grid grid-cols-2">
-				<div id="noske-pagination" class="text-right"></div>
-				<div id="statsbox" class="text-left"></div>
+				<div class="mx-auto grid grid-cols-2">
+					<div id="noske-pagination" class="text-right"></div>
+					<div id="statsbox" class="text-left"></div>
+				</div>
 			</div>
 		</div>
 		<EditionFragment />
@@ -148,8 +152,8 @@ import Register from "./Register.astro";
 
 		const noskeInputSelect = document.getElementById("noske-input-select") as HTMLSelectElement;
 		if (noskeInputSelect) {
-			noskeInputSelect.options[0].text = "Einfache Suche";
-			noskeInputSelect.options[1].text = "Erweiterte Suche (CQL)";
+			noskeInputSelect.options[0].text = "Einfach";
+			noskeInputSelect.options[1].text = "Erweitert (CQL)";
 		}
 
 		const noskeInputDiv = document.getElementById("noske-input");
