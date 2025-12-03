@@ -108,6 +108,7 @@ import Register from "./Register.astro";
 <script>
 	import { NoskeSearch } from "acdh-noske-search";
 	import { loadContent } from "../lib/synopticView";
+	import { includes } from "@acdh-oeaw/lib";
 
 	const screeWidth = window.innerWidth >= 1024 ? true : false;
 
@@ -310,11 +311,18 @@ import Register from "./Register.astro";
 				// function timeout
 				// const timeout = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 				// await timeout(250); // wait for hits to be rendered
-				let issues = {};
+				let issues = {
+					Korpus: 0,
+					"Abraham-Loesch_Wienn": 0,
+					"Abraham-Todten_Bruderschaft": 0,
+					"Abraham-Todten_Capelle": 0,
+					"Abraham-Mercks_Wien": 0,
+					"Abraham-Augustini_feuriges_Hertz": 0,
+				};
 				for (const line of lines) {
 					var issueId = line.refs[1].split("doc.id=")[1];
-					issues["Korpus"] ? issues["Korpus"]++ : (issues["Korpus"] = 1);
-					issues[issueId] ? issues[issueId]++ : (issues[issueId] = 1);
+					issues["Korpus"]++;
+					issues[issueId]++;
 				}
 				const issuesBox = document.createElement("div");
 				issuesBox.classList.add("mt-4", "text-gray-600", "text-left");
@@ -322,8 +330,16 @@ import Register from "./Register.astro";
 				issuesBox.innerHTML += `<ul class="pl-4">`;
 				for (const [key, value] of Object.entries(issues)) {
 					let title = key.replaceAll("_", " ").replace("Abraham-", "").replace("oe", "ö");
+					if (title.includes("Mercks Wien")) {
+						title = "Mercks Wienn";
+					} else if (title.includes("Todten Capelle")) {
+						title = "Todten-Capelle";
+					} else if (title.includes("Todten Bruderschaft")) {
+						title = "Grosse Todten Bruderschaft";
+					}
 					issuesBox.innerHTML += `<li class="text-red-600 cursor-pointer list-none" data-key="${key == "Korpus" ? ".*" : key}">${value} – ${title}</li>`;
 				}
+
 				const hitsBox =
 					document.getElementById(containerId!) || document.getElementById("hitsbox-init");
 				hitsBox!.prepend(issuesBox);
