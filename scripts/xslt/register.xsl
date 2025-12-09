@@ -48,29 +48,37 @@
 		</xsl:for-each>
 		<xsl:for-each select="document('../../data/register/abacus-index_placenames.xml')//tei:TEI">
 			<div id="rg-place" class="hidden">
-				<xsl:for-each-group select=".//tei:place" group-by="@type">
+				<xsl:for-each-group select=".//tei:place" group-by="
+					if (@type='lake' or @type='rive' or @type='sea') then 'water'
+					else if (@type='vill' or @type='city' or @type='sett' or @type='subu') then 'urban'
+					else @type">
 					<xsl:sort select="
-						if (current-grouping-key()='city') then 'Städte'
+						if (current-grouping-key()='urban') then 'Städte und Dörfer'
 						else if (current-grouping-key()='cont') then 'Kontinente'
 						else if (current-grouping-key()='coun') then 'Länder'
 						else if (current-grouping-key()='dist') then 'Regionen'
-						else if (current-grouping-key()='lake') then 'Seen'
+						else if (current-grouping-key()='water') then 'Gewässer'
 						else if (current-grouping-key()='moun') then 'Berge'
-						else if (current-grouping-key()='rive') then 'Flüsse'
-						else if (current-grouping-key()='sea') then 'Meere'
-						else if (current-grouping-key()='sett') then 'Siedlungen'
 						else if (current-grouping-key()='stre') then 'Straßen und Plätze in Wien'
-						else if (current-grouping-key()='subu') then 'Stadtteile'
-						else if (current-grouping-key()='vill') then 'Dörfer'
 						else current-grouping-key()"
 						data-type="text" order="ascending"/>
 					<h5 class="cursor-pointer inline" title="Ortskategorie ausklappen/einklappen"><span class="text-red-600">&#8595; </span>
-						<xsl:variable name="placeTypeLabel" select="$termlabels1//terms[@key='placeType']/term[@key=current-grouping-key()]"/>
 						<xsl:choose>
-							<xsl:when test="$placeTypeLabel != ''">
-								<xsl:value-of select="$placeTypeLabel"/>
+							<xsl:when test="current-grouping-key()='water'">
+								<xsl:text>Gewässer</xsl:text>
 							</xsl:when>
-							<xsl:otherwise><xsl:value-of select="current-grouping-key()"/></xsl:otherwise>
+							<xsl:when test="current-grouping-key()='urban'">
+								<xsl:text>Städte und Dörfer</xsl:text>
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:variable name="placeTypeLabel" select="$termlabels1//terms[@key='placeType']/term[@key=current-grouping-key()]"/>
+								<xsl:choose>
+									<xsl:when test="$placeTypeLabel != ''">
+										<xsl:value-of select="$placeTypeLabel"/>
+									</xsl:when>
+									<xsl:otherwise><xsl:value-of select="current-grouping-key()"/></xsl:otherwise>
+								</xsl:choose>
+							</xsl:otherwise>
 						</xsl:choose>
 						<!--(<xsl:value-of select="current-grouping-key()"/>)-->
 					</h5><span id="placeType" data-str="{current-grouping-key()}" class="cursor-pointer inline-block text-red-600" title="Nach Ortskategorie '{current-grouping-key()}' suchen">&#160;&#10143;</span><br/>
