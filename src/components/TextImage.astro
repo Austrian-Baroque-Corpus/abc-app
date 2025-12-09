@@ -32,3 +32,9 @@ const { image, text, image_alt, link } = Astro.props;
 		<slot />
 	</article>
 </div>
+
+<style>
+	article :global(a) {
+		color: rgb(220 38 38);
+	}
+</style>
