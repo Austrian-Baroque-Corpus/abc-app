@@ -439,7 +439,8 @@ import Register from "./Register.astro";
 				}
 				let pdId = attr![pdIdx];
 				let pdN = attr![pdNdx];
-				let hash = pdId!.split("__")[2];
+				// Extract hash from kwic_attr - the ID is at index 4 (xml:id attribute)
+				let hash = attr![4]; // The ID element is the xml:id
 				loadContent(pdId, "noske-synoptic-view", hash, pdN);
 
 				let issues = {};
@@ -578,7 +579,9 @@ import Register from "./Register.astro";
 							}
 							let pdId = attr![pdIdx];
 							let pdN = attr![pdNdx];
-							let hash = hitId.split("__")[2];
+							// Extract hash from kwic_attr - it's the xml:id at position 5 (index 5 after split)
+							let kwic_attr_split = line.kwic_attr.split("/");
+							let hash = kwic_attr_split[5]; // The xml:id is at index 5
 							loadContent(pdId, "noske-synoptic-view", hash, pdN);
 						});
 					}

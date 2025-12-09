@@ -52,12 +52,19 @@ async function transform(options: {
 
 		if (!options.hash || options.hash === "") return;
 
-		const word = document.getElementById(options.hash);
+		// Add a small delay to ensure DOM is fully rendered
+		setTimeout(() => {
+			const word = document.getElementById(options.hash);
 
-		if (word) {
-			// word.scrollIntoView({ behavior: "instant", block: "center", inline: "center" });
-			word.style.backgroundColor = "yellow";
-		}
+			if (word) {
+				//word.scrollIntoView({ behavior: "smooth", block: "center", inline: "center" });
+				//word.style.backgroundColor = "red"; // ← THIS LINE sets the yellow background
+				word.style.color = "red";
+				word.style.fontWeight = "bold";
+				word.style.padding = "2px 4px";
+				word.style.borderRadius = "3px";
+			}
+		}, 100);
 	} catch (error) {
 		console.error(error);
 	}
