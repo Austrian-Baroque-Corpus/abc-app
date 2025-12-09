@@ -338,7 +338,7 @@ import Register from "./Register.astro";
 					} else if (title.includes("Todten Bruderschaft")) {
 						title = "Grosse Todten Bruderschaft";
 					}
-					issuesBox.innerHTML += `<li class="text-red-600 cursor-pointer list-none" data-key="${key == "Korpus" ? ".*" : key}">${value} – ${title}</li>`;
+					issuesBox.innerHTML += `<li class="text-red-600 cursor-pointer list-none" data-key="${key == "Korpus" ? ".*" : key}">${title} - ${value}</li>`;
 				}
 
 				const hitsBox =
