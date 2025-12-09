@@ -14,7 +14,7 @@ const { image, text, image_alt, link } = Astro.props;
 ---
 
 <div class="my-4 flex flex-row">
-	<section class="basis-2/12 items-center border-gray-200 py-2 align-middle">
+	<section class="basis-2/12 items-center border-gray-200 py-2 align-middle text-base">
 		{
 			(
 				<a href={link}>
@@ -27,7 +27,7 @@ const { image, text, image_alt, link } = Astro.props;
 			)
 		}
 	</section>
-	<article class="basis-10/12 pl-4 text-justify text-lg">
+	<article class="basis-10/12 pl-4 text-justify text-base">
 		{text}
 		<slot />
 	</article>
