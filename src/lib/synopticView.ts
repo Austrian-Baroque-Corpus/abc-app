@@ -58,8 +58,8 @@ async function transform(options: {
 
 			if (word) {
 				//word.scrollIntoView({ behavior: "smooth", block: "center", inline: "center" });
-				//word.style.backgroundColor = "red"; // ← THIS LINE sets the yellow background
-				word.style.color = "red";
+				//word.style.backgroundColor = "red";
+				word.style.color = "#dc2626"; // Tailwind's red-600 color
 				word.style.fontWeight = "bold";
 				word.style.padding = "2px 4px";
 				word.style.borderRadius = "3px";
