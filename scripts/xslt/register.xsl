@@ -35,9 +35,15 @@
 										<xsl:choose>
 											<xsl:when test="$termLabel != ''">
 												<xsl:value-of select="$termLabel"/>
+												<xsl:text> (</xsl:text>
+												<xsl:value-of select=".//tei:noteGrp/tei:note[@type='mentions'][not(@target)]/@n"/>
+												<xsl:text>)</xsl:text>
 											</xsl:when>
 											<xsl:otherwise>
 												<xsl:value-of select=".//tei:persName[@type='main']"/>
+												<xsl:text> (</xsl:text>
+												<xsl:value-of select=".//tei:noteGrp/tei:note[@type='mentions'][not(@target)]/@n"/>
+												<xsl:text>)</xsl:text>
 											</xsl:otherwise>
 										</xsl:choose>
 									</li>
@@ -91,9 +97,15 @@
 									<xsl:choose>
 										<xsl:when test="$termLabel != ''">
 											<xsl:value-of select="$termLabel"/>
+											<xsl:text> (</xsl:text>
+											<xsl:value-of select=".//tei:noteGrp/tei:note[@type='mentions'][not(@target)]/@n"/>
+											<xsl:text>)</xsl:text>
 										</xsl:when>
 										<xsl:otherwise>
 											<xsl:value-of select=".//tei:placeName[@type='main']"/>
+											<xsl:text> (</xsl:text>
+											<xsl:value-of select=".//tei:noteGrp/tei:note[@type='mentions'][not(@target)]/@n"/>
+											<xsl:text>)</xsl:text>
 										</xsl:otherwise>
 									</xsl:choose>
 								</li>
