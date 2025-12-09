@@ -1238,20 +1238,33 @@ import Register from "./Register.astro";
 					}
 				});
 
-				wordslistHtml.innerHTML += `<div id="rg-abc"><h4 class="cursor-pointer"><span class="text-red-600">&#8595; </span>Kontrahierte Formen I</h4><ul class="hidden pl-2" id="rg-abc-types"></ul></div>`;
-
 				// Sort word types using diacriticSort
 				const sortedWordTypes = Object.entries(wordTypes).sort((a, b) => diacriticSort(a[0], b[0]));
+
+				// First, output Stuttgart-Tübingen-TagSet
+				for (let [key, value] of sortedWordTypes) {
+					if (key === "Stuttgart-Tübingen-TagSet") {
+						const sortedWords = value.sort((a, b) => diacriticSort(a, b));
+						wordslistHtml.innerHTML += `<div id="rg-abc"><h4 class="cursor-pointer"><span class="text-red-600">&#8595; </span>${key}</h4><ul class="hidden pl-2">${sortedWords.join("")}</ul></div>`;
+					}
+				}
+
+				// Then, output Kontrahierte Formen I with nested subcategories
+				wordslistHtml.innerHTML += `<div id="rg-abc"><h4 class="cursor-pointer"><span class="text-red-600">&#8595; </span>Kontrahierte Formen I</h4><ul class="hidden pl-2" id="rg-abc-types"></ul></div>`;
+
 				for (let [key, value] of sortedWordTypes) {
 					const sortedWords = value.sort((a, b) => diacriticSort(a, b));
 					if (key !== "Kontrahierte-Formen-II" && key !== "Stuttgart-Tübingen-TagSet") {
 						document.getElementById("rg-abc-types")!.innerHTML +=
 							`<h4 class="cursor-pointer"><span class="text-red-600">&#8595; </span>${key.replace("-", " ").replace("-", " ")}</h4><ul class="hidden pl-2">${sortedWords.join("")}</ul>`;
-					} else {
-						if (key !== "Stuttgart-Tübingen-TagSet") {
-							key = key.replace("-", " ").replace("-", " ");
-						}
-						wordslistHtml.innerHTML += `<div id="rg-abc"><h4 class="cursor-pointer"><span class="text-red-600">&#8595; </span>${key}</h4><ul class="hidden pl-2">${sortedWords.join("")}</ul></div>`;
+					}
+				}
+
+				// Finally, output Kontrahierte Formen II
+				for (let [key, value] of sortedWordTypes) {
+					if (key === "Kontrahierte-Formen-II") {
+						const sortedWords = value.sort((a, b) => diacriticSort(a, b));
+						wordslistHtml.innerHTML += `<div id="rg-abc"><h4 class="cursor-pointer"><span class="text-red-600">&#8595; </span>${key.replace("-", " ").replace("-", " ")}</h4><ul class="hidden pl-2">${sortedWords.join("")}</ul></div>`;
 					}
 				}
 			}
