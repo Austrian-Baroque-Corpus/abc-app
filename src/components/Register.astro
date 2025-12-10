@@ -7,7 +7,8 @@ const html = await readFile("edition/register.html", "utf-8");
 ---
 
 <div
-	class="xs:hidden relative z-0 max-h-screen min-h-screen w-full max-w-[290px] shrink-0 overflow-y-auto border-r border-r-red-600 bg-cabacus bg-repeat-y px-4 pt-10 sm:hidden md:hidden lg:hidden xl:block 2xl:block"
+	id="register-container"
+	class="xs:hidden relative z-0 max-h-screen min-h-screen w-full max-w-[290px] shrink-0 overflow-y-auto border-r border-r-red-600 bg-cabacus bg-repeat-y px-4 pt-10 transition-all duration-300 sm:hidden md:hidden lg:hidden xl:block 2xl:block"
 >
 	<div id="abacus-wordslist" class="my-2">
 		<ul>
@@ -115,12 +116,15 @@ const html = await readFile("edition/register.html", "utf-8");
 	button?.addEventListener("click", () => {
 		button.parentElement!.classList.toggle("rotate-90");
 		button.parentElement!.classList.toggle("-left-2");
-		//button.parentElement!.classList.toggle("top-45");
 		button.parentElement!.classList.toggle("top-4");
+
 		let register = document.getElementById("abacus-register") as HTMLElement;
 		register.classList.toggle("hidden");
-		register.parentElement?.classList.toggle("w-20");
-		register.parentElement?.classList.toggle("w-[50%]");
+
+		let container = document.getElementById("register-container") as HTMLElement;
+		container.classList.toggle("!w-20");
+		container.classList.toggle("!max-w-20");
+
 		let wordslist = document.getElementById("abacus-wordslist") as HTMLElement;
 		wordslist.classList.toggle("hidden");
 	});
