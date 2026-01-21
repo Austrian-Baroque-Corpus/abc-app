@@ -126,8 +126,8 @@ height is always the screen height minus some offset
 	container = document.querySelector(".section") ?? document.createElement("div");
 	width = container.clientWidth;
 	container = document.getElementById("viewer-1") ?? document.createElement("div");
-	container.style.width = `${String(width / 1.16)}px`;
-	container.style.height = `${String(width / 1.16)}px`;
+	container.style.width = `${String(width / 1.0)}px`;
+	container.style.height = `${String(width / 0.9)}px`;
 
 	// set container_facs_1 height to match its parent viewer-1
 	if (facs) {
@@ -174,10 +174,31 @@ initialize osd
 	});
 
 	viewer.viewport.goHome = function () {
-		fitVertically_align_left_bottom();
+		//fitVertically_align_left_bottom();
+		fitVertically_align_centered();
 	};
 
-	function fitVertically_align_left_bottom() {
+	// function fitVertically_align_left_bottom() {
+	// 	const initial_bounds = viewer.viewport.getBounds();
+	// 	const ratio = initial_bounds.width / initial_bounds.height;
+	// 	const tiledImage = viewer.world.getItemAt(viewer.world.getItemCount() - 1);
+	// 	const new_height: number =
+	// 		// @ts-expect-error in development
+	// 		ratio > tiledImage.contentAspectX ? tiledImage.normHeight : 1 / ratio;
+	// 	// @ts-expect-error in development
+	// 	const normed_height: number = tiledImage.normHeight;
+	// 	// const bounds_y: number = -(new_height - tiledImage.normHeight);
+	// 	const new_bounds =
+	// 		// @ts-expect-error in development
+	// 		ratio > tiledImage.contentAspectX
+	// 			? // @ts-expect-error in development
+	// 				new OpenSeadragon.Rect(0, 0, new_height, normed_height)
+	// 			: // @ts-expect-error in development
+	// 				new OpenSeadragon.Rect(0, 0, 1, new_height);
+	// 	viewer.viewport.fitBounds(new_bounds, true);
+	// }
+
+	function fitVertically_align_centered() {
 		const initial_bounds = viewer.viewport.getBounds();
 		const ratio = initial_bounds.width / initial_bounds.height;
 		const tiledImage = viewer.world.getItemAt(viewer.world.getItemCount() - 1);
@@ -186,14 +207,20 @@ initialize osd
 			ratio > tiledImage.contentAspectX ? tiledImage.normHeight : 1 / ratio;
 		// @ts-expect-error in development
 		const normed_height: number = tiledImage.normHeight;
-		// const bounds_y: number = -(new_height - tiledImage.normHeight);
+		// @ts-expect-error in development
+		const image_width: number = tiledImage.contentAspectX * normed_height;
+		// Calculate x offset to center the image horizontally
+		const viewport_width: number =
+			// @ts-expect-error in development
+			ratio > tiledImage.contentAspectX ? new_height : 1;
+		const x_offset: number = (image_width - viewport_width) / 2;
 		const new_bounds =
 			// @ts-expect-error in development
 			ratio > tiledImage.contentAspectX
 				? // @ts-expect-error in development
-					new OpenSeadragon.Rect(0, 0, new_height, normed_height)
+					new OpenSeadragon.Rect(x_offset, 0, new_height, normed_height)
 				: // @ts-expect-error in development
-					new OpenSeadragon.Rect(0, 0, 1, new_height);
+					new OpenSeadragon.Rect(x_offset, 0, 1, new_height);
 		viewer.viewport.fitBounds(new_bounds, true);
 	}
 }

@@ -80,7 +80,12 @@ import Register from "./Register.astro";
 						</div>
 					</div>
 				</div>
-				<div id="hitsbox"></div>
+				<div
+					id="hitsbox"
+					class="overflow-y-auto"
+					style="max-height: calc(100vh - var(--header-height, 60px) - var(--footer-height, 40px) - 200px);"
+				>
+				</div>
 
 				<div class="mx-auto grid grid-cols-2">
 					<div id="noske-pagination" class="text-right"></div>
@@ -1328,9 +1333,9 @@ import Register from "./Register.astro";
 			let skipAutocomplete = false;
 
 			// Collect all words for autocomplete
-			const allWords: Array<{ str: string; frq: string }> = [];
+			const allWords: Array<{ str: string; frq: string; ana?: string }> = [];
 			wordlist.forEach((item: any) => {
-				allWords.push({ str: item.str, frq: item.frq });
+				allWords.push({ str: item.str, frq: item.frq, ana: item.ana });
 			});
 
 			regfilter.addEventListener("input", () => {
@@ -1346,10 +1351,10 @@ import Register from "./Register.astro";
 						const matches = allWords.filter((word) => regex?.test(word.str)).slice(0, 10);
 						if (matches.length > 0) {
 							autocompleteDiv.innerHTML = matches
-								.map(
-									(word, idx) =>
-										`<div class="p-2 hover:bg-gray-100 cursor-pointer autocomplete-item text-red-600" data-index="${idx}" data-str="${word.str}">${word.str} (${word.frq})</div>`,
-								)
+								.map((word, idx) => {
+									const oovMarker = word.ana && word.ana.includes("#oov") ? "*" : "";
+									return `<div class="p-2 hover:bg-gray-100 cursor-pointer autocomplete-item text-red-600" data-index="${idx}" data-str="${word.str}">${word.str}${oovMarker} (${word.frq})</div>`;
+								})
 								.join("");
 							autocompleteDiv.classList.remove("hidden");
 						} else {
@@ -1532,8 +1537,9 @@ import Register from "./Register.astro";
 		}
 	};
 
-	const createListItem = (item: { str: string; frq: string }) => {
-		return `<li class="cursor-pointer text-red-600" data-str="${item.str}">${item.str} (${item.frq})</li>`;
+	const createListItem = (item: { str: string; frq: string; ana?: string }) => {
+		const oovMarker = item.ana && item.ana.includes("#oov") ? "*" : "";
+		return `<li class="cursor-pointer text-red-600" data-str="${item.str}">${item.str}${oovMarker} (${item.frq})</li>`;
 	};
 
 	// Toggle examplelist visibility when clicking on example div
