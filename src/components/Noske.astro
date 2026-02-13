@@ -115,13 +115,29 @@ import Register from "./Register.astro";
 <script>
 	import { NoskeSearch } from "acdh-noske-search";
 	import { loadContent } from "../lib/synopticView";
-	import { includes } from "@acdh-oeaw/lib";
+	// import { includes } from "@acdh-oeaw/lib";
 
 	const screeWidth = window.innerWidth >= 1024 ? true : false;
 
 	// Helper function to escape special regex characters
 	const escapeRegex = (str: string): string => {
 		return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+	};
+
+	// Helper dict to map noske attributes names to their index position in the kwic_attr array
+	const noskeAttrMap = {
+		w: 0,
+		lemma: 1,
+		l: 2,
+		pos: 3,
+		id: 4,
+		oov: 5,
+		placeName: 6,
+		placeType: 7,
+		persName: 8,
+		persType: 9,
+		pbId: 10,
+		pbN: 11,
 	};
 
 	const search = new NoskeSearch({
@@ -132,6 +148,7 @@ import Register from "./Register.astro";
 			"lemma",
 			"pos",
 			"id",
+			"oov",
 			"placeName",
 			"placeType",
 			"persName",
@@ -283,7 +300,7 @@ import Register from "./Register.astro";
 			//base: "http://localhost:8080",
 			base: "https://abacus-noske.acdh-dev.oeaw.ac.at",
 			corpname: "abacus",
-			attrs: "word,lemma,w,l,pos,id,placeName,placeType,persName,persType,pbId,pbN",
+			attrs: "word,lemma,w,l,pos,id,oov,placeName,placeType,persName,persType,pbId,pbN",
 			structs: "doc,g",
 			refs: "doc.title,doc.id",
 		},
@@ -410,35 +427,35 @@ import Register from "./Register.astro";
 		},
 		config: {
 			tableView: false,
-			customUrlTransform: screeWidth
-				? undefined
-				: (lines: { kwic_attr?: string }) => {
-						let kwic_attr = lines.kwic_attr?.split("/")[1];
-						let pageId = lines.kwic_attr?.split("/")[8];
-						// let refs = lines.refs;
-						// let docID = refs[0].split("=")[1];
-						let url = new URL("https://abacus.acdh-ch-dev.oeaw.ac.at/edition/" + pageId);
-						url.hash = kwic_attr!;
-						url.searchParams.set("img", "on");
-						url.searchParams.set("place", "on");
-						return url;
-					},
+			// customUrlTransform: screeWidth
+			// 	? undefined
+			// 	: (lines: { kwic_attr?: string }) => {
+			// 			let kwic_attr = lines.kwic_attr?.split("/")[1];
+			// 			let pageId = lines.kwic_attr?.split("/")[8];
+			// 			// let refs = lines.refs;
+			// 			// let docID = refs[0].split("=")[1];
+			// 			let url = new URL("https://abacus.acdh-ch-dev.oeaw.ac.at/edition/" + pageId);
+			// 			url.hash = kwic_attr!;
+			// 			url.searchParams.set("img", "on");
+			// 			url.searchParams.set("place", "on");
+			// 			return url;
+			// 		},
 			customResponseHtml: (lines: any, containerId: string, hits: any, client_attrs: any) => {
 				const hitsBox = document.getElementById(containerId);
 
 				const attr = lines[0].kwic_attr?.split("/");
 				attr!.shift();
-				let attr_length = attr!.length / 11;
-				let pdIdx = 9;
-				let pdNdx = 10;
+				let attr_length = attr!.length / Object.keys(noskeAttrMap).length;
+				let pdIdx = noskeAttrMap.pbId;
+				let pdNdx = noskeAttrMap.pbN;
 				if (attr_length > 1) {
 					for (let i = 1; i < attr_length; i++) {
 						if (attr![pdIdx] !== "" && attr![pdNdx] !== "") {
 							pdIdx += 0;
 							pdNdx += 0;
 						} else {
-							pdIdx += 11;
-							pdNdx += 11;
+							pdIdx += Object.keys(noskeAttrMap).length;
+							pdNdx += Object.keys(noskeAttrMap).length;
 						}
 					}
 				}
@@ -518,7 +535,7 @@ import Register from "./Register.astro";
 					issue.appendChild(issueIcon);
 
 					let kwic_attr = line.kwic_attr.split(" ");
-					let pageAttr = kwic_attr[0].split("/")[11];
+					let pageAttr = kwic_attr[0].split("/")[12];
 
 					var facs = line.refs[0].replace("doc.title=", "");
 					var issueId = line.refs[1].split("doc.id=")[1];
@@ -568,17 +585,17 @@ import Register from "./Register.astro";
 							// console.log(line);
 							let attr = line.kwic_attr?.split("/");
 							attr!.shift();
-							let attr_length = attr!.length / 11;
-							let pdIdx = 9;
-							let pdNdx = 10;
+							let attr_length = attr!.length / Object.keys(noskeAttrMap).length;
+							let pdIdx = noskeAttrMap.pbId;
+							let pdNdx = noskeAttrMap.pbN;
 							if (attr_length > 1) {
 								for (let i = 1; i < attr_length; i++) {
 									if (attr![pdIdx] !== "" && attr![pdNdx] !== "") {
 										pdIdx += 0;
 										pdNdx += 0;
 									} else {
-										pdIdx += 11;
-										pdNdx += 11;
+										pdIdx += Object.keys(noskeAttrMap).length;
+										pdNdx += Object.keys(noskeAttrMap).length;
 									}
 								}
 							}
