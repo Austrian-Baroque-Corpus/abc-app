@@ -297,7 +297,7 @@ import Register from "./Register.astro";
 	search.search({
 		debug: false,
 		client: {
-			//base: "http://localhost:8080",
+			// base: "http://localhost:8080",
 			base: "https://abacus-noske.acdh-dev.oeaw.ac.at",
 			corpname: "abacus",
 			attrs: "word,lemma,w,l,pos,id,oov,placeName,placeType,persName,persType,pbId,pbN",
@@ -1186,6 +1186,7 @@ import Register from "./Register.astro";
 				wlmaxitems: 20000,
 				wlminfreq: 1,
 			});
+			console.log(words);
 
 			if (wordslistHtml.classList.contains("active")) {
 				wordslistHtml.innerHTML = "";
@@ -1234,6 +1235,7 @@ import Register from "./Register.astro";
 					const sortedWords = value.sort((a, b) => diacriticSort(a, b));
 					wordslistHtml.innerHTML += `<div id="rg-abc"><h4 class="cursor-pointer"><span class="text-red-600">&#8595; </span>${key}</h4><ul class="hidden pl-2">${sortedWords.join("")}</ul></div>`;
 				}
+				console.log(sortedSections);
 			} else {
 				let wordTypes: {
 					[key: string]: Array<string>;
@@ -1514,6 +1516,9 @@ import Register from "./Register.astro";
 
 					// @ts-ignore
 					//noskeInput.value = e.target!.textContent;
+					if (id === "oov") {
+						id = "lemma";
+					}
 					noskeInput.value = `[${id}="${e.target!.dataset.str}"]`;
 					//noskeInput.dispatchEvent(new Event("", { bubbles: true }));
 					const searchButton = document.getElementById("noske-search-button") as HTMLButtonElement;
@@ -1557,8 +1562,14 @@ import Register from "./Register.astro";
 	};
 
 	const createListItem = (item: { str: string; frq: string; ana?: string }) => {
-		const oovMarker = item.ana && item.ana.includes("#oov") ? "*" : "";
-		return `<li class="cursor-pointer text-red-600" data-str="${item.str}">${item.str}${oovMarker} (${item.frq})</li>`;
+		// const oovMarker = item.str ? (item.str.includes("#oov") ? "*" : "") : "";
+		let itemStr = item.str;
+		let itemStrLemma = item.str;
+		if (itemStr.includes("__")) {
+			itemStr = itemStr.split("__")[0];
+			itemStrLemma = itemStrLemma.split("__")[1];
+		}
+		return `<li class="cursor-pointer text-red-600" data-str="${itemStrLemma}">${itemStr} (${item.frq})</li>`;
 	};
 
 	// Toggle examplelist visibility when clicking on example div
