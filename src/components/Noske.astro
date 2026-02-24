@@ -1186,7 +1186,6 @@ import Register from "./Register.astro";
 				wlmaxitems: 20000,
 				wlminfreq: 1,
 			});
-			console.log(words);
 
 			if (wordslistHtml.classList.contains("active")) {
 				wordslistHtml.innerHTML = "";
@@ -1235,7 +1234,6 @@ import Register from "./Register.astro";
 					const sortedWords = value.sort((a, b) => diacriticSort(a, b));
 					wordslistHtml.innerHTML += `<div id="rg-abc"><h4 class="cursor-pointer"><span class="text-red-600">&#8595; </span>${key}</h4><ul class="hidden pl-2">${sortedWords.join("")}</ul></div>`;
 				}
-				console.log(sortedSections);
 			} else {
 				let wordTypes: {
 					[key: string]: Array<string>;
@@ -1513,12 +1511,10 @@ import Register from "./Register.astro";
 
 					const noskeSelect = document.getElementById("noske-input-select") as HTMLSelectElement;
 					noskeSelect.value = "cql";
-
-					// @ts-ignore
-					//noskeInput.value = e.target!.textContent;
 					if (id === "oov") {
 						id = "lemma";
 					}
+					// @ts-ignore
 					noskeInput.value = `[${id}="${e.target!.dataset.str}"]`;
 					//noskeInput.dispatchEvent(new Event("", { bubbles: true }));
 					const searchButton = document.getElementById("noske-search-button") as HTMLButtonElement;
