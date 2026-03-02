@@ -11,14 +11,13 @@
 
 <xsl:variable name="termlabels" select="document('../../data/register/termlabels-persnames.xml')"/>
 <xsl:variable name="termlabelsPlaces" select="document('../../data/register/termlabels-placenames.xml')"/>
-<xsl:variable name="termlabels1" select="document('../../data/register/termlabels1.xml')"/>
 
 <xsl:template match="/">
 		<xsl:for-each select="document('../../data/register/abacus-index_persnames.xml')//tei:TEI">
 			<div id="rg-pers" class="hidden">
 				<xsl:for-each-group select=".//tei:person" group-by="@role">
 						<h5 class="cursor-pointer inline" title="Personenkategorie ausklappen/einklappen"><span class="text-red-600">&#8595; </span>
-							<xsl:variable name="persTypeLabel" select="$termlabels1//terms[@key='persType']/term[@key=current-grouping-key()]"/>
+							<xsl:variable name="persTypeLabel" select="ancestor::tei:TEI//tei:listPerson[@type=current-grouping-key()]/tei:head"/>
 							<xsl:choose>
 								<xsl:when test="$persTypeLabel != ''">
 									<xsl:value-of select="$persTypeLabel"/>
@@ -77,7 +76,7 @@
 								<xsl:text>Städte und Dörfer</xsl:text>
 							</xsl:when>
 							<xsl:otherwise>
-								<xsl:variable name="placeTypeLabel" select="$termlabels1//terms[@key='placeType']/term[@key=current-grouping-key()]"/>
+								<xsl:variable name="placeTypeLabel" select="ancestor::tei:TEI//tei:listPlace[@type=current-grouping-key()]/tei:head"/>
 								<xsl:choose>
 									<xsl:when test="$placeTypeLabel != ''">
 										<xsl:value-of select="$placeTypeLabel"/>
