@@ -9,8 +9,6 @@
 
 <xsl:output encoding="UTF-8" media-type="text/html" method="xhtml" indent="yes" omit-xml-declaration="yes"/>
 
-<xsl:variable name="termlabels" select="document('../../data/register/termlabels-persnames.xml')"/>
-<xsl:variable name="termlabelsPlaces" select="document('../../data/register/termlabels-placenames.xml')"/>
 
 <xsl:template match="/">
 		<xsl:for-each select="document('../../data/register/abacus-index_persnames.xml')//tei:TEI">
@@ -27,9 +25,8 @@
 						</h5><span id="persType" data-str="{current-grouping-key()}" class="cursor-pointer inline-block text-red-600" title="Nach Personenkategorie '{current-grouping-key()}' suchen">&#160;&#10143;</span><br/>
 							<ul class="hidden">
 								<xsl:for-each select="current-group()">
-									<xsl:sort select="if ($termlabels//term[@key=current()/.//tei:persName[@type='main']/@key]) then $termlabels//term[@key=current()/.//tei:persName[@type='main']/@key] else current()/.//tei:persName[@type='main']" data-type="text" order="ascending"/>
-									<xsl:variable name="personKey" select=".//tei:persName[@type='main']/@key"/>
-									<xsl:variable name="termLabel" select="$termlabels//term[@key=$personKey]"/>
+									<xsl:sort select="if (current()//tei:persName[@type='reg']) then current()//tei:persName[@type='reg'] else current()//tei:persName[@type='main']" data-type="text" order="ascending"/>
+									<xsl:variable name="termLabel" select=".//tei:persName[@type='reg']"/>
 									<li data-link="wk-{position()}" data-str="{.//tei:persName/@key}" class="text-red-500 cursor-pointer whitespace-pre">
 										<xsl:choose>
 											<xsl:when test="$termLabel != ''">
@@ -89,9 +86,8 @@
 					</h5><span id="placeType" data-str="{current-grouping-key()}" class="cursor-pointer inline-block text-red-600" title="Nach Ortskategorie '{current-grouping-key()}' suchen">&#160;&#10143;</span><br/>
 						<ul class="hidden">
 							<xsl:for-each select="current-group()">
-								<xsl:sort select="if ($termlabelsPlaces//term[@key=current()/.//tei:placeName[@type='main']/@key]) then $termlabelsPlaces//term[@key=current()/.//tei:placeName[@type='main']/@key] else current()/.//tei:placeName[@type='main']" data-type="text" order="ascending"/>
-								<xsl:variable name="placeKey" select=".//tei:placeName[@type='main']/@key"/>
-								<xsl:variable name="termLabel" select="$termlabelsPlaces//term[@key=$placeKey]"/>
+								<xsl:sort select="if (current()//tei:placeName[@type='reg']) then current()//tei:placeName[@type='reg'] else current()//tei:placeName[@type='main']" data-type="text" order="ascending"/>
+								<xsl:variable name="termLabel" select=".//tei:placeName[@type='reg']"/>
 								<li data-link="wk-{position()}" data-str="{.//tei:placeName/@key}" class="text-red-500 cursor-pointer whitespace-pre">
 									<xsl:choose>
 										<xsl:when test="$termLabel != ''">
