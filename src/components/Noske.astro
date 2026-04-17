@@ -86,6 +86,7 @@ import Register from "./Register.astro";
 							</div>
 						</div>
 					</div>
+					<div id="issuesbox" class="mt-4 text-left text-gray-600"></div>
 					<div id="hitsbox"></div>
 
 					<div class="mx-auto grid grid-cols-2">
@@ -465,10 +466,26 @@ import Register from "./Register.astro";
 				let hash = attr![4]; // The ID element is the xml:id
 				loadContent(pdId, "noske-synoptic-view", hash, pdN);
 
-				let issues = {};
+				// let issues = {};
+
+				let issuesIdx = [
+					"Abraham-Mercks_Wienn",
+					"Abraham-Loesch_Wienn",
+					"Abraham-Todten_Bruderschaft",
+					"Abraham-Augustini_feuriges_Hertz",
+					"Abraham-Todten_Capelle",
+				];
+
+				const sortedLines = [...lines].sort((a, b) => {
+					const idA = a.refs[1]?.split("doc.id=")[1] ?? "";
+					const idB = b.refs[1]?.split("doc.id=")[1] ?? "";
+					const idxA = issuesIdx.indexOf(idA);
+					const idxB = issuesIdx.indexOf(idB);
+					return (idxA === -1 ? Infinity : idxA) - (idxB === -1 ? Infinity : idxB);
+				});
 
 				let count = 0;
-				for (const line of lines) {
+				for (const line of sortedLines) {
 					const hitItem = document.createElement("div");
 					hitItem!.classList.add(...["mt-4", "kwic", "cursor-pointer", "text-left", "border-b"]);
 
@@ -538,10 +555,10 @@ import Register from "./Register.astro";
 					let pageAttr = kwic_attr[0].split("/")[12];
 
 					var facs = line.refs[0].replace("doc.title=", "");
-					var issueId = line.refs[1].split("doc.id=")[1];
+					// var issueId = line.refs[1].split("doc.id=")[1];
 
-					issues["Corpus"] ? issues["Corpus"]++ : (issues["Corpus"] = 1);
-					issues[issueId] ? issues[issueId]++ : (issues[issueId] = 1);
+					// issues["Corpus"] ? issues["Corpus"]++ : (issues["Corpus"] = 1);
+					// issues[issueId] ? issues[issueId]++ : (issues[issueId] = 1);
 
 					try {
 						var pageNr: string = pageAttr.replaceAll("_", " ").replace(/[\[\]]/g, "");
