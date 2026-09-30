@@ -6,15 +6,15 @@ import BaseHead from "../components/BaseHead.astro";
 import EditionAside from "../components/EditionAside.astro";
 import Footer from "../components/Footer.astro";
 import Header from "../components/Header.astro";
-// import MatomoAnalytics from "../components/MatomoAnalytics.astro";
+import MatomoAnalytics from "../components/MatomoAnalytics.astro";
 import { baseurl, createBaseurl } from "../lib/baseurl.js";
 
 const { title, issue, source, name } = Astro.props;
 const backgroundcolor = "bg-cabacus";
 const githuburl = "https://github.com/wiener-diarium/";
 const textcolor = "text-stone-700";
-// const matomoUrl = "https://matomo.acdh.oeaw.ac.at/";
-// const siteId = 99999;
+const matomoUrl = "https://matomo.acdh.oeaw.ac.at/";
+const siteId = 4;
 ---
 
 <html lang="de">
@@ -59,7 +59,7 @@ const textcolor = "text-stone-700";
 		></script>
 		<script type="text/javascript" is:inline src={createBaseurl("mark.js")}></script>
 		<script type="text/javascript" is:inline src={createBaseurl("listStopProp.js")}></script>
-		<!-- <MatomoAnalytics matomoUrl={matomoUrl} siteId={siteId} /> -->
+		<MatomoAnalytics matomoUrl={matomoUrl} siteId={siteId} />
 		<script>
 			(() => {
 				const url = new URL(window.location.href);
